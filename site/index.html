@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Furnace</title>
+</head>
+<body>
+	<h1>Furnace</h1>
+	<form method="POST" action="http://localhost:8080/furnace/">
+		<fieldset>
+			<legend>Components</legend>
+			<label>
+				<input type="checkbox" name="components" value="accordion" /> Accordion
+			</label>
+			<br />
+			<label>
+				<input type="checkbox" name="components" value="animate" /> Animate
+			</label>
+			<br />
+			<label>
+				<input type="checkbox" name="components" value="body" /> Body
+			</label>
+			<br />
+			<label>
+				<input type="checkbox" name="components" value="breadcrumbs" /> Breadcrumbs
+			</label>
+			<br />
+			<label>
+				<input type="checkbox" name="components" value="buttons" /> Buttons
+			</label>
+			<br />
+			<label>
+				<input type="checkbox" name="components" value="callout" /> Callout
+			</label>
+			<br />
+			<label>
+				<input type="checkbox" name="components" value="control-input" /> Control input
+			</label>
+			<br />
+			<label>
+				<input type="checkbox" name="components" value="core" disabled checked /> Core
+			</label>
+			<br />
+			<label>
+				<input type="checkbox" name="components" value="cta-link" /> Call to action link
+			</label>
+			<br />
+			<label>
+				<input type="checkbox" name="components" value="direction-links" /> Direction links
+			</label>
+			<br />
+			<label>
+				<input type="checkbox" name="components" value="footer" /> Footer
+			</label>
+			<br />
+			<label>
+				<input type="checkbox" name="components" value="grid-12" /> 12 Column grid
+			</label>
+		</fieldset>
+		<br />
+		<fieldset>
+			<legend>Build options</legend>
+			<label>
+				<input type="checkbox" name="buildOptions" value="sass" /> SASS
+			</label>
+			<br />
+			<label>
+				<input type="checkbox" name="buildOptions" value="minifycss" /> Minify CSS
+			</label>
+		</fieldset>
+		<br />
+		<fieldset>
+			<legend>Javascript framework</legend>
+			<label>
+				<input type="radio" name="framework" value="module" checked>Common javascript</input>
+			</label>
+			<br />
+			<label>
+				<input type="radio" name="framework" value="jquery">jQuery</input>
+			</label>
+			<br />
+			<label>
+				<input type="radio" name="framework" value="react">React</input>
+			</label>
+		</fieldset>
+		<br />
+		<button type="submit">Melt the components!</button>
+	</form>
+</body>
+</html>
