@@ -29,7 +29,9 @@ export const SETTINGS = {
 		redirect: 'https://gold.service.gov.au',
 	},
 	uikit: {
-		root: Path.normalize(`${ process.cwd() }/uikit/packages/`),
+		root: Path.normalize(`${ process.cwd() }/uikit/`),
+		components: Path.normalize(`${ process.cwd() }/uikit/packages/`),
 		dist: Path.normalize(`${ process.cwd() }/dist/`),
+		json: Path.normalize( `${ process.cwd() }/uikit/uikit.json` )
 	}
 };
