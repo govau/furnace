@@ -21,7 +21,7 @@ import { AddFile, CompileZip } from './zip';
 import { GetCss } from './css';
 import { GetSass } from './sass';
 import { GetJs } from './javascript';
-import { GetDepTree } from './dependencies';
+import { GetDependencies } from './dependencies';
 
 
 /**
@@ -37,14 +37,33 @@ export const HandlePost = ( request, response ) => {
 	const zipFile = Archiver(`zip`);
 
 	let data = request.body;
+	const buildOptions = data.buildOptions;
 
 	Log.verbose( `Melting the component strings into filenames`);
 
 	HandleData( data )
-		.then( GetSass )
 		.then( data => {
-			Log.info(`Finished the furnace`);
-			console.log( data );
+			// Get the CSS
+			if ( buildOptions.includes( 'minifycss' ) ) {
+				data.zip.css = GetCss( data.sass );
+			}
+			return data;
+		})
+		.then( data => {
+			// Get the JS
+			data.zip.js = GetJS( data.js );
+			return data;
+		})
+		.then( data => {
+
+			response.writeHead(200, {
+				'Content-Type': `application/zip`,
+				'Content-disposition': `attachment; filename=Nugget.zip`,
+			});
+
+			zipFile.pipe( response );
+
+			CompileZip( zipFile, data.css );
 		})
 		.catch( error => {
 			Log.error( error );
@@ -62,10 +81,9 @@ export const HandleData = ( data ) => {
 
 	return new Promise( (resolve, reject ) => {
 
-		let dependencies = JSON.parse( Fs.readFileSync( SETTINGS.uikit.json, "utf-8" ) );
+		const uikit = JSON.parse( Fs.readFileSync( SETTINGS.uikit.json, "utf-8" ) );
 
-		let components = GetComponents( dependencies, data.components );
-
+		let components = GetDependencies( uikit, data.components );
 
 		// Get the SASS/JS files from the dependencies first then components
 		let sass = [];
@@ -74,8 +92,8 @@ export const HandleData = ( data ) => {
 		components.map( component => {
 
 			// Get the directory or files
-			let sassDir = `${ SETTINGS.uikit.components + component }/src/sass/`;
-			let jsFile = `${ SETTINGS.uikit.components + component }/src/js/${ data.framework }.js`;
+			let sassDir = `${ SETTINGS.uikit.components + component }/lib/sass/`;
+			let jsFile = `${ SETTINGS.uikit.components + component }/lib/js/${ data.framework }.js`;
 
 
 			// Check that the file exists before adding it
@@ -87,50 +105,9 @@ export const HandleData = ( data ) => {
 		resolve({
 			"sass": sass,
 			"js": js,
-			"buildOptions": data.buildOptions,
-			"framework": data.framework,
 		})
 	});
 
-};
-
-
-
-/**
- * GetComponents - Gets the components with dependencies.
- *
- * @param uikitJson - The file where the dependencies live
- */
-export const GetComponents = ( dependencies, components ) => {
-
-	// Get the arrays of dependencies for each component
-	dependencies = components.map( component => {
-		let componentDependencies = GetDepTree( `@gov.au/${ component }`, dependencies );
-		return [ ...new Set( Flatten( componentDependencies ) ) ];
-	});
-
-	// Flatten and find unique dependencies and components
-	components = [ [].concat.apply([], dependencies) , components ];
-	return [ 'core', ...new Set( [].concat( ...components ) ) ];
-
-}
-
-
-
-/**
- * Flatten a deep object into a one level array
- *
- * @param  {object} object - The object to be flattened
- *
- * @return {array}         - The resulting flat array
- */
-export const Flatten = object => {
-	return [].concat( ...Object.keys( object ).map( key =>
-		Object.keys( object[ key ] ).length > 0
-			? [ key, ...Flatten( object[ key ] ) ]
-			: key
-		)
-	);
 };
 
 

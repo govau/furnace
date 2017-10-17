@@ -28,6 +28,9 @@ export const SETTINGS = {
 		port: 8080,
 		redirect: 'https://gold.service.gov.au',
 	},
+	node_modules: {
+		sassVersioning: Path.normalize(`${ process.cwd() }/node_modules/sass-versioning/dist/_index.scss`),
+	},
 	uikit: {
 		root: Path.normalize(`${ process.cwd() }/uikit/`),
 		components: Path.normalize(`${ process.cwd() }/uikit/packages/`),

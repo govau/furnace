@@ -30,8 +30,11 @@
 	},
 	"dependencies": {
 		"archiver": "^2.0.3",
+		"autoprefixer": "^7.1.5",
 		"body-parser": "^1.18.2",
-		"express": "^4.16.1"
+		"express": "^4.16.1",
+		"node-sass": "^4.5.3",
+		"sass-versioning": "^0.2.2"
 	},
 	"devDependencies": {
 		"jest-cli": "^20.0.4",

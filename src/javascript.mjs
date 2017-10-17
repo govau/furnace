@@ -1,10 +1,10 @@
 import { Log } from './helper';
 
-export const GetJs = ( data ) => {
+export const GetJs = ( jsDirectories ) => {
 	Log.verbose( `Running GetJs`);
 
-	data.js = "js minified";
 
-	console.log( data );
+	console.log( `${ jsDirectories } running js` );
+
 	return data;
 }
