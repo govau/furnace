@@ -5,87 +5,177 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<title>Furnace</title>
+	<style>
+		body {
+			font-family: -apple-system,BlinkMacSystemFont,"Segoe UI","Roboto","Oxygen","Ubuntu","Cantarell","Fira Sans","Droid Sans","Helvetica Neue",sans-serif;
+			font-size: 12px;
+			background: -webkit-linear-gradient(left top, red, orangered);
+		}
+		label {
+			display: block;
+			margin-bottom: 5px;
+			cursor: pointer;
+		}
+		label:hover {
+			text-decoration: underline;
+		}
+		.disabled {
+			cursor: default;
+			color: #888;
+		}
+		.disabled:hover {
+			text-decoration: none;
+		}
+		h1 {
+			background: #fff;
+			border: 1px solid #000;
+			padding: 5px 10px;
+			display: inline-block;
+		}
+		fieldset {
+			padding-top: 10px;
+			margin-bottom: 10px;
+			min-width: 300px;
+			float: left;
+			margin-right: 20px;
+			background: #fff;
+			border: 1px solid #000;
+		}
+		legend {
+			font-weight: bold;
+			background: #fff;
+			border: 1px solid #000;
+			padding: 5px 10px;
+		}
+
+		input {
+			margin-right: 10px;
+		}
+		.fieldset-wrapper {
+			display: block;
+			overflow: auto;
+		}
+		button {
+			background: white;
+			border: 0;
+			border-radius: 3px;
+			padding: 10px 20px;
+			cursor: pointer;
+			border: 1px solid #000;
+			font-weight: bold;
+		}
+		button:hover {
+			background: #ccc;
+		}
+	</style>
 </head>
 <body>
 	<h1>Furnace</h1>
 	<form method="POST" action="http://localhost:8080/furnace/">
-		<fieldset>
-			<legend>Components</legend>
-			<label>
-				<input type="checkbox" name="components" value="accordion" /> Accordion
-			</label>
-			<br />
-			<label>
-				<input type="checkbox" name="components" value="animate" /> Animate
-			</label>
-			<br />
-			<label>
-				<input type="checkbox" name="components" value="body" /> Body
-			</label>
-			<br />
-			<label>
-				<input type="checkbox" name="components" value="breadcrumbs" /> Breadcrumbs
-			</label>
-			<br />
-			<label>
-				<input type="checkbox" name="components" value="buttons" /> Buttons
-			</label>
-			<br />
-			<label>
-				<input type="checkbox" name="components" value="callout" /> Callout
-			</label>
-			<br />
-			<label>
-				<input type="checkbox" name="components" value="control-input" /> Control input
-			</label>
-			<br />
-			<label>
-				<input type="checkbox" name="components" value="core" disabled checked /> Core
-			</label>
-			<br />
-			<label>
-				<input type="checkbox" name="components" value="cta-link" /> Call to action link
-			</label>
-			<br />
-			<label>
-				<input type="checkbox" name="components" value="direction-links" /> Direction links
-			</label>
-			<br />
-			<label>
-				<input type="checkbox" name="components" value="footer" /> Footer
-			</label>
-			<br />
-			<label>
-				<input type="checkbox" name="components" value="grid-12" /> 12 Column grid
-			</label>
-		</fieldset>
-		<br />
-		<fieldset>
-			<legend>Build options</legend>
-			<label>
-				<input type="checkbox" name="buildOptions" value="sass" /> SASS
-			</label>
-			<br />
-			<label>
-				<input type="checkbox" name="buildOptions" value="minifycss" /> Minify CSS
-			</label>
-		</fieldset>
-		<br />
-		<fieldset>
-			<legend>Javascript framework</legend>
-			<label>
-				<input type="radio" name="framework" value="module" checked>Common javascript</input>
-			</label>
-			<br />
-			<label>
-				<input type="radio" name="framework" value="jquery">jQuery</input>
-			</label>
-			<br />
-			<label>
-				<input type="radio" name="framework" value="react">React</input>
-			</label>
-		</fieldset>
-		<br />
+		<div class="fieldset-wrapper">
+			<fieldset>
+				<legend>Components</legend>
+				<label>
+					<input type="checkbox" name="components" value="accordion" />Accordion
+				</label>
+				<label>
+					<input type="checkbox" name="components" value="animate" />Animate
+				</label>
+				<label>
+					<input type="checkbox" name="components" value="body" />Body
+				</label>
+				<label>
+					<input type="checkbox" name="components" value="breadcrumbs" />Breadcrumbs
+				</label>
+				<label>
+					<input type="checkbox" name="components" value="buttons" />Buttons
+				</label>
+				<label>
+					<input type="checkbox" name="components" value="callout" />Callout
+				</label>
+				<label>
+					<input type="checkbox" name="components" value="control-input" />Control input
+				</label>
+				<label class="disabled">
+					<input type="checkbox" name="components" value="core" checked disabled />Core
+				</label>
+				<label>
+					<input type="checkbox" name="components" value="cta-link" />Call to action link
+				</label>
+				<label>
+					<input type="checkbox" name="components" value="direction-links" />Direction links
+				</label>
+				<label>
+					<input type="checkbox" name="components" value="footer" />Footer
+				</label>
+				<label>
+					<input type="checkbox" name="components" value="grid-12" />12 Column grid
+				</label>
+				<label>
+					<input type="checkbox" name="components" value="header" />Header
+				</label>
+				<label>
+					<input type="checkbox" name="components" value="headings" />Headings
+				</label>
+				<label>
+					<input type="checkbox" name="components" value="inpage-nav" />In page nav
+				</label>
+				<label>
+					<input type="checkbox" name="components" value="keyword-list" />Keyword list
+				</label>
+				<label>
+					<input type="checkbox" name="components" value="link-list" />Link list
+				</label>
+				<label>
+					<input type="checkbox" name="components" value="page-alerts" />Page alerts
+				</label>
+				<label>
+					<input type="checkbox" name="components" value="progress-indicator" />Progress indicator
+				</label>
+				<label>
+					<input type="checkbox" name="components" value="responsive-media" />Responsive media
+				</label>
+				<label>
+					<input type="checkbox" name="components" value="select" />Select
+				</label>
+				<label>
+					<input type="checkbox" name="components" value="skip-link" />Skip link
+				</label>
+				<label>
+					<input type="checkbox" name="components" value="tags" />Tags
+				</label>
+				<label>
+					<input type="checkbox" name="components" value="text-inputs" />Text inputs
+				</label>
+			</fieldset>
+			<fieldset>
+				<legend>Build options</legend>
+				<label class="disabled">
+					<input type="checkbox" name="buildOptions" value="min-css" disabled checked/>CSS
+				</label>
+				<label>
+					<input type="checkbox" name="buildOptions" value="css-modules" />CSS modules
+				</label>
+				<label>
+					<input type="checkbox" name="buildOptions" value="sass" />SASS modules
+				</label>
+				<label>
+					<input type="checkbox" name="buildOptions" value="js-min" />JavaScript
+				</label>
+				<label>
+					<input type="checkbox" name="buildOptions" value="module" />JavaScript modules
+				</label>
+				<label>
+					<input type="checkbox" name="buildOptions" value="jquery" />jQuery
+				</label>
+				<label>
+					<input type="checkbox" name="buildOptions" value="jquery" />jQuery modules
+				</label>
+				<label>
+					<input type="checkbox" name="buildOptions" value="react" />React modules
+				</label>
+			</fieldset>
+		</div>
 		<button type="submit">Melt the components!</button>
 	</form>
 </body>

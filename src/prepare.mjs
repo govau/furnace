@@ -56,6 +56,8 @@ export const HandlePost = ( request, response ) => {
 
 			CompileZip( zipFile, data.files );
 
+			Log.done('Jobs done!');
+
 		})
 		.catch( error => {
 			Log.error( error );
@@ -93,7 +95,6 @@ export const HandleData = ( data ) => {
 		resolve ({
 			sass: sass,
 			js: js,
-			framework: data.framework,
 			buildOptions: data.buildOptions,
 			files: [],
 		});

@@ -25,23 +25,20 @@ import { AddFile } from './zip';
 export const GetCss = ( data ) => {
 	Log.verbose( `Running GetCSS`);
 
-	if( data.buildOptions.includes( 'minifycss' ) ){
-		let css = "";
+	let css = "";
 
-		// Add sass versioning to the start
-		css = `@import '${ SETTINGS.node_modules.sassVersioning }';\n\n`;
+	// Add sass versioning to the start
+	css = `@import '${ SETTINGS.node_modules.sassVersioning }';\n\n`;
 
-		// Add the directories to the string
-		data.sass.map( sassDir => {
-			css = css + `@import '${ sassDir }_module.scss';\n`;
-		});
+	// Add the directories to the string
+	data.sass.map( sassDir => {
+		css = css + `@import '${ sassDir }_module.scss';\n`;
+	});
 
-		Sassify( css );
-		Autoprefix( css );
+	Sassify( css );
+	Autoprefix( css );
 
-		data.files = AddFile( css, 'css/styles.min.css', data.files );
-
-	}
+	data.files = AddFile( css, 'css/styles.min.css', data.files );
 
 	return data;
 
