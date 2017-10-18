@@ -27,14 +27,14 @@ import { Log } from './helper';
 export const AddFile = ( content, archivePath, files ) => {
 	Log.verbose(`Zip: Adding file: ${archivePath}`);
 
-	if(typeof content !== `string`) {
+	if( typeof content !== `string` ) {
 		Log.error(`Zip: Adding file: Content can only be string, is ${typeof content}`);
 	}
 	else {
 		if( content.length > 0 ) {
 			files.push({
 				content: content,
-				name: `/GOLD-furnace${archivePath}`,
+				name: `/GOLD-furnace/${ archivePath }`,
 			});
 		}
 	}
@@ -52,6 +52,7 @@ export const AddFile = ( content, archivePath, files ) => {
  */
 export const CompileZip = ( archive, files ) => {
 	Log.verbose(`Zip: Compiling zip`);
+
 
 	files.map( file => {
 		archive.append( file.content, { name: file.name } );

@@ -11,6 +11,8 @@
 
 // Dependencies
 import Path from 'path';
+import Fs from 'fs';
+
 
 
 /**
@@ -33,8 +35,9 @@ export const SETTINGS = {
 	},
 	uikit: {
 		root: Path.normalize(`${ process.cwd() }/uikit/`),
-		components: Path.normalize(`${ process.cwd() }/uikit/packages/`),
+		componentsDir: Path.normalize(`${ process.cwd() }/uikit/packages/`),
 		dist: Path.normalize(`${ process.cwd() }/dist/`),
-		json: Path.normalize( `${ process.cwd() }/uikit/uikit.json` )
-	}
+		json: JSON.parse( Fs.readFileSync( Path.normalize( `${ process.cwd() }/uikit/uikit.json` ), "utf-8" ) ),
+		prefix: '@gov.au/'
+	},
 };

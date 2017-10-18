@@ -9,15 +9,15 @@
 'use strict';
 
 // Dependencies
-import Fs from 'fs';
 import Path from 'path';
 import Archiver from 'archiver';
+import Fs from 'fs';
 
 
 // Local dependencies
 import { SETTINGS } from './settings';
 import { Log } from './helper';
-import { AddFile, CompileZip } from './zip';
+import { CompileZip } from './zip';
 import { GetCss } from './css';
 import { GetSass } from './sass';
 import { GetJs } from './javascript';
@@ -42,20 +42,11 @@ export const HandlePost = ( request, response ) => {
 	Log.verbose( `Melting the component strings into filenames`);
 
 	HandleData( data )
-		.then( data => {
-			// Get the CSS
-			if ( buildOptions.includes( 'minifycss' ) ) {
-				data.zip.css = GetCss( data.sass );
-			}
-			return data;
-		})
-		.then( data => {
-			// Get the JS
-			data.zip.js = GetJS( data.js );
-			return data;
-		})
+		.then( GetCss )
+		.then( GetJs )
 		.then( data => {
 
+			// --- MAKE A FUNCTION FOR THIS ---
 			response.writeHead(200, {
 				'Content-Type': `application/zip`,
 				'Content-disposition': `attachment; filename=Nugget.zip`,
@@ -63,7 +54,8 @@ export const HandlePost = ( request, response ) => {
 
 			zipFile.pipe( response );
 
-			CompileZip( zipFile, data.css );
+			CompileZip( zipFile, data.files );
+
 		})
 		.catch( error => {
 			Log.error( error );
@@ -79,33 +71,33 @@ export const HandlePost = ( request, response ) => {
 export const HandleData = ( data ) => {
 	Log.verbose( `Running HandleData`);
 
-	return new Promise( (resolve, reject ) => {
+	return new Promise( ( resolve, reject ) => {
 
-		const uikit = JSON.parse( Fs.readFileSync( SETTINGS.uikit.json, "utf-8" ) );
+		// Get the components
+		let components = GetDependencies( data.components );
 
-		let components = GetDependencies( uikit, data.components );
+		components = ['core', ...new Set(components)];
 
 		// Get the SASS/JS files from the dependencies first then components
 		let sass = [];
 		let js = [];
 
 		components.map( component => {
+			let sassDir = `${ SETTINGS.uikit.componentsDir + component }/lib/sass/`;
+			let jsFile = `${ SETTINGS.uikit.componentsDir + component }/lib/js/${ data.framework }.js`;
 
-			// Get the directory or files
-			let sassDir = `${ SETTINGS.uikit.components + component }/lib/sass/`;
-			let jsFile = `${ SETTINGS.uikit.components + component }/lib/js/${ data.framework }.js`;
-
-
-			// Check that the file exists before adding it
-			if ( Fs.existsSync( sassDir ) ) { sass.push( sassDir ); }
-			if ( Fs.existsSync( jsFile ) ) { js.push( jsFile ); }
-
+			if( Fs.existsSync( sassDir ) ) { sass.push( sassDir ); }
+			if( Fs.existsSync( jsFile ) ) { js.push( jsFile ); }
 		});
 
-		resolve({
-			"sass": sass,
-			"js": js,
-		})
+		resolve ({
+			sass: sass,
+			js: js,
+			framework: data.framework,
+			buildOptions: data.buildOptions,
+			files: [],
+		});
+
 	});
 
 };
