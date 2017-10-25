@@ -91,15 +91,7 @@ export const GetFiles = ( data ) => {
 	if ( sassCssMin ) {
 		// Add sass versioning
 		sassCssMin = `@import '${ SETTINGS.npm.sassVersioning }';\n\n${ sassCssMin }`;
-
 		bundler.push( GetMinCss( sassCssMin ) );
-
-
-
-		// promises.push( functionWhichIsPromise )
-		// Promise.all( promises )
-		//	.then( resolve( ) );
-
 
 		// AddFile( cssMin, 'css/furnace.min.css', files );
 	}
@@ -114,6 +106,13 @@ export const GetFiles = ( data ) => {
 		sassModule = `@import 'node_modules/sass-versioning/_index.scss';\n\n${ sassModule }`;
 		AddFile( sassModule, `sass/main.scss`, files );
 	}
+
+	Promise.all( bundler )
+		.then( bundles => {
+			bundles.map( bundle => {
+				AddFile( bundle, 'whereismyname', files )
+			})
+		})
 
 
 
