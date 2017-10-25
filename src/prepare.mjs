@@ -18,9 +18,7 @@ import Fs from 'fs';
 import { SETTINGS } from './settings';
 import { Log } from './helper';
 import { CompileZip } from './zip';
-import { GetCss } from './css';
-import { GetSass } from './sass';
-import { GetJs } from './javascript';
+import { GetFiles, GetBundles } from './files';
 import { GetDependencies } from './dependencies';
 
 
@@ -42,11 +40,10 @@ export const HandlePost = ( request, response ) => {
 	Log.verbose( `Melting the component strings into filenames`);
 
 	HandleData( data )
-		.then( GetCss )
-		.then( GetJs )
-		.then( data => {
+		.then( GetFiles )
+		.then( GetBundles )
+		.then( files => {
 
-			// --- MAKE A FUNCTION FOR THIS ---
 			response.writeHead(200, {
 				'Content-Type': `application/zip`,
 				'Content-disposition': `attachment; filename=Nugget.zip`,
@@ -54,13 +51,14 @@ export const HandlePost = ( request, response ) => {
 
 			zipFile.pipe( response );
 
-			CompileZip( zipFile, data.files );
+			CompileZip( zipFile, files );
 
-			Log.done('Jobs done!');
+			Log.done(`Job's done!`);
 
 		})
 		.catch( error => {
 			Log.error( error );
+			response.status( 400 ).send( `400: ${ error }` );
 		});
 
 }
@@ -71,32 +69,20 @@ export const HandlePost = ( request, response ) => {
  * @param data - The request.body returned from the form
  */
 export const HandleData = ( data ) => {
-	Log.verbose( `Running HandleData`);
+	Log.verbose( `Running HandleData `);
 
 	return new Promise( ( resolve, reject ) => {
 
-		// Get the components
-		let components = GetDependencies( data.components );
+		// If there is one option, put it into an array.
+		const components = typeof data.components === 'string' ? [ data.components ] : data.components;
+		const buildOptions = typeof data.buildOptions === 'string' ? [ data.buildOptions ] : data.buildOptions;
+		const framework = typeof data.framework === 'string' ? [ data.framework ] : data.framework;
 
-		components = ['core', ...new Set(components)];
-
-		// Get the SASS/JS files from the dependencies first then components
-		let sass = [];
-		let js = [];
-
-		components.map( component => {
-			let sassDir = `${ SETTINGS.uikit.componentsDir + component }/lib/sass/`;
-			let jsFile = `${ SETTINGS.uikit.componentsDir + component }/lib/js/${ data.framework }.js`;
-
-			if( Fs.existsSync( sassDir ) ) { sass.push( sassDir ); }
-			if( Fs.existsSync( jsFile ) ) { js.push( jsFile ); }
-		});
-
+		// Resolve the data object and push it through the system
 		resolve ({
-			sass: sass,
-			js: js,
-			buildOptions: data.buildOptions,
-			files: [],
+			components: GetDependencies( components ),
+			buildOptions: buildOptions,
+			framework: framework
 		});
 
 	});
@@ -104,7 +90,10 @@ export const HandleData = ( data ) => {
 };
 
 
-
+// To do
+// Add param/return type in JSdocs comments
+// Write jest tests for each function - more pure more testable functions
+// 100% testable functions as good as we can with filesystem!
 
 
 

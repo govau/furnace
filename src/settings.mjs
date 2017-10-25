@@ -30,7 +30,7 @@ export const SETTINGS = {
 		port: 8080,
 		redirect: 'https://gold.service.gov.au',
 	},
-	node_modules: {
+	npm: {
 		sassVersioning: Path.normalize(`${ process.cwd() }/node_modules/sass-versioning/dist/_index.scss`),
 	},
 	uikit: {
@@ -38,6 +38,6 @@ export const SETTINGS = {
 		componentsDir: Path.normalize(`${ process.cwd() }/uikit/packages/`),
 		dist: Path.normalize(`${ process.cwd() }/dist/`),
 		json: JSON.parse( Fs.readFileSync( Path.normalize( `${ process.cwd() }/uikit/uikit.json` ), "utf-8" ) ),
-		prefix: '@gov.au/'
+		prefix: '@gov.au/',
 	},
 };

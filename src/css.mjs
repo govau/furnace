@@ -14,36 +14,21 @@ import Postcss from 'postcss';
 
 import { SETTINGS } from './settings';
 import { Log } from './helper';
-import { AddFile } from './zip';
 
 
 /**
- * GetCss - From the sass directories create a minified js file
+ * Compile Sass code into CSS (modified from the uikit helper.js)
  *
- * @return data - The package containing the sassDirs, jsDirs, options selected and files
+ * @param  {string} scss - The Sass file to be compiled
+ * @param  {string} css  - The location where the CSS should be written to
  */
-export const GetCss = ( data ) => {
-	Log.verbose( `Running GetCSS`);
+export const GetMinCss = ( sassString ) => {
+	Log.verbose( `Running GetMinCss`);
 
-	let css = "";
-
-	// Add sass versioning to the start
-	css = `@import '${ SETTINGS.node_modules.sassVersioning }';\n\n`;
-
-	// Add the directories to the string
-	data.sass.map( sassDir => {
-		css = css + `@import '${ sassDir }_module.scss';\n`;
-	});
-
-	Sassify( css );
-	Autoprefix( css );
-
-	data.files = AddFile( css, 'css/styles.min.css', data.files );
-
-	return data;
+	// Needs autoprefixer
+	return Sassify( sassString );
 
 }
-
 
 
 /**
@@ -55,15 +40,14 @@ export const GetCss = ( data ) => {
 const Sassify = ( scss ) => {
 	Log.verbose( `Running Sassify`);
 
-	let compiledCss = Sass.renderSync({
+	const compiled = Sass.renderSync({
 		data: scss,
 		indentType: 'tab',
 		precision: 8,
-		includePaths: [ './lib/sass/' ],
 		outputStyle: 'compressed',
 	});
 
-	return compiledCss.css.toString();
+	return compiled.css.toString();
 };
 
 
@@ -74,7 +58,8 @@ const Sassify = ( scss ) => {
  */
 const Autoprefix = ( css ) => {
 	Log.verbose( `Running Autoprefix`);
-	Postcss([ Autoprefixer({ browsers: ['last 2 versions', 'ie 8', 'ie 9', 'ie 10'] }) ])
+
+	return Postcss([ Autoprefixer({ browsers: ['last 2 versions', 'ie 8', 'ie 9', 'ie 10'] }) ])
 		.process( css )
 		.then( ( prefixed ) => {
 			prefixed
@@ -84,6 +69,6 @@ const Autoprefix = ( css ) => {
 			});
 
 			return prefixed.css;
-
 	});
+
 };

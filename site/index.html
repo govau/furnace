@@ -35,8 +35,7 @@
 		fieldset {
 			padding-top: 10px;
 			margin-bottom: 10px;
-			min-width: 300px;
-			float: left;
+			width: 300px;
 			margin-right: 20px;
 			background: #fff;
 			border: 1px solid #000;
@@ -53,7 +52,7 @@
 		}
 		.fieldset-wrapper {
 			display: block;
-			overflow: auto;
+			float: left;
 		}
 		button {
 			background: white;
@@ -96,7 +95,7 @@
 				<label>
 					<input type="checkbox" name="components" value="control-input" />Control input
 				</label>
-				<label class="disabled">
+				<label>
 					<input type="checkbox" name="components" value="core" checked disabled />Core
 				</label>
 				<label>
@@ -148,31 +147,36 @@
 					<input type="checkbox" name="components" value="text-inputs" />Text inputs
 				</label>
 			</fieldset>
+		</div>
+		<div class="fieldset">
 			<fieldset>
 				<legend>Build options</legend>
-				<label class="disabled">
-					<input type="checkbox" name="buildOptions" value="min-css" disabled checked/>CSS
+				<label>
+					<input type="radio" name="buildOptions" value="css" checked/>CSS minified
 				</label>
 				<label>
-					<input type="checkbox" name="buildOptions" value="css-modules" />CSS modules
+					<input type="radio" name="buildOptions" value="cssModules" />CSS modules
 				</label>
 				<label>
-					<input type="checkbox" name="buildOptions" value="sass" />SASS modules
+					<input type="radio" name="buildOptions" value="sassModules" />SASS modules
+				</label>
+			</fieldset>
+			<fieldset>
+				<legend>Framework</legend>
+				<label>
+					<input type="radio" name="framework" value="js" checked/>JavaScript minified
 				</label>
 				<label>
-					<input type="checkbox" name="buildOptions" value="js-min" />JavaScript
+					<input type="radio" name="framework" value="jsModules" />JavaScript modules
 				</label>
 				<label>
-					<input type="checkbox" name="buildOptions" value="module" />JavaScript modules
+					<input type="radio" name="framework" value="jquery" />jQuery minified
 				</label>
 				<label>
-					<input type="checkbox" name="buildOptions" value="jquery" />jQuery
+					<input type="radio" name="framework" value="jqueryModules" />jQuery modules
 				</label>
 				<label>
-					<input type="checkbox" name="buildOptions" value="jquery" />jQuery modules
-				</label>
-				<label>
-					<input type="checkbox" name="buildOptions" value="react" />React modules
+					<input type="radio" name="framework" value="react" />React modules
 				</label>
 			</fieldset>
 		</div>

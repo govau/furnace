@@ -42,6 +42,27 @@ export const AddFile = ( content, archivePath, files ) => {
 	return files;
 };
 
+
+export const AddPath =  ( path, archivePath, files ) => {
+	Log.verbose(`Zip: Adding file path: ${ path }`);
+
+	if( typeof path !== `string` ) {
+		Log.error(`Zip: Adding file path: Path can only be string, is ${ typeof path }`);
+	}
+	else {
+		if( path.length > 0 ) { //don't need no empty files ;)
+			files.push(
+				Archiver.directory( path, { name: `/GOLD-furnace${ archivePath }` } )
+			);
+		}
+	}
+
+	return files;
+}
+
+
+
+
 /**
  *
  * CompileZip - Turn the files array into a zip file using archiver
@@ -52,7 +73,6 @@ export const AddFile = ( content, archivePath, files ) => {
  */
 export const CompileZip = ( archive, files ) => {
 	Log.verbose(`Zip: Compiling zip`);
-
 
 	files.map( file => {
 		archive.append( file.content, { name: file.name } );
@@ -67,6 +87,31 @@ export const CompileZip = ( archive, files ) => {
 		Log.error( error );
 	}
 };
+
+
+/**
+ *
+ * CompileZip - Turn the files array into a zip file using archiver
+ *
+ * @param archive - The response containing the archiver head
+ * @param files - The files array to be iterated upon to go into the zip file
+ *
+ */
+export const GetZip = ( files, response ) => {
+
+	response.writeHead(200, {
+		'Content-Type': `application/zip`,
+		'Content-disposition': `attachment; filename=Nugget.zip`,
+	});
+
+	zipFile.pipe( response );
+
+	CompileZip( zipFile, data.files );
+
+	Log.done(`Job's done!`);
+
+};
+
 
 
 // addBulk: ( cwd, files, archivePath ) => {
@@ -89,21 +134,6 @@ export const CompileZip = ( archive, files ) => {
 // },
 
 
-// addPath: ( path, archivePath ) => {
-// 	Log.verbose(`Zip: Adding file path: ${path}`);
 
-// 	if(typeof path !== `string`) {
-// 		Log.error(`Zip: Adding file path: Path can only be string, is ${typeof path}`);
-// 	}
-// 	else {
-// 		if( path.length > 0 ) { //don't need no empty files ;)
-// 			Zip.archive.file(
-// 				path,
-// 				{
-// 					name: `/GOLD-furnace${archivePath}`,
-// 				}
-// 			);
-// 		}
-// 	}
 
 // },
