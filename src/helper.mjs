@@ -123,7 +123,7 @@ export const Log = {
 	 */
 	verbose: ( text ) => {
 		if( Log.verboseMode ) {
-			console.info(` 😬 🔥        ${ Style.gray(`VERBOSE: ${ text }`) }`);
+			console.info(` 🙊 🔥        ${ Style.gray(`VERBOSE: ${ text }`) }`);
 		}
 	},
 

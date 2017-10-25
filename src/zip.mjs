@@ -44,15 +44,15 @@ export const AddFile = ( content, archivePath, files ) => {
 
 
 export const AddPath =  ( path, archivePath, files ) => {
-	Log.verbose(`Zip: Adding file path: ${ path }`);
+	Log.verbose(`Adding path: ${ path }`);
 
 	if( typeof path !== `string` ) {
-		Log.error(`Zip: Adding file path: Path can only be string, is ${ typeof path }`);
+		Log.error(`Adding path: Path can only be string, is ${ typeof path }`);
 	}
 	else {
-		if( path.length > 0 ) { //don't need no empty files ;)
+		if( path.length > 0 ) {
 			files.push(
-				Archiver.directory( path, { name: `/GOLD-furnace${ archivePath }` } )
+				Archiver(`zip`).file( path, { name: `/GOLD-furnace${ archivePath }` } )
 			);
 		}
 	}

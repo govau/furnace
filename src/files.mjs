@@ -22,6 +22,8 @@ export const GetFiles = ( data ) => {
 		data: [],
 	}
 
+	let sassModule = '';
+
 	// Change the value to module for the directory lookup
 	if ( data.framework.includes( 'js' ) || data.framework.includes( 'jsModules' ) ) {
 		files.jsFileName = 'module';
@@ -56,11 +58,8 @@ export const GetFiles = ( data ) => {
 
 		// Sass Modules
 		if( data.buildOptions.includes( 'sassModules' ) && Fs.existsSync( sassDirectory ) ) {
-			console.log( sassDirectory );
-
 			AddPath( sassDirectory, `sass/${ component }/`, files.data )
-
-			files.sassModules = `${ files.sassModules }@import 'sass/${ component }/_module.scss';\n`;
+			sassModule = `${ sassModule }@import 'sass/${ component }/_module.scss';\n`;
 		}
 
 		// Jquery/JS minified
@@ -83,10 +82,12 @@ export const GetFiles = ( data ) => {
 		? files.cssMin = `@import '${ SETTINGS.npm.sassVersioning }';\n\n${ files.cssMin }`
 		: '';
 
-	// if ( files.sassDirectories.length ) {
-	// 	files.sassDirectories.unshift( SETTINGS.npm.sassVersioning );
-	// 	files.sassModules = `@import 'sass/sass-versioning/_index.scss';\n\n${ files.sassModules }`
-	// }
+	// Add the sass versioning to the start of the file...
+	if ( sassModule !== '' ) {
+		sassModule = `@import 'sass/sass-versioning/_index.scss';\n\n${ sassModule }`
+	}
+
+	console.log( sassModule );
 
 	return files;
 };
