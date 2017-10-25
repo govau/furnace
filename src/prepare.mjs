@@ -17,8 +17,8 @@ import Fs from 'fs';
 // Local dependencies
 import { SETTINGS } from './settings';
 import { Log } from './helper';
-import { CompileZip } from './zip';
-import { GetFiles, GetBundles } from './files';
+import { CompileZip, GetZip } from './zip';
+import { GetFiles } from './files';
 import { GetDependencies } from './dependencies';
 
 
@@ -32,8 +32,6 @@ import { GetDependencies } from './dependencies';
 export const HandlePost = ( request, response ) => {
 	Log.verbose( `Running HandlePost`);
 
-	const zipFile = Archiver(`zip`);
-
 	let data = request.body;
 	const buildOptions = data.buildOptions;
 
@@ -41,21 +39,8 @@ export const HandlePost = ( request, response ) => {
 
 	HandleData( data )
 		.then( GetFiles )
-		.then( GetBundles )
-		.then( files => {
-
-			response.writeHead(200, {
-				'Content-Type': `application/zip`,
-				'Content-disposition': `attachment; filename=Nugget.zip`,
-			});
-
-			zipFile.pipe( response );
-
-			CompileZip( zipFile, files );
-
-			Log.done(`Job's done!`);
-
-		})
+		// .then( Bundler )
+		.then( files => GetZip( files, response ) )
 		.catch( error => {
 			Log.error( error );
 			response.status( 400 ).send( `400: ${ error }` );

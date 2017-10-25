@@ -14,27 +14,28 @@ import { AddFile, AddPath } from './zip';
 export const GetFiles = ( data ) => {
 	Log.verbose( `Running GetFiles` );
 
-	const files = {
-		cssMin: '',
-		jsMin: [],
-		jsFileName: '',
-		framework: '',
-		data: [],
-	}
+	const files = [];
+	let jsMin = []; // This should be const
+	let sassCssMin = '';
+	let jsFileName = '';
+	let framework = '';
 
 	let sassModule = '';
 
 	// Change the value to module for the directory lookup
+	// Create an SETTINGS.files.js: 'module'
+	// Align the SETTINGS.* with the value from the form
 	if ( data.framework.includes( 'js' ) || data.framework.includes( 'jsModules' ) ) {
-		files.jsFileName = 'module';
-		files.framework = 'js';
+		jsFileName = 'module';
+		framework = 'js';
 	}
 	else if ( data.framework.includes( 'jqueryModules' ) ) {
-		files.jsFileName = 'jquery';
-		files.framework = 'jquery';
-	} else {
-		files.jsFileName = data.framework[ 0 ];
-		files.framework = data.framework[ 0 ];
+		jsFileName = 'jquery';
+		framework = 'jquery';
+	}
+	else {
+		jsFileName = data.framework[ 0 ];
+		framework = data.framework[ 0 ];
 	}
 
 
@@ -43,74 +44,79 @@ export const GetFiles = ( data ) => {
 		const sassFile      = `${ SETTINGS.uikit.componentsDir + component }/lib/sass/_module.scss`;
 		const cssFile       = `${ SETTINGS.uikit.componentsDir + component }/lib/css/styles.css`;
 		const sassDirectory = `${ SETTINGS.uikit.componentsDir + component }/lib/sass/`;
-		const jsFile        = `${ SETTINGS.uikit.componentsDir + component }/lib/js/${ files.jsFileName }.js`;
+		const jsFile        = `${ SETTINGS.uikit.componentsDir + component }/lib/js/${ jsFileName }.js`;
 
-		// Minify CSS
+		// Minify CSS ( Create Sass string to be ran with node-sass )
 		if( data.buildOptions.includes( 'css' ) && Fs.existsSync( sassFile ) ) {
-			files.cssMin = `${ files.cssMin }@import '${ sassFile }';\n`;
+			sassCssMin = `${ sassCssMin }@import '${ sassFile }';\n`;
 		}
 
-		// CSS Modules
+		// Jquery/JS minified ( Create array of files to be iterated upon and concatenated/uglified )
+		if( data.framework.includes( 'js' ) || data.framework.includes( 'jquery' ) ) {
+			if( Fs.existsSync( jsFile ) ) {
+				jsMin.push( jsFile );
+			}
+		}
+		// React/jQuery/JS modules ( Add the files to the zip )
+		else if ( Fs.existsSync( jsFile ) ) {
+			const js = Fs.readFileSync( jsFile ).toString();
+			AddFile( js, `${ framework }/${ component }.js`, files );
+		}
+
+		// CSS Modules ( Add the files to the zip )
 		if( data.buildOptions.includes( 'cssModules' ) && Fs.existsSync( cssFile ) ) {
 			const css = Fs.readFileSync( cssFile ).toString();
-			AddFile( css, `css/${ component }.css`, files.data );
+			AddFile( css, `css/${ component }.css`, files );
 		}
 
-		// Sass Modules
+		// Sass Modules ( Add the paths, create sass file for the zip )
 		if( data.buildOptions.includes( 'sassModules' ) && Fs.existsSync( sassDirectory ) ) {
-			AddPath( sassDirectory, `sass/${ component }/`, files.data )
+			AddPath( sassDirectory, `/sass/${ component }/`, files );
 			sassModule = `${ sassModule }@import 'sass/${ component }/_module.scss';\n`;
 		}
 
-		// Jquery/JS minified
-		if( data.framework.includes( 'js' ) || data.framework.includes( 'jquery' ) ) {
-			if( Fs.existsSync( jsFile ) ) {
-				files.jsMin.push( jsFile );
-			}
-		}
-
-		// React/jQuery/JS modules
-		else if ( Fs.existsSync( jsFile ) ) {
-			const js = Fs.readFileSync( jsFile ).toString();
-			AddFile( js, `${ files.framework }/${ component }.js`, files.data );
-		}
+		// Create a package.json file for the sass modules...
+		// In the pancake object copy settings from form input
+		// Align sassModule with sassCssMin so we have one sass import string
+		// Align the directories with the uikit e.g. packages/component/lib/
 
 	});
 
+
+	// This is the bundler code....
+
+	const bundler = [];
+
 	// Add the sass versioning to the start of the minified CSS string
-	files.cssMin !== ''
-		? files.cssMin = `@import '${ SETTINGS.npm.sassVersioning }';\n\n${ files.cssMin }`
-		: '';
+	if ( sassCssMin ) {
+		// Add sass versioning
+		sassCssMin = `@import '${ SETTINGS.npm.sassVersioning }';\n\n${ sassCssMin }`;
+
+		bundler.push( GetMinCss( sassCssMin ) );
+
+
+
+		// promises.push( functionWhichIsPromise )
+		// Promise.all( promises )
+		//	.then( resolve( ) );
+
+
+		// AddFile( cssMin, 'css/furnace.min.css', files );
+	}
+
+	if( jsMin.length !== 0 ) {
+		jsMin = GetMinJs( jsMin );
+		AddFile( jsMin, `${ framework }/furnace.min.js`, files );
+	}
 
 	// Add the sass versioning to the start of the file...
 	if ( sassModule !== '' ) {
-		sassModule = `@import 'sass/sass-versioning/_index.scss';\n\n${ sassModule }`
+		sassModule = `@import 'node_modules/sass-versioning/_index.scss';\n\n${ sassModule }`;
+		AddFile( sassModule, `sass/main.scss`, files );
 	}
 
-	console.log( sassModule );
+
 
 	return files;
 };
 
-
-/**
- * Get files - Get the paths based on the framework and components chosen.
- *
- * @param data - The request.body returned from the form
- */
-export const GetBundles = ( bundles ) => {
-	Log.verbose( `Running GetBundles` );
-
-	if( bundles.cssMin ) {
-		const cssMin = GetMinCss( bundles.cssMin );
-		AddFile( cssMin, 'css/furnace.min.css', bundles.data );
-	}
-
-	if( bundles.jsMin.length !== 0 ) {
-		const jsMin = GetMinJs( bundles.jsMin );
-		AddFile( jsMin, `${ bundles.framework }/furnace.min.js`, bundles.data );
-	}
-
-	return bundles.data;
-
-};

@@ -26,7 +26,14 @@ export const GetMinCss = ( sassString ) => {
 	Log.verbose( `Running GetMinCss`);
 
 	// Needs autoprefixer
-	return Sassify( sassString );
+	return new Promise( ( resolve, reject ) => {
+		Sassify( sassString )
+			.then( Autoprefix )
+			.then( data => resolve( data ) )
+			.catch( error => {
+				reject( `some rejection yo: ${ error }`)
+			})
+	});
 
 }
 
@@ -40,14 +47,20 @@ export const GetMinCss = ( sassString ) => {
 const Sassify = ( scss ) => {
 	Log.verbose( `Running Sassify`);
 
-	const compiled = Sass.renderSync({
-		data: scss,
-		indentType: 'tab',
-		precision: 8,
-		outputStyle: 'compressed',
+	return new Promise( ( resolve, reject ) => {
+		Sass.render({
+			data: scss,
+			indentType: 'tab',
+			precision: 8,
+			outputStyle: 'compressed',
+		}, ( error, result ) => {
+			if ( error ) {
+				reject( error );
+			} else {
+				resolve( result.css.toString() );
+			}
+		})
 	});
-
-	return compiled.css.toString();
 };
 
 
@@ -69,6 +82,11 @@ const Autoprefix = ( css ) => {
 			});
 
 			return prefixed.css;
-	});
+		})
+		.catch( error => {
+			return error;
+		});
+
+
 
 };

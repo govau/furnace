@@ -7,13 +7,16 @@
  *
  */
 
+'use strict';
+
 // Dependencies
 import Archiver from 'archiver';
 
 // Local dependencies
 import { Log } from './helper';
 
-'use strict';
+
+const zipFile = Archiver(`zip`);
 
 /**
  *
@@ -25,7 +28,7 @@ import { Log } from './helper';
  * @return {array} files - The array of files
  */
 export const AddFile = ( content, archivePath, files ) => {
-	Log.verbose(`Zip: Adding file: ${archivePath}`);
+	Log.verbose(`Zip: Adding file: ${ archivePath }`);
 
 	if( typeof content !== `string` ) {
 		Log.error(`Zip: Adding file: Content can only be string, is ${typeof content}`);
@@ -51,9 +54,12 @@ export const AddPath =  ( path, archivePath, files ) => {
 	}
 	else {
 		if( path.length > 0 ) {
-			files.push(
-				Archiver(`zip`).file( path, { name: `/GOLD-furnace${ archivePath }` } )
-			);
+			zipFile.file(
+				path,
+				{
+					name: `/GOLD-furnace${ archivePath }`,
+				}
+			)
 		}
 	}
 
@@ -106,7 +112,7 @@ export const GetZip = ( files, response ) => {
 
 	zipFile.pipe( response );
 
-	CompileZip( zipFile, data.files );
+	CompileZip( zipFile, files );
 
 	Log.done(`Job's done!`);
 
