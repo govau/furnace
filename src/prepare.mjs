@@ -19,6 +19,7 @@ import { SETTINGS } from './settings';
 import { Log } from './helper';
 import { CompileZip, GetZip } from './zip';
 import { GetFiles } from './files';
+import { Bundle } from './bundle';
 import { GetDependencies } from './dependencies';
 
 
@@ -39,7 +40,7 @@ export const HandlePost = ( request, response ) => {
 
 	HandleData( data )
 		.then( GetFiles )
-		// .then( Bundler )
+		.then( Bundle )
 		.then( files => GetZip( files, response ) )
 		.catch( error => {
 			Log.error( error );

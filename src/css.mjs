@@ -53,12 +53,12 @@ const Sassify = ( scss ) => {
 			indentType: 'tab',
 			precision: 8,
 			outputStyle: 'compressed',
+			includePaths: [ `uikit/` ]
 		}, ( error, result ) => {
 			if ( error ) {
 				reject( error );
-			} else {
-				resolve( result.css.toString() );
 			}
+			resolve( result.css.toString() );
 		})
 	});
 };
@@ -86,7 +86,4 @@ const Autoprefix = ( css ) => {
 		.catch( error => {
 			return error;
 		});
-
-
-
 };

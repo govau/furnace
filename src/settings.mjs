@@ -31,13 +31,33 @@ export const SETTINGS = {
 		redirect: 'https://gold.service.gov.au',
 	},
 	npm: {
-		sassVersioning: Path.normalize(`${ process.cwd() }/node_modules/sass-versioning/dist/_index.scss`),
+		sassVersioning: Path.normalize(`packages/core/node_modules/sass-versioning/dist/_index.scss`),
 	},
 	uikit: {
-		root: Path.normalize(`${ process.cwd() }/uikit/`),
-		componentsDir: Path.normalize(`${ process.cwd() }/uikit/packages/`),
 		dist: Path.normalize(`${ process.cwd() }/dist/`),
 		json: JSON.parse( Fs.readFileSync( Path.normalize( `${ process.cwd() }/uikit/uikit.json` ), "utf-8" ) ),
 		prefix: '@gov.au/',
-	},
+		framework: {
+			js: {
+				fileName: 'module',
+				directory: 'js',
+			},
+			jsModules:  {
+				fileName: 'module',
+				directory: 'js',
+			},
+			jquery: {
+				fileName: 'jquery',
+				directory: 'jquery',
+			},
+			jqueryModules: {
+				fileName: 'jquery',
+				directory: 'jquery',
+			},
+			react: {
+				fileName: 'react',
+				directory: 'react',
+			}
+		}
+	}
 };
