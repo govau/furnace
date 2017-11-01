@@ -41,7 +41,7 @@ export const HandlePost = ( request, response ) => {
 	HandleData( data )
 		.then( GetFiles )
 		.then( Bundle )
-		.then( files => GetZip( files, response ) )
+		.then( () => GetZip( response ) )
 		.catch( error => {
 			Log.error( error );
 			response.status( 400 ).send( `400: ${ error }` );
@@ -74,42 +74,3 @@ export const HandleData = ( data ) => {
 	});
 
 };
-
-
-// To do
-// Add param/return type in JSdocs comments
-// Write jest tests for each function - more pure more testable functions
-// 100% testable functions as good as we can with filesystem!
-
-
-
-
-
-
-
-
-
-////////////////////
-///
-////
-///
-///
-// ZIP STUFF NEED THIS
-
-
-// const files = AddFile( data.components, 'test.txt', [] );
-
-
-
-// Create the response with all of the data and send it as a response
-
-// response.writeHead(200, {
-// 	'Content-Type': `application/zip`,
-// 	'Content-disposition': `attachment; filename=Nugget.zip`,
-// });
-
-
-// zipFile.pipe( response );
-
-
-// CompileZip( zipFile, files );

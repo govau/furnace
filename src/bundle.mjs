@@ -10,32 +10,33 @@ import { AddFile } from './zip';
  * @param data - The request.body returned from the form
  */
 export const Bundle = ( data ) => {
+	Log.verbose( `Running Bundle` );
 
-	const bundle = [];
+	new Promise ( ( resolve, reject ) => {
 
-	// Add the sass versioning to the start of the minified CSS string
-	if ( data.buildOptions.includes( 'css' ) ) {
-		data.sassIncludes = `@import '${ SETTINGS.npm.sassVersioning }';\n\n` + data.sassIncludes;
-		// Add sass versioning
-		bundle.push(
-			GetMinCss( data.sassIncludes )
-				.then( cssMin => {
-					AddFile( cssMin, 'css/furnace.min.css', data.files )
-				})
-		);
-	}
+		if ( data.buildOptions.includes( 'css' ) ) {
+			const sassIncludes = `@import '${ SETTINGS.npm.sassVersioning }';\n\n` + data.sassIncludes;
 
-	console.log( data.jsMin );
+			data.bundle.push(
+				GetMinCss( sassIncludes )
+					.then( cssMin => AddFile( cssMin, 'css/furnace.min.css' ) )
+					.catch( error => reject( error ) )
+			);
+		}
 
-	if( data.jsMin.length !== 0 ) {
-		GetMinJs( data.jsMin )
-			.then( jsMinData => {
-				AddFile( jsMinData, `${ data.jsDirectory }/furnace.min.js`, data.files );
-			})
-			.catch( error => {
-				console.error( error );
-			})
-	}
+		if( data.jsMin.length !== 0 ) {
+			data.bundle.push(
+				GetMinJs( data.jsMin )
+					.then( jsMinData => AddFile( jsMinData, `${ data.jsDirectory }/furnace.min.js` ) )
+					.catch( error => reject( error ) )
+			)
+		}
 
-	return Promise.all( bundle );
+
+		const bundle = Promise.all( data.bundle )
+			.catch( error => reject( error ));
+
+		resolve( bundle );
+
+	})
 }

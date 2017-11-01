@@ -32,17 +32,11 @@ export const GetMinJs = ( jsFiles ) => {
 			js.push( ReadFile( `uikit/${ jsFile }` ) );
 		});
 
-		Promise.all( js )
-			.then( jsStringArray => {
-				return data.toString();
-			})
-			.then( jsString => {
-				console.log( jsString );
-				return UglifyJs.minify( jsString );
-			})
-			.then( resolve() )
-			.catch( error => {
-				reject( error );
-			})
+		js = Promise.all( js )
+			.then( jsStringArray => data.toString() )
+			.then( jsString => UglifyJs.minify( jsString ) )
+			.catch( error => reject( error ) );
+
+		resolve( js );
 	})
 }

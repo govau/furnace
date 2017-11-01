@@ -47,9 +47,3 @@ Server
 	.listen( SETTINGS.server.port, ( request, response ) => {
 		Log.welcome( `Furnace is ready to melt GOLD on port ${ SETTINGS.server.port }` );
 	});
-
-
-// Todo
-// - Add JS docs /** */
-// - Add table of contents to the top of the comments
-// - One line for Timestamp

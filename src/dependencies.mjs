@@ -30,20 +30,16 @@ export const GetDependencies = (
 			? component
 			: prefix + component;
 
-		// Don't go deeper for core, we add this after to the start.
-		if( component !== `${ prefix }core` ) {
+		// Add the dependencies first
+		Object.keys( json[ component ].peerDependencies ).map( dependency => {
+			result.push( dependency.replace( prefix, '' ) );
+		});
 
-			// Add the component to results without the prefix
-			result.push( component.replace( prefix, '' ) );
-
-			// Check that components dependencies
-			GetDependencies(
-				Object.keys( json[ component ].peerDependencies ),
-				result
-			)
-		}
+		// Add the component after the dependencies
+		result.push( component.replace( prefix, '' ) );
 
 	});
 
+	// Only return unique values
 	return [ ...new Set( result ) ];
 };

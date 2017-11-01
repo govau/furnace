@@ -25,14 +25,11 @@ import { Log } from './helper';
 export const GetMinCss = ( sassString ) => {
 	Log.verbose( `Running GetMinCss`);
 
-	// Needs autoprefixer
 	return new Promise( ( resolve, reject ) => {
 		Sassify( sassString )
 			.then( Autoprefix )
-			.then( data => resolve( data ) )
-			.catch( error => {
-				reject( `some rejection yo: ${ error }`)
-			})
+			.then( cssMin => resolve( cssMin ) )
+			.catch( error => reject( error ) );
 	});
 
 }
@@ -72,18 +69,17 @@ const Sassify = ( scss ) => {
 const Autoprefix = ( css ) => {
 	Log.verbose( `Running Autoprefix`);
 
-	return Postcss([ Autoprefixer({ browsers: ['last 2 versions', 'ie 8', 'ie 9', 'ie 10'] }) ])
-		.process( css )
-		.then( ( prefixed ) => {
-			prefixed
-				.warnings()
-				.forEach( ( warn ) => {
-					console.warn( warn.toString() );
-			});
+	new Promise ( ( resolve, reject ) => {
 
-			return prefixed.css;
-		})
-		.catch( error => {
-			return error;
-		});
+		return Postcss([ Autoprefixer({ browsers: ['last 2 versions', 'ie 8', 'ie 9', 'ie 10'] }) ])
+			.process( css )
+			.then( ( prefixed ) => {
+				prefixed
+					.warnings()
+					.forEach( ( warn ) => console.warn( warn.toString() ) );
+
+				resolve( prefixed.css );
+			})
+			.catch( error => reject( error ) );
+	})
 };

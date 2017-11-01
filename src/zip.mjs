@@ -16,7 +16,7 @@ import Archiver from 'archiver';
 import { Log } from './helper';
 
 
-const zipFile = Archiver(`zip`);
+let zipFile = Archiver(`zip`);
 
 /**
  *
@@ -27,46 +27,16 @@ const zipFile = Archiver(`zip`);
  *
  * @return {array} files - The array of files
  */
-export const AddFile = ( content, archivePath, files ) => {
+export const AddFile = ( content, archivePath ) => {
 	Log.verbose(`Zip: Adding file: ${ archivePath }`);
 
-	if( typeof content !== `string` ) {
+	if( typeof content !== `string` && content.length <= 0 ) {
 		Log.error(`Zip: Adding file: Content can only be string, is ${typeof content}`);
 	}
-	else {
-		if( content.length > 0 ) {
-			files.push({
-				content: content,
-				name: `/GOLD-furnace/${ archivePath }`,
-			});
-		}
-	}
 
-	return files;
+	zipFile.append( content, `/GOLD-furnace/${ archivePath }` );
+
 };
-
-
-export const AddPath =  ( path, archivePath, files ) => {
-	Log.verbose(`Adding path: ${ path }`);
-
-	if( typeof path !== `string` ) {
-		Log.error(`Adding path: Path can only be string, is ${ typeof path }`);
-	}
-	else {
-		if( path.length > 0 ) {
-			zipFile.file(
-				path,
-				{
-					name: `/GOLD-furnace${ archivePath }`,
-				}
-			)
-		}
-	}
-
-	return files;
-}
-
-
 
 
 /**
@@ -77,21 +47,16 @@ export const AddPath =  ( path, archivePath, files ) => {
  * @param files - The files array to be iterated upon to go into the zip file
  *
  */
-export const CompileZip = ( archive, files ) => {
-	Log.verbose(`Zip: Compiling zip`);
-
-	files.map( file => {
-		archive.append( file.content, { name: file.name } );
-	});
+export const CompileZip = ( archive ) => {
+	Log.verbose( `CompileZip: Compiling zip` );
 
 	try {
-		archive.finalize(); //send to server
-		Log.info(`Zip sent!`);
+		archive.finalize();
 	}
 	catch( error ) {
-		Log.error(`Zip ERROR`);
-		Log.error( error );
+		reject( error );
 	}
+
 };
 
 
@@ -103,7 +68,8 @@ export const CompileZip = ( archive, files ) => {
  * @param files - The files array to be iterated upon to go into the zip file
  *
  */
-export const GetZip = ( files, response ) => {
+export const GetZip = ( response ) => {
+	Log.verbose( `GetZip: Compiling zip` );
 
 	response.writeHead(200, {
 		'Content-Type': `application/zip`,
@@ -112,34 +78,9 @@ export const GetZip = ( files, response ) => {
 
 	zipFile.pipe( response );
 
-	CompileZip( zipFile, files );
+	CompileZip( zipFile );
 
-	Log.done(`Job's done!`);
+	Log.done( `Job's done: Alright alright alright!` );
+	zipFile = Archiver( `zip` );
 
 };
-
-
-
-// addBulk: ( cwd, files, archivePath ) => {
-// 	Log.verbose(`Zip: Adding bluk: ${cwd}${files} to: ${archivePath}`);
-
-// 	if(typeof files !== `object`) {
-// 		Log.error(`Zip: Adding files: Path can only be array/object, is ${typeof files}`);
-// 	}
-// 	else {
-
-// 		Zip.archive.bulk({ //add them all to the archive
-// 			expand: true,
-// 			cwd: cwd,
-// 			src: files,
-// 			dest: `/GOLD-furnace${archivePath}`,
-// 			filter: `isFile`,
-// 		});
-
-// 	}
-// },
-
-
-
-
-// },
