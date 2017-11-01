@@ -12,7 +12,7 @@ import { AddFile } from './zip';
 export const Bundle = ( data ) => {
 	Log.verbose( `Running Bundle` );
 
-	new Promise ( ( resolve, reject ) => {
+	return new Promise ( ( resolve, reject ) => {
 
 		if ( data.buildOptions.includes( 'css' ) ) {
 			const sassIncludes = `@import '${ SETTINGS.npm.sassVersioning }';\n\n` + data.sassIncludes;
@@ -33,10 +33,9 @@ export const Bundle = ( data ) => {
 		}
 
 
-		const bundle = Promise.all( data.bundle )
-			.catch( error => reject( error ));
-
-		resolve( bundle );
+		Promise.all( data.bundle )
+			.then( resolve )
+			.catch( error => reject( error ) );
 
 	})
 }

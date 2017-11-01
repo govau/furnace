@@ -69,9 +69,9 @@ const Sassify = ( scss ) => {
 const Autoprefix = ( css ) => {
 	Log.verbose( `Running Autoprefix`);
 
-	new Promise ( ( resolve, reject ) => {
+	return new Promise ( ( resolve, reject ) => {
 
-		return Postcss([ Autoprefixer({ browsers: ['last 2 versions', 'ie 8', 'ie 9', 'ie 10'] }) ])
+		Postcss([ Autoprefixer({ browsers: ['last 2 versions', 'ie 8', 'ie 9', 'ie 10'] }) ])
 			.process( css )
 			.then( ( prefixed ) => {
 				prefixed

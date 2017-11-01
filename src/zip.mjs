@@ -28,14 +28,25 @@ let zipFile = Archiver(`zip`);
  * @return {array} files - The array of files
  */
 export const AddFile = ( content, archivePath ) => {
-	Log.verbose(`Zip: Adding file: ${ archivePath }`);
+	Log.verbose(`AddFile: ${ archivePath }`);
 
-	if( typeof content !== `string` && content.length <= 0 ) {
-		Log.error(`Zip: Adding file: Content can only be string, is ${typeof content}`);
+	if( typeof content !== `string` ) {
+		Log.error(`AddFile: Content can only be string, is ${typeof content}`);
 	}
 
-	zipFile.append( content, `/GOLD-furnace/${ archivePath }` );
+	zipFile.append( content, { name: `${ archivePath }` } );
+};
 
+
+/**
+ *
+ * AddGlob, adds a file and returns it as a string
+ *
+ */
+export const AddGlob = ( pattern, archivePath ) => {
+	Log.verbose(`AddGlob: ${ pattern }`);
+
+	zipFile.glob( pattern, { cwd: 'uikit' }, { name: `${ archivePath }` } );
 };
 
 
@@ -50,12 +61,15 @@ export const AddFile = ( content, archivePath ) => {
 export const CompileZip = ( archive ) => {
 	Log.verbose( `CompileZip: Compiling zip` );
 
-	try {
-		archive.finalize();
-	}
-	catch( error ) {
-		reject( error );
-	}
+	return new Promise( ( resolve, reject ) => {
+		try {
+			archive.finalize();
+			resolve();
+		}
+		catch( error ) {
+			reject( error );
+		}
+	});
 
 };
 
@@ -78,9 +92,10 @@ export const GetZip = ( response ) => {
 
 	zipFile.pipe( response );
 
-	CompileZip( zipFile );
-
-	Log.done( `Job's done: Alright alright alright!` );
-	zipFile = Archiver( `zip` );
+	CompileZip( zipFile )
+		.then( () => {
+			Log.done( `Job's done: Alright alright alright!` );
+			zipFile = Archiver( `zip` );
+		});
 
 };

@@ -5,7 +5,7 @@ import { SETTINGS } from './settings';
 import { Log } from './helper';
 import { GetMinCss } from './css';
 import { GetMinJs } from './javascript';
-import { AddFile } from './zip';
+import { AddGlob } from './zip';
 
 /**
  * Get files - Get the paths based on the framework and components chosen.
@@ -43,6 +43,13 @@ export const GetFiles = ( data ) => {
 				sassIncludes += `@import '${ sassFile }';\n`;
 			}
 
+			// Sass Modules ( Add the paths, create sass file for the zip )
+			if( data.buildOptions.includes( 'sassModules' ) ) {
+				bundle.push(
+					AddGlob( `${ sassDirectory }*.scss`, `packages/${ component }/lib/sass/` )
+				);
+			}
+
 		});
 
 		resolve({
@@ -59,7 +66,7 @@ export const GetFiles = ( data ) => {
 
 // Promisified Read File
 export const ReadFile = ( pathToFile ) => {
-	Log.verbose( `Running ReadFile` );
+	Log.verbose( `Running ReadFile: ${ pathToFile }` );
 
 	return new Promise( ( resolve, reject ) => {
 
@@ -69,10 +76,9 @@ export const ReadFile = ( pathToFile ) => {
 				Log.verbose( `File not found: ${ pathToFile }` );
 				reject( error );
 			}
-			else {
-				Log.verbose( `Read: ${ pathToFile }` );
-				resolve( fileContents );
-			}
+
+			Log.verbose( `Read: ${ pathToFile }` );
+			resolve( fileContents );
 
 		});
 
