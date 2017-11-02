@@ -34,7 +34,7 @@ export const AddFile = ( content, archivePath ) => {
 		Log.error(`AddFile: Content can only be string, is ${typeof content}`);
 	}
 
-	zipFile.append( content, { name: `${ archivePath }` } );
+	zipFile.append( content, { name: archivePath } );
 };
 
 
@@ -43,10 +43,10 @@ export const AddFile = ( content, archivePath ) => {
  * AddGlob, adds a file and returns it as a string
  *
  */
-export const AddGlob = ( pattern, archivePath ) => {
-	Log.verbose(`AddGlob: ${ pattern }`);
+export const AddGlob = ( pattern, directory, archivePath ) => {
+	Log.verbose(`AddGlob: ${ directory + pattern }`);
 
-	zipFile.glob( pattern, { cwd: 'uikit' }, { name: `${ archivePath }` } );
+	zipFile.glob( pattern, { cwd: directory }, { prefix: archivePath } );
 };
 
 
@@ -61,16 +61,12 @@ export const AddGlob = ( pattern, archivePath ) => {
 export const CompileZip = ( archive ) => {
 	Log.verbose( `CompileZip: Compiling zip` );
 
-	return new Promise( ( resolve, reject ) => {
-		try {
-			archive.finalize();
-			resolve();
-		}
-		catch( error ) {
-			reject( error );
-		}
-	});
-
+	try {
+		archive.finalize();
+	}
+	catch( error ) {
+		Log.error( error );
+	}
 };
 
 
@@ -87,15 +83,14 @@ export const GetZip = ( response ) => {
 
 	response.writeHead(200, {
 		'Content-Type': `application/zip`,
-		'Content-disposition': `attachment; filename=Nugget.zip`,
+		'Content-disposition': `attachment; filename=GOLD-AU.zip`,
 	});
 
 	zipFile.pipe( response );
 
-	CompileZip( zipFile )
-		.then( () => {
-			Log.done( `Job's done: Alright alright alright!` );
-			zipFile = Archiver( `zip` );
-		});
+	CompileZip( zipFile );
+
+	Log.done( `Job's done: Alright alright alright!` );
+	zipFile = Archiver( `zip` );
 
 };

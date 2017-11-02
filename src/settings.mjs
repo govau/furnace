@@ -31,7 +31,7 @@ export const SETTINGS = {
 		redirect: 'https://gold.service.gov.au',
 	},
 	npm: {
-		sassVersioning: Path.normalize(`packages/core/node_modules/sass-versioning/dist/_index.scss`),
+		sassVersioning: Path.normalize(`uikit/packages/core/node_modules/sass-versioning/dist/_index.scss`),
 	},
 	uikit: {
 		dist: Path.normalize(`${ process.cwd() }/dist/`),

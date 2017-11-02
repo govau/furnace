@@ -29,7 +29,7 @@ export const GetMinJs = ( jsFiles ) => {
 
 		// For each JS file read the file and add it to the string.
 		jsFiles.map( jsFile => {
-			js.push( ReadFile( `uikit/${ jsFile }` ) );
+			js.push( ReadFile( jsFile ) );
 		});
 
 		Promise.all( js )

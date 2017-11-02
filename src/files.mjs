@@ -5,7 +5,7 @@ import { SETTINGS } from './settings';
 import { Log } from './helper';
 import { GetMinCss } from './css';
 import { GetMinJs } from './javascript';
-import { AddGlob } from './zip';
+import { AddFile, AddGlob } from './zip';
 
 /**
  * Get files - Get the paths based on the framework and components chosen.
@@ -17,7 +17,10 @@ export const GetFiles = ( data ) => {
 
 	const bundle       = [];
 	const jsMin        = [];
-	let   sassIncludes = '';
+
+	let   cssIncludes  = `@import '${ SETTINGS.npm.sassVersioning }';\n\n`;
+	let   sassInclude  = `@import 'node_modules/sass-versioning/dist/_index.scss';\n\n`;
+
 	const jsFileName   = SETTINGS.uikit.framework[ data.framework ].fileName;
 	const jsDirectory  = SETTINGS.uikit.framework[ data.framework ].directory;
 
@@ -25,36 +28,65 @@ export const GetFiles = ( data ) => {
 
 		data.components.map( component => {
 
-			const componentPancake = SETTINGS.uikit.json[`${ SETTINGS.uikit.prefix }${ component }`]['pancake-module'];
-			const sassFile = Path.normalize( `packages/${ component }/${ componentPancake.sass.path }` );
+			const uikitJson = SETTINGS.uikit.json[`${ SETTINGS.uikit.prefix }${ component }`];
+			const componentPancake = uikitJson['pancake-module'];
+			const dependencies = uikitJson.peerDependencies;
+
+			const sassFile = Path.normalize( `uikit/packages/${ component }/${ componentPancake.sass.path }` );
 			const sassDirectory = Path.normalize( sassFile ).replace('_module.scss', '');
 
 			let jsFile;
 			if ( componentPancake[ jsDirectory ] ) {
-				jsFile = Path.normalize( `packages/${ component }/${ componentPancake[ jsDirectory ].path }` );
+				jsFile = Path.normalize( `uikit/packages/${ component }/${ componentPancake[ jsDirectory ].path }` );
 			}
 
+			// Minified JS add directory to array
 			if( jsFile && data.framework.includes( 'js' ) ) {
 				jsMin.push( jsFile );
+			}
+			// JS Modules read the file and add it to the zip
+			else if( jsFile ) {
+				bundle.push(
+					ReadFile( jsFile )
+						.then( jsData => AddFile( jsData, `components/${ component }/${ jsDirectory }/${ jsFileName }.js` ) )
+						.catch( error => reject( error ) )
+				);
 			}
 
 			// Minify CSS ( Create Sass string to be ran with node-sass )
 			if( data.buildOptions.includes( 'css' ) ) {
-				sassIncludes += `@import '${ sassFile }';\n`;
+				cssIncludes += `@import '${ sassFile }';\n`;
+			}
+
+			// CSS Modules ( Add the files to the zip )
+			if( data.buildOptions.includes( 'cssModules' ) && Object.keys( dependencies ).length ) {
+				let cssModuleImport = `@import '${ SETTINGS.npm.sassVersioning }';\n\n`;
+				Object.keys( dependencies ).map( dependency => {
+					cssModuleImport += `@import '${ `uikit/packages/${ dependency.replace('@gov.au/', '') }/${ componentPancake.sass.path }` }';\n`;
+				});
+
+				bundle.push(
+					GetMinCss( cssModuleImport )
+						.then( cssMin => AddFile( cssMin, `components/${ component }/css/styles.css` ) )
+						.catch( error => reject( error ) )
+				);
 			}
 
 			// Sass Modules ( Add the paths, create sass file for the zip )
 			if( data.buildOptions.includes( 'sassModules' ) ) {
-				bundle.push(
-					AddGlob( `${ sassDirectory }*.scss`, `packages/${ component }/lib/sass/` )
-				);
+				sassInclude += `@import 'components/${ component }/sass/_module.scss';\n`;
+				bundle.push( AddGlob( `*.scss`, sassDirectory, `components/${ component }/sass/` ) );
 			}
-
 		});
+
+		// Add the main.scss file to the
+		bundle.push(
+			AddFile( sassInclude, `main.scss` )
+		)
 
 		resolve({
 			jsMin: jsMin,
-			sassIncludes: sassIncludes,
+			cssIncludes: cssIncludes,
 			bundle: bundle,
 			buildOptions: data.buildOptions,
 			jsDirectory: jsDirectory
@@ -64,7 +96,12 @@ export const GetFiles = ( data ) => {
 };
 
 
-// Promisified Read File
+
+/**
+ * Promise that reads a file
+ *
+ * @param pathToFile
+ */
 export const ReadFile = ( pathToFile ) => {
 	Log.verbose( `Running ReadFile: ${ pathToFile }` );
 
@@ -84,35 +121,3 @@ export const ReadFile = ( pathToFile ) => {
 
 	})
 }
-
-	//	// Sass Modules ( Add the paths, create sass file for the zip )
-	// 	// if( data.buildOptions.includes( 'sassModules' ) && Fs.existsSync( sassDirectory ) ) {
-	// 	// 	AddPath( sassDirectory, `/sass/${ component }/` );
-	// 	// }
-
-	// 	// CSS Modules ( Add the files to the zip )
-	// 	if( data.buildOptions.includes( 'cssModules' ) ) {
-	// 		bundle.push(
-	// 			ReadFile( cssFile )
-	// 				.then( cssData => {
-	// 					AddFile( cssData, `css/${ component }.css` );
-	// 				})
-	// 				.catch( error => {
-	// 					console.error( error );
-	// 				})
-	// 		);
-	// 	}
-
-
-	// React/jQuery/JS modules ( Add the files to the zip )
-	// else if( jsFile ) {
-	// 	bundle.push(
-	// 		ReadFile( jsFile )
-	// 			.then( jsData => {
-	// 				AddFile( jsData, `${ jsDirectory }/${ component }.js` );
-	// 			})
-	// 			.catch( error => {
-	// 				console.error( `${ error }\n${ jsFile }` );
-	// 			})
-	// 	)
-	// }

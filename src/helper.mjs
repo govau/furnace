@@ -87,6 +87,7 @@ export const Log = {
 	 */
 	error: ( text ) => {
 		console.error(` 🔥 🔥        ${ Style.red(`ERROR:   ${ text }`) }`);
+		process.exit( 1 );
 	},
 
 	/**

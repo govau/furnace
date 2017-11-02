@@ -15,14 +15,13 @@ export const Bundle = ( data ) => {
 	return new Promise ( ( resolve, reject ) => {
 
 		if ( data.buildOptions.includes( 'css' ) ) {
-			const sassIncludes = `@import '${ SETTINGS.npm.sassVersioning }';\n\n` + data.sassIncludes;
-
 			data.bundle.push(
-				GetMinCss( sassIncludes )
+				GetMinCss( cssIncludes )
 					.then( cssMin => AddFile( cssMin, 'css/furnace.min.css' ) )
 					.catch( error => reject( error ) )
 			);
 		}
+
 
 		if( data.jsMin.length !== 0 ) {
 			data.bundle.push(

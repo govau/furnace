@@ -15,12 +15,10 @@ import Postcss from 'postcss';
 import { SETTINGS } from './settings';
 import { Log } from './helper';
 
-
 /**
- * Compile Sass code into CSS (modified from the uikit helper.js)
+ * Promise that uses a sass @import string to resolve minified, autopreffixed css
  *
- * @param  {string} scss - The Sass file to be compiled
- * @param  {string} css  - The location where the CSS should be written to
+ * @param sassString
  */
 export const GetMinCss = ( sassString ) => {
 	Log.verbose( `Running GetMinCss`);
@@ -50,7 +48,6 @@ const Sassify = ( scss ) => {
 			indentType: 'tab',
 			precision: 8,
 			outputStyle: 'compressed',
-			includePaths: [ `uikit/` ]
 		}, ( error, result ) => {
 			if ( error ) {
 				reject( error );
