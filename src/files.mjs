@@ -15,14 +15,16 @@ import { AddFile, AddGlob } from './zip';
 export const GetFiles = ( data ) => {
 	Log.verbose( `Running GetFiles` );
 
-	const bundle       = [];
-	const jsMin        = [];
+	const bundle = [];
+	const jsMin  = [];
 
-	let   cssIncludes  = `@import '${ SETTINGS.npm.sassVersioning }';\n\n`;
-	let   sassInclude  = `@import 'node_modules/sass-versioning/dist/_index.scss';\n\n`;
+	let imports = {
+		css: `@import '${ SETTINGS.npm.sassVersioning }';\n\n`,
+		sass: `@import 'node_modules/sass-versioning/dist/_index.scss';\n\n`,
+	};
 
-	const jsFileName   = SETTINGS.uikit.framework[ data.framework ].fileName;
-	const jsDirectory  = SETTINGS.uikit.framework[ data.framework ].directory;
+	const jsFileName  = SETTINGS.uikit.framework[ data.framework ].fileName;
+	const jsDirectory = SETTINGS.uikit.framework[ data.framework ].directory;
 
 	return new Promise ( ( resolve, reject ) => {
 
@@ -55,7 +57,7 @@ export const GetFiles = ( data ) => {
 
 			// Minify CSS ( Create Sass string to be ran with node-sass )
 			if( data.buildOptions.includes( 'css' ) ) {
-				cssIncludes += `@import '${ sassFile }';\n`;
+				imports.css += `@import '${ sassFile }';\n`;
 			}
 
 			// CSS Modules ( Add the files to the zip )
@@ -67,26 +69,21 @@ export const GetFiles = ( data ) => {
 
 				bundle.push(
 					GetMinCss( cssModuleImport )
-						.then( cssMin => AddFile( cssMin, `components/${ component }/css/styles.css` ) )
+						.then( cssMin => AddFile( cssMin, `${ component }/css/styles.css` ) )
 						.catch( error => reject( error ) )
 				);
 			}
 
 			// Sass Modules ( Add the paths, create sass file for the zip )
 			if( data.buildOptions.includes( 'sassModules' ) ) {
-				sassInclude += `@import 'components/${ component }/sass/_module.scss';\n`;
+				imports.sass += `@import 'components/${ component }/sass/_module.scss';\n`;
 				bundle.push( AddGlob( `*.scss`, sassDirectory, `components/${ component }/sass/` ) );
 			}
 		});
 
-		// Add the main.scss file to the
-		bundle.push(
-			AddFile( sassInclude, `main.scss` )
-		)
-
 		resolve({
 			jsMin: jsMin,
-			cssIncludes: cssIncludes,
+			imports: imports,
 			bundle: bundle,
 			buildOptions: data.buildOptions,
 			jsDirectory: jsDirectory
