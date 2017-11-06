@@ -18,8 +18,7 @@ import Fs from 'fs';
 import { SETTINGS } from './settings';
 import { Log } from './helper';
 import { CompileZip, GetZip } from './zip';
-import { GetFiles } from './files';
-import { Bundle } from './bundle';
+import { PrepareBundle, Bundle } from './bundle';
 import { GetDependencies } from './dependencies';
 
 
@@ -34,12 +33,11 @@ export const HandlePost = ( request, response ) => {
 	Log.verbose( `Running HandlePost`);
 
 	let data = request.body;
-	const buildOptions = data.buildOptions;
 
 	Log.verbose( `Melting the component strings into filenames`);
 
 	HandleData( data )
-		.then( GetFiles )
+		.then( PrepareBundle )
 		.then( Bundle )
 		.then( () => GetZip( response ) )
 		.catch( error => {
@@ -50,7 +48,7 @@ export const HandlePost = ( request, response ) => {
 }
 
 /**
- * HandleData - Get the paths based on the framework and components chosen.
+ * HandleData - Get the paths based on the jsOutput and components chosen.
  *
  * @param data - The request.body returned from the form
  */
@@ -65,15 +63,18 @@ export const HandleData = ( data ) => {
 
 		// If there is one option, put it into an array.
 		const components = typeof data.components === 'string' ? [ data.components ] : data.components;
-		const buildOptions = typeof data.buildOptions === 'string' ? [ data.buildOptions ] : data.buildOptions;
-		const framework = typeof data.framework === 'string' ? [ data.framework ] : data.framework;
+		const styleOutput = typeof data.styleOutput === 'string' ? [ data.styleOutput ] : data.styleOutput;
+		const jsOutput = typeof data.jsOutput === 'string' ? [ data.jsOutput ] : data.jsOutput;
 
 		resolve({
 			components: GetDependencies( components ),
-			buildOptions: buildOptions,
-			framework: framework,
+			styleOutput: styleOutput,
+			jsOutput: jsOutput,
 		})
 
 	});
 
 };
+
+
+

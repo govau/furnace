@@ -49,7 +49,7 @@ export const Sassify = ( scss ) => {
 			precision: 8,
 			outputStyle: 'compressed',
 		}, ( error, result ) => {
-			if ( result ) {
+			if ( result && !error ) {
 				resolve( result.css.toString() );
 			}
 			reject( error );

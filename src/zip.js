@@ -64,28 +64,6 @@ export const AddGlob = ( pattern, directory, archivePath ) => {
  * @param files - The files array to be iterated upon to go into the zip file
  *
  */
-export const CompileZip = ( archive ) => {
-	Log.verbose( `CompileZip: Compiling zip` );
-
-	try {
-		archive.finalize();
-		Log.done( `Job's done: Alright alright alright!` );
-		zipFile = Archiver( `zip` );
-	}
-	catch( error ) {
-		Log.error( error );
-	}
-};
-
-
-/**
- *
- * CompileZip - Turn the files array into a zip file using archiver
- *
- * @param archive - The response containing the archiver head
- * @param files - The files array to be iterated upon to go into the zip file
- *
- */
 export const GetZip = ( response ) => {
 	Log.verbose( `GetZip: Compiling zip` );
 
@@ -96,5 +74,13 @@ export const GetZip = ( response ) => {
 
 	zipFile.pipe( response );
 
-	CompileZip( zipFile );
+	try {
+		zipFile.finalize();
+		Log.done( `Job's done: Alright alright alright!` );
+	}
+	catch( error ) {
+		Log.error( error );
+	}
+
+	zipFile = Archiver( `zip` );
 };

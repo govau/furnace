@@ -44,22 +44,3 @@ test('AddGlob: should error when given an non string value', () => {
 	AddGlob( true, 'files/', 'files/' );
 	expect( console.error.mock.calls.length ).toBe( 1 );
 });
-
-
-// test('GetZip: should error when given an non string value', () => {
-
-// 	const output = {};
-
-// 	const responseMock = {
-// 		writeHead: ( statusNum, headObject ) => {
-// 			output.statusNum = statusNum;
-// 			output.headObject = headObject;
-// 		},
-// 	};
-
-// 	GetZip( responseMock );
-
-// 	console.log( output );
-
-
-// });

@@ -37,27 +37,43 @@ export const SETTINGS = {
 		dist: Path.normalize(`${ process.cwd() }/dist/`),
 		json: JSON.parse( Fs.readFileSync( Path.normalize( `${ process.cwd() }/uikit/uikit.json` ), "utf-8" ) ),
 		prefix: '@gov.au/',
-		framework: {
+		styleOutput: {
+			css: {
+				option: 'css',
+			},
+			cssModules: {
+				option: 'cssModules',
+			},
+			sassModules: {
+				option: 'sassModules',
+			},
+		},
+		jsOutput: {
 			js: {
+				option: 'js',
 				fileName: 'module',
 				directory: 'js',
 			},
 			jsModules:  {
+				option: 'jsModules',
 				fileName: 'module',
 				directory: 'js',
 			},
 			jquery: {
+				option: 'jquery',
 				fileName: 'jquery',
 				directory: 'jquery',
 			},
 			jqueryModules: {
+				option: 'jqueryModules',
 				fileName: 'jquery',
 				directory: 'jquery',
 			},
 			react: {
+				option: 'react',
 				fileName: 'react',
 				directory: 'react',
-			}
-		}
-	}
+			},
+		},
+	},
 };

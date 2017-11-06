@@ -30,7 +30,8 @@ if (process.argv.includes('-v') || process.argv.includes('--verbose')) {
  * Server - Collect POST data and run HandlePost function on it
  *
  */
-const Server = Express();
+export const Server = Express();
+
 Server
 	// Middleware to use the querystring library
 	.use( BodyParser.urlencoded( { extended: false } ) )
