@@ -27,6 +27,10 @@ export const GetMinJs = ( jsFiles ) => {
 	return new Promise ( ( resolve, reject ) => {
 		let js = [];
 
+		if ( jsFiles.length <= 0 ) {
+			reject( 'The jsFiles must have atleast one file' );
+		}
+
 		// For each JS file read the file and add it to the string.
 		jsFiles.map( jsFile => {
 			js.push( ReadFile( jsFile ) );

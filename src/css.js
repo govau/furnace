@@ -39,7 +39,7 @@ export const GetMinCss = ( sassString ) => {
  * @param  {string} scss - The Sass file to be compiled
  * @param  {string} css  - The location where the CSS should be written to
  */
-const Sassify = ( scss ) => {
+export const Sassify = ( scss ) => {
 	Log.verbose( `Running Sassify`);
 
 	return new Promise( ( resolve, reject ) => {
@@ -49,10 +49,10 @@ const Sassify = ( scss ) => {
 			precision: 8,
 			outputStyle: 'compressed',
 		}, ( error, result ) => {
-			if ( error ) {
-				reject( error );
+			if ( result ) {
+				resolve( result.css.toString() );
 			}
-			resolve( result.css.toString() );
+			reject( error );
 		})
 	});
 };
@@ -63,7 +63,7 @@ const Sassify = ( scss ) => {
  *
  * @param  {string} file - The file to be prefixed
  */
-const Autoprefix = ( css ) => {
+export const Autoprefix = ( css ) => {
 	Log.verbose( `Running Autoprefix`);
 
 	return new Promise ( ( resolve, reject ) => {

@@ -87,7 +87,6 @@ export const Log = {
 	 */
 	error: ( text ) => {
 		console.error(` 🔥 🔥        ${ Style.red(`ERROR:   ${ text }`) }`);
-		process.exit( 1 );
 	},
 
 	/**
@@ -105,7 +104,7 @@ export const Log = {
 	 * @param  {string}  text - The text you want to log
 	 */
 	ok: ( text ) => {
-		console.info(` ✔ 🔥        ${ Style.green(`OK:`) }      ${ Style.green( text ) }`);
+		console.info(` ✔ 🔥        ${ Style.green(`OK:      ${ text }`) }`);
 	},
 
 	/**
