@@ -28,7 +28,7 @@ export const GetMinJs = ( jsFiles ) => {
 		let js = [];
 
 		if ( jsFiles.length <= 0 ) {
-			reject( 'The jsFiles must have atleast one file' );
+			reject( 'The jsFiles must have at least one file' );
 		}
 
 		// For each JS file read the file and add it to the string.

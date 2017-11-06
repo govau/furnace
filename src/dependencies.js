@@ -27,16 +27,23 @@ export const GetDependencies = (
 
 		// Add the prefix if it doesn't have it
 		component = component.startsWith( prefix )
-			? component
-			: prefix + component;
+		? component
+		: prefix + component;
 
-		// Add the dependencies first
-		Object.keys( json[ component ].peerDependencies ).map( dependency => {
-			result.push( dependency.replace( prefix, '' ) );
-		});
+		const componentJson = json[ component ];
 
-		// Add the component after the dependencies
-		result.push( component.replace( prefix, '' ) );
+		if ( componentJson !== undefined ) {
+
+			// Add the dependencies first
+			Object.keys( componentJson.depedencies ).map( dependency => {
+				result.push( dependency.replace( prefix, '' ) );
+			});
+
+			// Add the component after the dependencies
+			result.push( component.replace( prefix, '' ) );
+		} else {
+			Log.error( `Component ${ component } not found.`);
+		}
 
 	});
 

@@ -59,6 +59,10 @@ export const HandleData = ( data ) => {
 
 	return new Promise( ( resolve, reject ) => {
 
+		if ( !data.components ) {
+			reject( `No components selected` );
+		}
+
 		// If there is one option, put it into an array.
 		const components = typeof data.components === 'string' ? [ data.components ] : data.components;
 		const buildOptions = typeof data.buildOptions === 'string' ? [ data.buildOptions ] : data.buildOptions;

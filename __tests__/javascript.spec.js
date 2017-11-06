@@ -2,6 +2,7 @@
  * javascript.js unit tests
  */
 
+import Path from 'path';
 
 import { GetMinJs } from '../src/javascript';
 
@@ -10,8 +11,8 @@ import { GetMinJs } from '../src/javascript';
 // ----------------------------------------------------------------
 test('GetMinJs: should minify and concat multiple js files', () => {
 	const jsFiles = [
-		'__tests__/mocks/js/mock1.js',
-		'__tests__/mocks/js/mock2.js'
+		Path.normalize( '__tests__/mocks/js/mock1.js' ),
+		Path.normalize( '__tests__/mocks/js/mock2.js' ),
 	];
 
 	GetMinJs( jsFiles )
@@ -24,16 +25,19 @@ test('GetMinJs: should error when given an empty array', () => {
 	const jsFiles = [];
 
 	GetMinJs( jsFiles )
-		.catch( error => expect( error ).toBe( `The jsFiles must have atleast one file` ) );
+		.catch( error => expect( error ).toBe( `The jsFiles must have at least one file` ) );
 
 });
 
-test('GetMinJs: should error when a file does not exist', () => {
+test('GetMinJs: should error when given an empty array', () => {
 	const jsFiles = [
-		'ioiojoijoi.js'
+		Path.normalize( '__tests__/mocks/js/mock3.js' ),
 	];
 
 	GetMinJs( jsFiles )
-		.catch( error => expect( error.code ).toBe( `ENOENT` ) );
+		.catch( error =>  {
+			console.log( error );
+			expect( error ).toBe( `The jsFiles must have at least one file` )
+		});
 
 });

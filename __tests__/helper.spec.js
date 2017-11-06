@@ -3,8 +3,7 @@
  */
 
 
-import { Log } from '../src/helper';
-import { Style } from '../src/helper';
+import { Log, Style } from '../src/helper';
 
 
 // ----------------------------------------------------------------

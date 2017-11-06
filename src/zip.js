@@ -18,6 +18,7 @@ import { Log } from './helper';
 
 let zipFile = Archiver(`zip`);
 
+
 /**
  *
  * AddFile, adds a file and returns it as a string
@@ -29,12 +30,12 @@ let zipFile = Archiver(`zip`);
  */
 export const AddFile = ( content, archivePath ) => {
 	Log.verbose(`AddFile: ${ archivePath }`);
-
-	if( typeof content !== `string` ) {
-		Log.error(`AddFile: Content can only be string, is ${typeof content}`);
+	if( typeof content !== `string` || typeof archivePath !== `string` ) {
+		Log.error( `AddFile: content (${ typeof content }) and archivePath (${ typeof archivePath }) can only be string.` );
 	}
-
-	zipFile.append( content, { name: archivePath } );
+	else {
+		zipFile.append( content, { name: archivePath } );
+	}
 };
 
 
@@ -46,7 +47,12 @@ export const AddFile = ( content, archivePath ) => {
 export const AddGlob = ( pattern, directory, archivePath ) => {
 	Log.verbose(`AddGlob: ${ directory + pattern }`);
 
-	zipFile.glob( pattern, { cwd: directory }, { prefix: archivePath } );
+	if( typeof pattern !== `string` || typeof directory !== `string` || typeof archivePath !== `string` ) {
+		Log.error( `AddGlob: pattern (${ typeof pattern }), directory (${ typeof directory }) and archivePath (${ typeof archivePath }) can only be string.` );
+	}
+	else {
+		zipFile.glob( pattern, { cwd: directory }, { prefix: archivePath } );
+	}
 };
 
 
@@ -63,6 +69,8 @@ export const CompileZip = ( archive ) => {
 
 	try {
 		archive.finalize();
+		Log.done( `Job's done: Alright alright alright!` );
+		zipFile = Archiver( `zip` );
 	}
 	catch( error ) {
 		Log.error( error );
@@ -89,8 +97,4 @@ export const GetZip = ( response ) => {
 	zipFile.pipe( response );
 
 	CompileZip( zipFile );
-
-	Log.done( `Job's done: Alright alright alright!` );
-	zipFile = Archiver( `zip` );
-
 };

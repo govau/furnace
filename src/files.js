@@ -15,6 +15,8 @@ import { AddFile, AddGlob } from './zip';
 export const GetFiles = ( data ) => {
 	Log.verbose( `Running GetFiles` );
 
+	console.log( data );
+
 	const bundle = [];
 	const jsMin  = [];
 
@@ -107,8 +109,7 @@ export const ReadFile = ( pathToFile ) => {
 		Fs.readFile( pathToFile, 'utf8', ( error, fileContents ) => {
 
 			if( error && error.code !== 'EEXIST' ) {
-				Log.verbose( `File not found: ${ pathToFile }` );
-				reject( error );
+				reject( `File not found: ${ pathToFile }` );
 			}
 
 			Log.verbose( `Read: ${ pathToFile }` );

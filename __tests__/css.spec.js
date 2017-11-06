@@ -3,8 +3,7 @@
  */
 
 
-import { GetMinCss } from '../src/css';
-import { Autoprefix } from '../src/css';
+import { GetMinCss, Autoprefix } from '../src/css';
 
 
 // ----------------------------------------------------------------
@@ -33,9 +32,9 @@ test('Autoprefixer: should throw a warning', () => {
 
 	console.warn = jest.fn();
 	const sass = 'body { display: box; }';
-	const warning = `autoprefixer: <css input>:1:8: You should write display: flex by final spec instead of display: box`;
+	const warning = `autoprefixer: <css input>:1:6: You should write display: flex by final spec instead of display: box`;
 
-	Autoprefix( sass )
+	GetMinCss( sass )
 		.then( css => {
 			expect( console.warn.mock.calls.length ).toBe( 1 );
 			expect( console.warn.mock.calls[0][0] ).toBe( warning );
