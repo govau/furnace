@@ -35,8 +35,7 @@ test('HandleData: should error with a component that does not exist', () => {
 	};
 
 	HandleData( data )
-		.then( data => expect( data ).toEqual( formattedData ) )
-		.catch( error => console.log( error ) );
+		.catch( error => expect( error ).toEqual( `Component @gov.au/oisjdoioioj not found.` ) );
 
 });
 

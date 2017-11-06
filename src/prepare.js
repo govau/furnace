@@ -68,12 +68,14 @@ export const HandleData = ( data ) => {
 		const buildOptions = typeof data.buildOptions === 'string' ? [ data.buildOptions ] : data.buildOptions;
 		const framework = typeof data.framework === 'string' ? [ data.framework ] : data.framework;
 
-		// Resolve the data object and push it through the system
-		resolve ({
-			components: GetDependencies( components ),
-			buildOptions: buildOptions,
-			framework: framework
-		});
+		GetDependencies( components )
+			.then( dependencies => resolve({
+					components: dependencies,
+					buildOptions: buildOptions,
+					framework: framework,
+				})
+			)
+			.catch( error => reject( error ) );
 
 	});
 
