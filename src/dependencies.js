@@ -23,33 +23,30 @@ export const GetDependencies = (
 ) => {
 	Log.verbose( `Running GetDependencies`);
 
-	return new Promise( ( resolve, reject ) => {
+	components.map( component => {
 
-		components.map( component => {
+		// Add the prefix if it doesn't have it
+		component = component.startsWith( prefix )
+		? component
+		: prefix + component;
 
-			// Add the prefix if it doesn't have it
-			component = component.startsWith( prefix )
-			? component
-			: prefix + component;
+		if ( json[ component ] !== undefined ) {
 
-			if ( json[ component ] !== undefined ) {
+			// Add the dependencies first
+			Object.keys( json[ component ].peerDependencies ).map( dependency => {
+				result.push( dependency.replace( prefix, '' ) );
+			});
 
-				// Add the dependencies first
-				Object.keys( json[ component ].peerDependencies ).map( dependency => {
-					result.push( dependency.replace( prefix, '' ) );
-				});
+			// Add the component after the dependencies
+			result.push( component.replace( prefix, '' ) );
 
-				// Add the component after the dependencies
-				result.push( component.replace( prefix, '' ) );
+		}
+		else {
+			Log.error( `Component ${ component } not found.`);
+		}
 
-			} else {
-				reject( `Component ${ component } not found.`);
-			}
+	});
 
-		});
-
-		// Only return unique values
-		resolve( [ ...new Set( result ) ] );
-
-	})
+	// Only return unique values
+	return [ ...new Set( result ) ];
 };

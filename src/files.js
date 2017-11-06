@@ -87,8 +87,7 @@ export const GetFiles = ( data ) => {
 			jsMin: jsMin,
 			imports: imports,
 			bundle: bundle,
-			buildOptions: data.buildOptions,
-			jsDirectory: jsDirectory
+			buildOptions: data.buildOptions
 		})
 	})
 

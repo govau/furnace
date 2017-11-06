@@ -6,7 +6,7 @@ import { AddFile } from './zip';
 import { ReadFile } from './files';
 
 /**
- * Bundler - Get the paths based on the framework and components chosen.
+ * Bundler - Gets all of the data for the zip files.
  *
  * @param data - The request.body returned from the form
  */
@@ -39,7 +39,7 @@ export const Bundle = ( data ) => {
 		if( data.jsMin.length !== 0 ) {
 			data.bundle.push(
 				GetMinJs( data.jsMin )
-					.then( jsMinData => AddFile( jsMinData, `${ data.jsDirectory }/furnace.min.js` ) )
+					.then( jsMinData => AddFile( jsMinData, `js/furnace.min.js` ) )
 					.catch( error => reject( error ) )
 			)
 		}
