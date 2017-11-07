@@ -4,7 +4,7 @@
 
 import Archiver from 'archiver';
 
-import { AddFile, AddGlob, GetZip } from '../src/zip';
+import { AddFile, AddGlob, GetZip } from '../../src/zip';
 
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------

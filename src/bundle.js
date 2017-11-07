@@ -1,11 +1,11 @@
-/**
+/***************************************************************************************************************************************************************
  *
  * Bundle the data into a zipFile
  *
  * PrepareBundle - Get the paths based on the jsOuput, styleOutput and components chosen.
  * Bundle        - Gets all of the data for the zip files.
  *
- */
+ **************************************************************************************************************************************************************/
 
 import Path from 'path';
 
@@ -18,37 +18,39 @@ import { ReadFile } from './files';
 
 
 /**
- * PrepareBundle - Get the paths based on the jsOuput, styleOutput and components chosen.
+ * PrepareBundle - Get the paths and add files to zip
  *
- * @param data - The request.body returned from the form
+ * @param  { object } data    - The request.body and it's dependencies returned from the form
+ *
+ * @return { promise object } - Resolves once all bundles are moved into zipFile
  */
 export const PrepareBundle = ( data ) => {
 	Log.verbose( `Running PrepareBundle` );
 
-	const bundle = [];
-	const jsMin  = [];
+	// An array of promises that adds files and globs to the zip.
+	const bundle      = [];
 
-	let cssImports  = `@import '${ SETTINGS.npm.sassVersioning }';\n\n`;
-	let sassImports = `@import 'node_modules/sass-versioning/dist/_index.scss';\n\n`;
+	// Sass @imports for minification and sassModules.
+	let cssImports    = `@import '${ SETTINGS.npm.sassVersioning }';\n\n`;
+	let sassImports   = `@import 'node_modules/sass-versioning/dist/_index.scss';\n\n`;
 
-
+	// JS values based on the form input
 	const jsFileName  = SETTINGS.uikit.jsOutput[ data.jsOutput ].fileName;
 	const jsDirectory = SETTINGS.uikit.jsOutput[ data.jsOutput ].directory;
+
+	// Array of JS files to be uglified
+	const jsMin       = [];
 
 	return new Promise ( ( resolve, reject ) => {
 
 		data.components.map( component => {
 
-			const componentJson			= SETTINGS.uikit.json[`${ SETTINGS.uikit.prefix }${ component }`];
-			const componentPancake	= componentJson['pancake-module'];
-			const dependencies			= componentJson.peerDependencies;
-
-			const sassFile					= Path.normalize( `uikit/packages/${ component }/${ componentJson['pancake-module'].sass.path }` );
-			const sassDirectory			= Path.normalize( sassFile ).replace('_module.scss', '');
+			// The uikit.json object for the current component
+			const componentJson = SETTINGS.uikit.json[`${ SETTINGS.uikit.prefix }${ component }`];
 
 			let jsFile;
-			if( componentPancake[ jsDirectory ] ) {
-				jsFile = Path.normalize( `uikit/packages/${ component }/${ componentPancake[ jsDirectory ].path }` );
+			if( componentJson['pancake-module'][ jsDirectory ] ) {
+				jsFile = Path.normalize( `uikit/packages/${ component }/${ componentJson['pancake-module'][ jsDirectory ].path }` );
 			}
 
 			// Minified JS add directory to array
@@ -64,15 +66,17 @@ export const PrepareBundle = ( data ) => {
 			}
 
 			// Minify CSS ( Create Sass string to be ran with node-sass )
+			const sassFile = Path.normalize( `uikit/packages/${ component }/${ componentJson['pancake-module'].sass.path }` );
 			if( data.styleOutput === 'css' ) {
 				cssImports += `@import '${ sassFile }';\n`;
 			}
 
 			// CSS Modules ( Add the files to the zip )
+			const dependencies = componentJson.peerDependencies;
 			if( data.styleOutput === 'cssModules' && Object.keys( dependencies ).length ) {
 				let cssModuleImport = `@import '${ SETTINGS.npm.sassVersioning }';\n\n`;
 				Object.keys( dependencies ).map( dependency => {
-					cssModuleImport += `@import '${ `uikit/packages/${ dependency.replace('@gov.au/', '') }/${ componentPancake.sass.path }` }';\n`;
+					cssModuleImport += `@import '${ `uikit/packages/${ dependency.replace('@gov.au/', '') }/${ componentJson['pancake-module'].sass.path }` }';\n`;
 				});
 
 				bundle.push(
@@ -82,6 +86,7 @@ export const PrepareBundle = ( data ) => {
 			}
 
 			// Sass Modules ( Add the paths, create sass file for the zip )
+			const sassDirectory = Path.normalize( sassFile ).replace('_module.scss', '');
 			if( data.styleOutput === 'sassModules' ) {
 				sassImports += `@import '${ component }/sass/_module.scss';\n`;
 				bundle.push( AddGlob( `*.scss`, sassDirectory, `${ component }/sass/` ) );
@@ -90,16 +95,15 @@ export const PrepareBundle = ( data ) => {
 
 		Promise.all( bundle )
 			.catch( error => reject ( error ) )
-			.then(
+			.then( () => {
 				resolve({
 					jsMin: jsMin,
 					sassImports: sassImports,
 					cssImports: cssImports,
 					styleOutput: data.styleOutput
 				})
-		);
+			});
 	})
-
 };
 
 
@@ -111,9 +115,9 @@ export const PrepareBundle = ( data ) => {
 export const Bundle = ( data ) => {
 	Log.verbose( `Running Bundle` );
 
-	const bundle = [];
-
 	return new Promise ( ( resolve, reject ) => {
+
+		const bundle = [];
 
 		if ( data.styleOutput === 'css' ) {
 			bundle.push(

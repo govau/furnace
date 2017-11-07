@@ -3,7 +3,7 @@
  */
 
 
-import { GetMinCss, Autoprefix } from '../src/css';
+import { GetMinCss, Autoprefix } from '../../src/css';
 
 
 // ----------------------------------------------------------------

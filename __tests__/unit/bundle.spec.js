@@ -4,7 +4,7 @@
 
 import Path from 'path';
 
-import { PrepareBundle, Bundle } from '../src/bundle';
+import { PrepareBundle, Bundle } from '../../src/bundle';
 
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -108,10 +108,10 @@ test('Bundle: gets all of the data for the zip files.', () => {
 
 	const data = {
 		jsMin: [
-			Path.normalize( '__tests__/mocks/js/mock1.js' ),
-			Path.normalize( '__tests__/mocks/js/mock2.js' ),
+			Path.normalize( '__tests__/unit/mocks/js/mock1.js' ),
+			Path.normalize( '__tests__/unit/mocks/js/mock2.js' ),
 		],
-		cssImports:  `@import '__tests__/mocks/scss/mock1.scss';\n@import '__tests__/mocks/scss/mock2.scss';`,
+		cssImports:  `@import '__tests__/unit/mocks/scss/mock1.scss';\n@import '__tests__/unit/mocks/scss/mock2.scss';`,
 		bundle: [],
 		styleOutput: 'css'
 	};

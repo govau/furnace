@@ -41,7 +41,7 @@ export const AddFile = ( content, archivePath ) => {
 
 /**
  *
- * AddGlob, adds a file and returns it as a string
+ * AddGlob - adds a file and returns it as a string
  *
  */
 export const AddGlob = ( pattern, directory, archivePath ) => {
