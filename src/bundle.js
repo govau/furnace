@@ -9,10 +9,12 @@
 
 'use strict';
 
+
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Dependencies
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 import Path from 'path';
+
 
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Local
@@ -26,11 +28,15 @@ import { ReadFile } from './files';
 
 
 /**
- * PrepareBundle - Get the paths and add files to zip
+ * PrepareBundle - Iterates over the components, adds files to zip and prepares remaining options for bundle.
  *
- * @param  { object } data    - The request.body and it's dependencies formatted from the POST.
+ * @param  { object } data         - The request.body and it's dependencies formatted from the POST.
  *
- * @return { Promise object } - Resolves once all bundles are moved into zipFile
+ * @return { Promise }             - Resolves once all bundles are moved into zipFile
+ * @return { Promise }.jsMin       - An array of paths to jsFiles for jsMin
+ * @return { Promise }.sassImports - A string of @imports for sassModules
+ * @return { Promise }.cssImports  - A string of @imports for cssMin
+ * @return { Promise }.styleOutput - The selected option from the form related to how the styles are output.
  */
 export const PrepareBundle = ( data ) => {
 	Log.verbose( `Running PrepareBundle` );
@@ -38,7 +44,7 @@ export const PrepareBundle = ( data ) => {
 	// An array of promises that adds files and globs to the zip.
 	const bundle      = [];
 
-	// Sass @imports for minification and sassModules.
+	// Sass @imports for minification and sassModules, always starts with sassVersioning.
 	let cssImports    = `@import '${ SETTINGS.npm.sassVersioning }';\n\n`;
 	let sassImports   = `@import 'node_modules/sass-versioning/dist/_index.scss';\n\n`;
 
@@ -57,16 +63,16 @@ export const PrepareBundle = ( data ) => {
 			const componentJson = SETTINGS.uikit.json[`${ SETTINGS.uikit.prefix }${ component }`];
 
 
-			// If the component has javascript
+			// If the current component has javascript
 			if( componentJson['pancake-module'][ jsDirectory ] ) {
 				const jsFile = Path.normalize( `uikit/packages/${ component }/${ componentJson['pancake-module'][ jsDirectory ].path }` );
 
-				// If the jsOutput says to minifyJS
+				// minifyJs was selected in the form, add the directory to the array
 				if( data.jsOutput === 'js' ) {
 					jsMin.push( jsFile );
 				}
 
-				// JS Modules read the file and add it to the zip
+				// minfyJs not selected in the form, add JS modules based on the fileName/Directory
 				else {
 					bundle.push(
 						ReadFile( Path.normalize( jsFile ) )
@@ -76,33 +82,42 @@ export const PrepareBundle = ( data ) => {
 			}
 
 
-			// Minify CSS ( Create Sass string to be ran with node-sass )
+			// minifyCss was selected, create an @Import string
 			const sassFile = Path.normalize( `uikit/packages/${ component }/${ componentJson['pancake-module'].sass.path }` );
 			if( data.styleOutput === 'css' ) {
 				cssImports += `@import '${ sassFile }';\n`;
 			}
 
-			// CSS Modules ( Add the files to the zip )
+
+			// If cssModules was selected
 			const dependencies = componentJson.peerDependencies;
 			if( data.styleOutput === 'cssModules' && Object.keys( dependencies ).length ) {
+				// Create an @import string for CSS modules, add sassVersioning first.
 				let cssModuleImport = `@import '${ SETTINGS.npm.sassVersioning }';\n\n`;
+
+				// Add an @import for each dependency
 				Object.keys( dependencies ).map( dependency => {
 					cssModuleImport += `@import '${ `uikit/packages/${ dependency.replace('@gov.au/', '') }/${ componentJson['pancake-module'].sass.path }` }';\n`;
 				});
 
+				// Add an @import for the current component
+				cssModuleImport += `@import '${ `uikit/packages/${ component }/${ componentJson['pancake-module'].sass.path }` }';\n`;
+
+				// Compile the CSS and add the file to the Zip
 				bundle.push(
 					GetMinCss( cssModuleImport )
 						.then( cssMin => AddFile( cssMin, `${ component }/css/styles.css` ) )
 				);
 			}
 
-			// Sass Modules ( Add the paths, create sass file for the zip )
+			// sassModules was selected, create an @import for the zipFile, addGlob to zip
 			const sassDirectory = Path.normalize( sassFile ).replace('_module.scss', '');
 			if( data.styleOutput === 'sassModules' ) {
 				sassImports += `@import '${ component }/sass/_module.scss';\n`;
 				bundle.push( AddGlob( `*.scss`, sassDirectory, `${ component }/sass/` ) );
 			}
 		});
+
 
 		Promise.all( bundle )
 			.catch( error => reject ( error ) )
