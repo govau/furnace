@@ -29,15 +29,12 @@ test('GetMinJs: should error when given an empty array', () => {
 
 });
 
-test('GetMinJs: should error when given an empty array', () => {
+test('GetMinJs: should error when has invalid js', () => {
 	const jsFiles = [
 		Path.normalize( '__tests__/mocks/js/mock3.js' ),
 	];
 
-	GetMinJs( jsFiles )
-		.catch( error =>  {
-			console.log( error );
-			expect( error ).toBe( `The jsFiles must have at least one file` )
-		});
+	return GetMinJs( jsFiles )
+		.catch( error =>  expect( error.message ).toBe( `Unexpected token punc «;», expected punc «,»` ) );
 
 });

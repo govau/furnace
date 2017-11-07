@@ -30,6 +30,6 @@ test('Readfile: should reject when file cannot be opened', () => {
 
 	const file = Path.normalize( '__tests__/mocks/readfile/abc.txt' );
 
-	return ReadFile( file )
+	ReadFile( file )
 		.catch( error => expect( error ).toBe( `Cannot be read/write/edited` ) );
 });

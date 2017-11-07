@@ -38,9 +38,25 @@ export const GetMinJs = ( jsFiles ) => {
 
 		Promise.all( js )
 			.then( jsStringArray =>  jsStringArray.join('') )
-			.then( jsString => UglifyJs.minify( jsString ) )
+			.then( jsString => Uglify( jsString ) )
 			.then( js => resolve( js.code ) )
 			.catch( error => reject( error ) );
 
 	})
+}
+
+
+export const Uglify = ( js ) => {
+	Log.verbose( `Running Uglify` );
+
+	return new Promise( ( resolve, reject ) => {
+
+		const minJs = UglifyJs.minify( js );
+
+		if ( minJs.error ) {
+			reject( minJs.error );
+		}
+
+		resolve( minJs );
+	});
 }
