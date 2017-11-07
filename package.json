@@ -52,7 +52,7 @@
 			"src/*.js"
 		],
 		"roots": [
-			"./__tests__"
+			"./__tests__/unit/"
 		],
 		"coverageThreshold": {
 			"global": {

@@ -2,7 +2,8 @@
  *
  * Bundle the data into a zipFile
  *
- * SETTINGS     - Keeping our settings across multiple imports
+ * PrepareBundle - Get the paths based on the jsOuput, styleOutput and components chosen.
+ * Bundle        - Gets all of the data for the zip files.
  *
  */
 
@@ -17,7 +18,7 @@ import { ReadFile } from './files';
 
 
 /**
- * Prepare bundle - Get the paths based on the jsOuput, styleOutput and components chosen.
+ * PrepareBundle - Get the paths based on the jsOuput, styleOutput and components chosen.
  *
  * @param data - The request.body returned from the form
  */
