@@ -20,7 +20,6 @@
 		}
 	],
 	"scripts": {
-		"prepublish": "npm run test",
 		"test": "npm run test:unit",
 		"test:unit": "jest",
 		"test:unit:detail": "jest --coverage",

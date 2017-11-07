@@ -7,8 +7,16 @@
  *
  **************************************************************************************************************************************************************/
 
+'use strict';
+
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------
+// Dependencies
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------
 import Path from 'path';
 
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------
+// Local
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------
 import { SETTINGS } from './settings';
 import { Log } from './helper';
 import { GetMinCss } from './css';
@@ -20,9 +28,9 @@ import { ReadFile } from './files';
 /**
  * PrepareBundle - Get the paths and add files to zip
  *
- * @param  { object } data    - The request.body and it's dependencies returned from the form
+ * @param  { object } data    - The request.body and it's dependencies formatted from the POST.
  *
- * @return { promise object } - Resolves once all bundles are moved into zipFile
+ * @return { Promise object } - Resolves once all bundles are moved into zipFile
  */
 export const PrepareBundle = ( data ) => {
 	Log.verbose( `Running PrepareBundle` );
@@ -48,22 +56,25 @@ export const PrepareBundle = ( data ) => {
 			// The uikit.json object for the current component
 			const componentJson = SETTINGS.uikit.json[`${ SETTINGS.uikit.prefix }${ component }`];
 
-			let jsFile;
+
+			// If the component has javascript
 			if( componentJson['pancake-module'][ jsDirectory ] ) {
-				jsFile = Path.normalize( `uikit/packages/${ component }/${ componentJson['pancake-module'][ jsDirectory ].path }` );
+				const jsFile = Path.normalize( `uikit/packages/${ component }/${ componentJson['pancake-module'][ jsDirectory ].path }` );
+
+				// If the jsOutput says to minifyJS
+				if( data.jsOutput === 'js' ) {
+					jsMin.push( jsFile );
+				}
+
+				// JS Modules read the file and add it to the zip
+				else {
+					bundle.push(
+						ReadFile( Path.normalize( jsFile ) )
+							.then( jsData => AddFile( jsData, `${ component }/js/${ jsFileName }.js` ) )
+					);
+				}
 			}
 
-			// Minified JS add directory to array
-			if( jsFile && data.jsOutput === 'js' ) {
-				jsMin.push( jsFile );
-			}
-			// JS Modules read the file and add it to the zip
-			else if( jsFile ) {
-				bundle.push(
-					ReadFile( jsFile )
-						.then( jsData => AddFile( jsData, `${ component }/js/${ jsFileName }.js` ) )
-				);
-			}
 
 			// Minify CSS ( Create Sass string to be ran with node-sass )
 			const sassFile = Path.normalize( `uikit/packages/${ component }/${ componentJson['pancake-module'].sass.path }` );
