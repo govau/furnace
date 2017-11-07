@@ -12,14 +12,14 @@ test('HandleData: takes an object then formats it', () => {
 
 	const data = {
 		components: [ 'accordion', 'breadcrumbs' ],
-		buildOptions: 'css',
-		framework: 'js',
+		styleOutput: 'css',
+		jsOutput: 'js',
 	};
 
 	const formattedData = {
 		components: [ 'core', 'animate', 'accordion', 'link-list', 'body', 'breadcrumbs' ],
-		buildOptions: [ 'css' ],
-		framework: [ 'js' ],
+		styleOutput: 'css',
+		jsOutput: 'js',
 	};
 
 	HandleData( data )
@@ -34,8 +34,8 @@ test('HandleData: should error with a component that does not exist', () => {
 
 	const data = {
 		components: 'oisjdoioioj',
-		buildOptions: 'css',
-		framework: 'js',
+		styleOutput: 'css',
+		jsOutput: 'js',
 	};
 
 	HandleData( data )
@@ -50,8 +50,8 @@ test('HandleData: should error with a component that does not exist', () => {
 test('HandleData: takes an object then formats it', () => {
 
 	const data = {
-		buildOptions: 'css',
-		framework: 'js',
+		styleOutput: 'css',
+		jsOutput: 'js',
 	};
 
 	HandleData( data )

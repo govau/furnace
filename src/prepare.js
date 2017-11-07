@@ -68,8 +68,8 @@ export const HandleData = ( data ) => {
 
 		resolve({
 			components: GetDependencies( components ),
-			styleOutput: styleOutput,
-			jsOutput: jsOutput,
+			styleOutput: SETTINGS.uikit.styleOutput[ data.styleOutput ].option,
+			jsOutput: SETTINGS.uikit.jsOutput[ data.jsOutput ].option,
 		})
 
 	});
