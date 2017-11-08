@@ -17,7 +17,7 @@ const Del     = require( 'del' );
 const Copydir = require( 'copy-dir' );
 const Fs      = require( 'fs' );
 const Dirsum  = require( 'dirsum' );
-const Spawn   = require( 'child_process' );
+const Request = require( 'request' );
 
 
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -49,7 +49,7 @@ const Tester = ( ( tests ) => {
 			Delete( scriptFolder )
 				.catch( error  => Log.error( `Noooooo: ${ error }` ) )
 				.then( ()      => CopyFixtures( scriptFolder, test ) )    // copy fixtures
-				.then( ()      => Run( scriptFolder, test ) )             // now run script
+				.then( ()      => Run( test ) )                           // now run script
 				.then( ()      => Fixture( scriptFolder, test ) )         // get hash for fixture
 				.then( result  => Result( scriptFolder, test, result ) )  // get hash for result of test
 				.then( result  => Compare( test, result ) )               // now compare both and detail errors
@@ -64,6 +64,25 @@ const Tester = ( ( tests ) => {
 		);
 	})
 
+	// finished with all tests
+	Promise.all( allTasks )
+		.catch( error => {
+			Log.error(`An error occurred: ${ Path.basename( error ) }`);
+
+			process.exit( 1 );
+		})
+		.then( () => {
+			if( SETTINGS.PASS ) {
+				Log.finished(`😅  All tests have passed`);
+
+				process.exit( 0 );
+			}
+			else {
+				Log.finished(`😳  Ouch! Some tests failed`);
+
+				process.exit( 1 );
+			}
+	});
 });
 
 
@@ -93,7 +112,7 @@ const Delete = ( path ) => {
 				reject( error );
 			})
 			.then( paths => {
-				Log.verbose( `Cleaned ${ path } folder`);
+				Log.verbose( `Cleaned: ${ path }`);
 
 				resolve();
 		});
@@ -138,42 +157,23 @@ const CopyFixtures = ( path, settings ) => {
  *
  * @return {Promise object}
  */
-const Run = ( path, settings ) => {
-	Log.verbose( 'Running Run runrunrun' );
+const Run = ( settings ) => {
+	Log.verbose( 'Rrrrunrunrun' );
 
 	return new Promise( ( resolve, reject ) => {
-		let errors = '';
 
-		// what the command would look like:
-		// console.log('node', [ Path.normalize(`${ path }/../../dist/index.js`), ...settings.script.options ].join(' '));
-		// console.log(`in ${ path }`);
-
-		const command = Spawn
-			.spawn( 'node', [ Path.normalize(`${ path }/../../dist/index.js`), ...settings.script.options ], {
-				cwd: path,
-			}
-		);
-
-		command.stdout.on('data', ( data ) => {
-			// console.log( data.toString() );
-		})
-
-		command.stderr.on('data', ( data ) => {
-			errors += data.toString();
-		})
-
-		command.on( 'close', ( code ) => {
-			if( code === 0 ) {
-				// Log.pass(`Ran test in ${ Chalk.bgWhite.black(` ${ Path.basename( path ) } `) } folder`);
-
-				resolve();
-			}
-			else {
-				PASS = false;
-
-				reject(`Script errored out with:\n${ Chalk.bold( errors ) }`);
+		// Array is being passed as individual keys
+		Request.post({
+			url: 'http://localhost:8080/furnace/',
+			form: settings.post
+		}, ( error, response, body ) => {
+			if( error ) {
+				console.log( error );
+			} else {
+				console.log( body );
 			}
 		});
+
 	});
 };
 
@@ -249,7 +249,7 @@ const Result = ( path, settings, fixture ) => {
 			Fs.access( location, Fs.constants.R_OK, error => {
 
 				if( !error || error.code !== 'ENOENT' ) {
-					Log.fail(`${ Chalk.bgWhite.black(` ${ settings.name } `) } failed becasue it produced files but really shoudn’t`);
+					Log.fail(`${ settings.name } failed becasue it produced files but really shoudn’t`);
 
 					PASS = false;
 
@@ -300,13 +300,13 @@ const Compare = ( settings, hashes ) => {
 
 	return new Promise( ( resolve, reject ) => {
 		if( hashes.fixture.hash === hashes.result.hash ) {
-			Log.pass(`${ Chalk.bgWhite.black(` ${ settings.name } `) } passed`); // yay
+			Log.pass(`${ settings.name } passed`); // yay
 
 			resolve( true );
 		}
 		else { // grr
 			PASS = false;
-			Log.fail(`${ Chalk.bgWhite.black(` ${ settings.name } `) } failed`);
+			Log.fail(`${ settings.name } failed`);
 
 			// flatten hash object
 			const fixture = Flatten( hashes.fixture.files );
@@ -318,13 +318,13 @@ const Compare = ( settings, hashes ) => {
 				delete result[ file ];          // remove this one so we can keep track of the ones that were not inside the fixture folder
 
 				if( compare === undefined ) {  // we couldn’t find this file inside the resulting folder
-					Log.error(`Missing ${ Chalk.yellow( file ) } file inside result folder`);
+					Log.error(`Missing ${ file } file inside result folder`);
 				}
 				else {
 					const fileName = file.split('/');
 
 					if( fixture[ file ] !== compare && fileName[ fileName.length - 1 ] !== 'hash' ) { // we don’t want to compare folders
-						Log.error(`Difference inside ${ Chalk.yellow( settings.folder + file ) } file`);
+						Log.error(`Difference inside ${ settings.folder + file } file`);
 					}
 				}
 			}
@@ -336,7 +336,7 @@ const Compare = ( settings, hashes ) => {
 					files.push( file ); // make ’em readable
 				}
 
-				Log.error(`Some new files not accounted for: ${ Chalk.yellow( files.join(', ') ) } inside the fixture folder`);
+				Log.error(`Some new files not accounted for: ${ files.join(', ') } inside the fixture folder`);
 			}
 
 			resolve( false );

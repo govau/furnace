@@ -11,7 +11,7 @@ const TESTS = module.exports = [
 	{
 		name: 'Test1: testing minified css, minified js and dependency fetching.',
 		folder: 'zip-01',
-		options: {
+		post: {
 			components: [ 'accordion', 'breadcrumbs' ],
 			styleOutput: 'css',
 			jsOutput: 'js',
@@ -22,7 +22,7 @@ const TESTS = module.exports = [
 	{
 		name: 'Test2: testing css modules, js modules and dependency fetching.',
 		folder: 'zip-02',
-		options: {
+		post: {
 			components: [ 'accordion', 'breadcrumbs' ],
 			styleOutput: 'cssModules',
 			jsOutput: 'jsModules',
@@ -33,7 +33,7 @@ const TESTS = module.exports = [
 	{
 		name: 'Test3: testing sass modules, react and dependency fetching.',
 		folder: 'zip-03',
-		options: {
+		post: {
 			components: [ 'accordion', 'breadcrumbs' ],
 			styleOutput: 'sassModules',
 			jsOutput: 'react',
@@ -44,7 +44,7 @@ const TESTS = module.exports = [
 	{
 		name: 'Test4: testing all modules with minified css and minified js.',
 		folder: 'zip-04',
-		options: {
+		post: {
 			components: [
 				'core',
 				'animate',

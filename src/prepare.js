@@ -40,6 +40,8 @@ export const HandlePost = ( request, response ) => {
 
 	let data = request.body;
 
+	console.log( data );
+
 	Log.verbose( `Melting the component strings into filenames`);
 
 	HandleData( data )

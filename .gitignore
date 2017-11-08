@@ -12,3 +12,6 @@ npm-debug.log
 lerna-debug.log
 dist
 coverage
+
+tests/integration/*/zip/*
+tests/integration/*/docs/*
