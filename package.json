@@ -20,11 +20,12 @@
 		}
 	],
 	"scripts": {
-		"test": "npm run test:unit",
-		"test:unit": "jest",
-		"test:unit:detail": "jest --coverage",
-		"test:unit:watch": "jest --watch --coverage",
-		"test:integration": "node __tests__/integration/test.js",
+		"test": "npm run unitTest && npm run intTest",
+		"unitTest": "jest",
+		"unitTest:detail": "jest --coverage",
+		"unitTest:watch": "jest --watch --coverage",
+		"intTest": "node __tests__/integration/tester.js",
+		"intTest:watch": "nodemon --watch __tests__/integration/ --exec npm run intTest",
 		"start": "node dist/init.js",
 		"build": "babel src --out-dir dist --presets=es2015",
 		"build:verbose": "npm run build && node dist/init.js --verbose",
