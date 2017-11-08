@@ -2,7 +2,7 @@
  *
  * Bundle the data into a zipFile
  *
- * Bundle - Gets all of the data for the zip files.
+ * Bundle - Iterates over the components, bundles tasks together and adds file to zip.
  *
  **************************************************************************************************************************************************************/
 
@@ -27,11 +27,11 @@ import { ReadFile } from './files';
 
 
 /**
- * Bundle - Iterates over the components, adds files to zip and prepares remaining options for bundle.
+ * Bundle - Iterates over the components, bundles tasks together and adds file to zip
  *
- * @param  { object } data         - The request.body and it's dependencies formatted from the POST.
+ * @param  { object } data - The request.body and it's dependencies formatted from the POST
  *
- * @return { Promise }             - Resolves once all bundles are moved into zipFile
+ * @return { Promise }     - Resolves once all bundles are moved into zipFile
  */
 export const Bundle = ( data ) => {
 	Log.verbose( `Running PrepareBundle` );

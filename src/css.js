@@ -1,24 +1,37 @@
-/**
+/***************************************************************************************************************************************************************
  *
- * Prepare the request and response for the express server.
+ * Turn sass into css
  *
- * HandlePost - Handle the POST request and response.
+ * GetMinCss  - Takes sass and returns css that is minified and autoprefixed
+ * Sassify    - Promisified node-sass, compile Sass code into CSS
+ * Autoprefix - Automatically adds autoprefixes to a css file
  *
- */
+ **************************************************************************************************************************************************************/
 
 'use strict';
 
+
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------
+// Dependencies
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------
 import Sass from 'node-sass';
 import Autoprefixer from 'autoprefixer';
 import Postcss from 'postcss';
 
+
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------
+// Local
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------
 import { SETTINGS } from './settings';
 import { Log } from './helper';
 
+
 /**
- * Promise that uses a sass @import string to resolve minified, autopreffixed css
+ * GetMinCss - Takes sass and returns css that is minified and autoprefixed
  *
- * @param sassString
+ * @param { string } sassString - A string of sass to be turned into css
+ *
+ * @return { Promise }          - Resolves when node-sass and autoprefixer have been ran.
  */
 export const GetMinCss = ( sassString ) => {
 	Log.verbose( `Running GetMinCss`);
@@ -34,42 +47,51 @@ export const GetMinCss = ( sassString ) => {
 
 
 /**
- * Compile Sass code into CSS (modified from the uikit helper.js)
+ * Sassify - Promisified node-sass, compile Sass code into CSS
  *
- * @param  {string} scss - The Sass file to be compiled
- * @param  {string} css  - The location where the CSS should be written to
+ * @param  { string } scss - The Sass file to be compiled
+ * @param  { string } css  - The location where the CSS should be written to
+ *
+ * @return { Promise }     - Resolves the minified css
  */
 export const Sassify = ( scss ) => {
 	Log.verbose( `Running Sassify`);
 
 	return new Promise( ( resolve, reject ) => {
+
+		// Run node-sass with uikit helper.js settings
 		Sass.render({
 			data: scss,
 			indentType: 'tab',
 			precision: 8,
 			outputStyle: 'compressed',
 		}, ( error, result ) => {
+
 			if( result && !error ) {
 				resolve( result.css.toString() );
 			}
 			else {
 				error ? reject( error ) : reject();
 			}
+
 		})
 	});
 };
 
 
 /**
- * Autoprefix a css file (modified from the uikit helper.js)
+ * Autoprefix - Automatically adds autoprefixes to a css file
  *
- * @param  {string} file - The file to be prefixed
+ * @param  { string } file - The file to be prefixed
+ *
+ * @return { Promise }     - Resolves the prefixed css
  */
 export const Autoprefix = ( css ) => {
 	Log.verbose( `Running Autoprefix`);
 
 	return new Promise ( ( resolve, reject ) => {
 
+		// Run autoprefixer with uikit helper.js settings
 		Postcss([ Autoprefixer({ browsers: ['last 2 versions', 'ie 8', 'ie 9', 'ie 10'] }) ])
 			.process( css )
 			.then( ( prefixed ) => {
@@ -80,5 +102,6 @@ export const Autoprefix = ( css ) => {
 				resolve( prefixed.css );
 			})
 			.catch( error => reject( error ) );
+
 	})
 };

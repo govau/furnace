@@ -32,7 +32,7 @@ test('Bundle: sassModules and react modules.', () => {
 	};
 
 	Bundle( data )
-		.then( data => expect( data ).toEqual( [ undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined ] ) );
+		.then( data => expect( data ).toEqual( [ undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined ] ));
 
 });
 
