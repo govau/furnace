@@ -18,7 +18,7 @@ import Fs from 'fs';
 import { SETTINGS } from './settings';
 import { Log } from './helper';
 import { CompileZip, GetZip } from './zip';
-import { PrepareBundle, Bundle } from './bundle';
+import { Bundle } from './bundle';
 import { GetDependencies } from './dependencies';
 
 
@@ -37,7 +37,6 @@ export const HandlePost = ( request, response ) => {
 	Log.verbose( `Melting the component strings into filenames`);
 
 	HandleData( data )
-		.then( PrepareBundle )
 		.then( Bundle )
 		.then( () => GetZip( response ) )
 		.catch( error => {
@@ -60,18 +59,18 @@ export const HandleData = ( data ) => {
 		if ( !data.components ) {
 			reject( `No components selected` );
 		}
+		else {
+			// Format the data so that it's in an array
+			const components = typeof data.components === 'string' ? [ data.components ] : data.components;
+			const styleOutput = typeof data.styleOutput === 'string' ? [ data.styleOutput ] : data.styleOutput;
+			const jsOutput = typeof data.jsOutput === 'string' ? [ data.jsOutput ] : data.jsOutput;
 
-		// If there is one option, put it into an array.
-		const components = typeof data.components === 'string' ? [ data.components ] : data.components;
-		const styleOutput = typeof data.styleOutput === 'string' ? [ data.styleOutput ] : data.styleOutput;
-		const jsOutput = typeof data.jsOutput === 'string' ? [ data.jsOutput ] : data.jsOutput;
-
-		resolve({
-			components: GetDependencies( components ),
-			styleOutput: SETTINGS.uikit.styleOutput[ data.styleOutput ].option,
-			jsOutput: SETTINGS.uikit.jsOutput[ data.jsOutput ].option,
-		})
-
+			resolve({
+				components: GetDependencies( components ),
+				styleOutput: SETTINGS.uikit.styleOutput[ data.styleOutput ].option,
+				jsOutput: SETTINGS.uikit.jsOutput[ data.jsOutput ].option,
+			})
+		}
 	});
 
 };

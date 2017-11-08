@@ -30,6 +30,7 @@ let zipFile = Archiver(`zip`);
  */
 export const AddFile = ( content, archivePath ) => {
 	Log.verbose(`AddFile: ${ archivePath }`);
+
 	if( typeof content !== `string` || typeof archivePath !== `string` ) {
 		Log.error( `AddFile: content (${ typeof content }) and archivePath (${ typeof archivePath }) can only be string.` );
 	}

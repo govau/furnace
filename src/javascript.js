@@ -53,10 +53,11 @@ export const Uglify = ( js ) => {
 
 		const minJs = UglifyJs.minify( js );
 
-		if ( minJs.error ) {
+		if( minJs.error ) {
 			reject( minJs.error );
 		}
-
-		resolve( minJs );
+		else {
+			resolve( minJs );
+		}
 	});
 }

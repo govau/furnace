@@ -2,8 +2,7 @@
  *
  * Bundle the data into a zipFile
  *
- * PrepareBundle - Get the paths based on the jsOuput, styleOutput and components chosen.
- * Bundle        - Gets all of the data for the zip files.
+ * Bundle - Gets all of the data for the zip files.
  *
  **************************************************************************************************************************************************************/
 
@@ -28,17 +27,13 @@ import { ReadFile } from './files';
 
 
 /**
- * PrepareBundle - Iterates over the components, adds files to zip and prepares remaining options for bundle.
+ * Bundle - Iterates over the components, adds files to zip and prepares remaining options for bundle.
  *
  * @param  { object } data         - The request.body and it's dependencies formatted from the POST.
  *
  * @return { Promise }             - Resolves once all bundles are moved into zipFile
- * @return { Promise }.jsMin       - An array of paths to jsFiles for jsMin
- * @return { Promise }.sassImports - A string of @imports for sassModules
- * @return { Promise }.cssImports  - A string of @imports for cssMin
- * @return { Promise }.styleOutput - The selected option from the form related to how the styles are output.
  */
-export const PrepareBundle = ( data ) => {
+export const Bundle = ( data ) => {
 	Log.verbose( `Running PrepareBundle` );
 
 	// An array of promises that adds files and globs to the zip.
@@ -57,6 +52,7 @@ export const PrepareBundle = ( data ) => {
 
 	return new Promise ( ( resolve, reject ) => {
 
+		// Iterate through components and dependencies
 		data.components.map( component => {
 
 			// The uikit.json object for the current component
@@ -110,6 +106,7 @@ export const PrepareBundle = ( data ) => {
 				);
 			}
 
+
 			// sassModules was selected, create an @import for the zipFile, addGlob to zip
 			const sassDirectory = Path.normalize( sassFile ).replace('_module.scss', '');
 			if( data.styleOutput === 'sassModules' ) {
@@ -119,62 +116,42 @@ export const PrepareBundle = ( data ) => {
 		});
 
 
-		Promise.all( bundle )
-			.catch( error => reject ( error ) )
-			.then( () => {
-				resolve({
-					jsMin: jsMin,
-					sassImports: sassImports,
-					cssImports: cssImports,
-					styleOutput: data.styleOutput
-				})
-			});
-	})
-};
-
-
-/**
- * Bundle - Gets all of the data for the zip files.
- *
- * @param data - The request.body returned from the form
- */
-export const Bundle = ( data ) => {
-	Log.verbose( `Running Bundle` );
-
-	return new Promise ( ( resolve, reject ) => {
-
-		const bundle = [];
-
-		if ( data.styleOutput === 'css' ) {
+		// minifyCss was selected, turn cssImports into a minified css file
+		if( data.styleOutput === 'css' ) {
 			bundle.push(
-				GetMinCss( data.cssImports )
+				GetMinCss( cssImports )
 					.then( cssMin => AddFile( cssMin, 'css/furnace.min.css' ) )
 			);
 		}
 
-		if ( data.styleOutput === 'sassModules' ) {
+
+		// sassModules was selected, create the main.scss and add sass-versioning
+		if( data.styleOutput === 'sassModules' ) {
 			bundle.push(
 				ReadFile( SETTINGS.npm.sassVersioning )
 					.then( sassVersioning => AddFile( sassVersioning, `node_modules/sass-versioning/dist/_index.scss` ) )
 			);
 
 			bundle.push(
-				AddFile( data.sassImports, 'main.scss' )
+				AddFile( sassImports, 'main.scss' )
 			);
 		}
 
 
-		if( data.jsMin.length !== 0 ) {
+		// jsMin was selected, create a minified js file
+		if( jsMin.length !== 0 ) {
 			bundle.push(
-				GetMinJs( data.jsMin )
+				GetMinJs( jsMin )
 					.then( jsMinData => AddFile( jsMinData, `js/furnace.min.js` ) )
 			)
 		}
 
 
+		// Run all of the promises
 		Promise.all( bundle )
 			.catch( error => reject( error ) )
 			.then( resolve );
 
 	})
-}
+};
+
