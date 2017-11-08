@@ -12,18 +12,18 @@
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 // DEPENDENCIES
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
-const Path    = require( 'path' );
-const Del     = require( 'del' );
-const Copydir = require( 'copy-dir' );
-const Fs      = require( 'fs' );
-const Dirsum  = require( 'dirsum' );
-const Request = require( 'request' );
+const Path        = require( 'path' );
+const Del         = require( 'del' );
+const Copydir     = require( 'copy-dir' );
+const Fs          = require( 'fs' );
+const Dirsum      = require( 'dirsum' );
+const Request     = require( 'request' );
+const Querystring = require('querystring');
 
 
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 // LOCAL
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
-const TESTS   = require( './tests' );
 const { Log } = require( '../../dist/helper' );
 
 
@@ -34,6 +34,78 @@ if(process.argv.includes('-v') || process.argv.includes('--verbose')) {
 
 
 let PASS = true;
+
+const TESTS = [
+	{
+		name: 'Test1: testing minified css, minified js and dependency fetching.',
+		folder: 'zip-01',
+		post: {
+			components: [ 'accordion', 'breadcrumbs' ],
+			styleOutput: 'css',
+			jsOutput: 'js',
+		},
+		compare: 'GOLD-AU/',
+		empty: false,
+	},
+	{
+		name: 'Test2: testing css modules, js modules and dependency fetching.',
+		folder: 'zip-02',
+		post: {
+			components: [ 'accordion', 'breadcrumbs' ],
+			styleOutput: 'cssModules',
+			jsOutput: 'jsModules',
+		},
+		compare: 'GOLD-AU/',
+		empty: false,
+	},
+	{
+		name: 'Test3: testing sass modules, react and dependency fetching.',
+		folder: 'zip-03',
+		post: {
+			components: [ 'accordion', 'breadcrumbs' ],
+			styleOutput: 'sassModules',
+			jsOutput: 'react',
+		},
+		compare: 'GOLD-AU/',
+		empty: false,
+	},
+	{
+		name: 'Test4: testing all modules with minified css and minified js.',
+		folder: 'zip-04',
+		post: {
+			components: [
+				'core',
+				'animate',
+				'accordion',
+				'body',
+				'link-list',
+				'breadcrumbs',
+				'buttons',
+				'callout',
+				'control-input',
+				'cta-link',
+				'direction-links',
+				'footer',
+				'grid-12',
+				'header',
+				'headings',
+				'inpage-nav',
+				'keyword-list',
+				'page-alerts',
+				'progress-indicator',
+				'responsive-media',
+				'select',
+				'skip-link',
+				'tags',
+				'text-inputs'
+			],
+			styleOutput: 'css',
+			jsOutput: 'js',
+		},
+		compare: 'GOLD-AU/',
+		empty: false,
+	},
+];
 
 
 const Tester = ( ( tests ) => {
@@ -162,15 +234,19 @@ const Run = ( settings ) => {
 
 	return new Promise( ( resolve, reject ) => {
 
-		// Array is being passed as individual keys
 		Request.post({
 			url: 'http://localhost:8080/furnace/',
-			form: settings.post
+			form: Querystring.stringify( settings.post ),
+			encoding: 'binary',
+			headers: {
+				'User-Agent': 'stress-tester',
+			},
 		}, ( error, response, body ) => {
 			if( error ) {
-				console.log( error );
-			} else {
-				console.log( body );
+				reject( error );
+			}
+			else {
+				resolve( body );
 			}
 		});
 
