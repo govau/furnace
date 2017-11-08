@@ -1,32 +1,39 @@
-/**
+/***************************************************************************************************************************************************************
  *
- * Use archiver to create zip archives from files, folders and paths.
+ * Zip files, globs and return them as a response
  *
- * AddFile - Add a string of content to a file to be placed into a zip
- * CompileZip - Compile all of files and paths into one zipe
+ * AddFile    - Add a string of content to a file to be placed into a zip
+ * AddGlob    - Adds a file and returns it as a string
+ * GetZip     - Send the zip back to the user in the response.writeHead
  *
- */
+ **************************************************************************************************************************************************************/
+
 
 'use strict';
 
+
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Dependencies
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------
 import Archiver from 'archiver';
 
-// Local dependencies
+
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------
+// Local
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------
 import { Log } from './helper';
 
 
+// Create a new empty zip on first run
 let zipFile = Archiver(`zip`);
 
 
 /**
  *
- * AddFile, adds a file and returns it as a string
+ * AddFile - Adds a file and returns it as a string
  *
- * @param {string} content - The string of content to go into the file
- * @param {string} archivePath - Create a file for the string to go into
- *
- * @return {array} files - The array of files
+ * @param {string} content     - The string of content to go into the file
+ * @param {string} archivePath - The location of the files in the zip
  */
 export const AddFile = ( content, archivePath ) => {
 	Log.verbose(`AddFile: ${ archivePath }`);
@@ -41,9 +48,11 @@ export const AddFile = ( content, archivePath ) => {
 
 
 /**
+ * AddGlob - Adds a file and returns it as a string
  *
- * AddGlob - adds a file and returns it as a string
- *
+ * @param {string} pattern     - The glob to match files and add to the zip
+ * @param {string} directory   - The directory for the glob to be applied to
+ * @param {string} archivePath - The location of the files in the zip
  */
 export const AddGlob = ( pattern, directory, archivePath ) => {
 	Log.verbose(`AddGlob: ${ directory + pattern }`);
@@ -58,12 +67,9 @@ export const AddGlob = ( pattern, directory, archivePath ) => {
 
 
 /**
+ * GetZip - Send the zip back to the user in the response.writeHead
  *
- * CompileZip - Turn the files array into a zip file using archiver
- *
- * @param archive - The response containing the archiver head
- * @param files - The files array to be iterated upon to go into the zip file
- *
+ * @param response - The response containing the archiver head
  */
 export const GetZip = ( response ) => {
 	Log.verbose( `GetZip: Compiling zip` );

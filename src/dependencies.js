@@ -1,17 +1,29 @@
+/***************************************************************************************************************************************************************
+ *
+ * Searches for all dependencies based off a component.
+ *
+ * GetDependencies - Gets an array of all components with all of their dependencies
+ *
+ **************************************************************************************************************************************************************/
+
 
 'use strict';
 
-import { Log } from './helper';
+
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------
+// Local
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------
+import { Log }      from './helper';
 import { SETTINGS } from './settings';
 
 
 /**
- * Gets an array of all components with the depenedencies.
+ * GetDependencies - Gets an array of all components with all of their dependencies
  *
- * @param  components {array}  - Components to look for dependencies on
- * @param  result     {array}  - Array where we populate the dependencies, optional, default: [ 'core' ]
- * @param  json       {object} - Object that contains the uikit depedencies
- * @param  prefix     {string} - Prefix before the component used in the dependency lookup
+ * @param components {array}  - Components to look for dependencies on
+ * @param result     {array}  - Array where we populate the dependencies, optional, default: [ 'core' ]
+ * @param json       {object} - Object that contains the uikit depedencies
+ * @param prefix     {string} - Prefix before the component used in the dependency lookup
  *
  * @return            {array} - The components and dependencies found
  */

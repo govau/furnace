@@ -1,25 +1,37 @@
-/**
+/***************************************************************************************************************************************************************
  *
- * Prepare the request and response for the express server.
+ * Javascript file uglification
  *
- * HandlePost - Handle the POST request and response.
+ * GetMinJs - Turn the js file paths into a string of js
+ * Uglify   - Promisified uglification of a js string
  *
- */
+ **************************************************************************************************************************************************************/
+
 
 'use strict';
 
-import Fs from 'fs';
+
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------
+// Dependencies
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------
+import Fs       from 'fs';
 import UglifyJs from 'uglify-js';
 
+
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------
+// Local
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------
 import { ReadFile } from './files';
 import { SETTINGS } from './settings';
-import { Log } from './helper';
+import { Log }      from './helper';
 
 
 /**
- * GetJs - From the js directories create a minified js file
+ * GetMinJs - From the js files create a minified js file
  *
- * @return data - The package containing the sassDirs, jsDirs, options selected and files
+ * @param  {array}  jsFiles - An array of paths to js files
+ *
+ * @return {string} js.code - The uglified js as one string
  */
 export const GetMinJs = ( jsFiles ) => {
 	Log.verbose( `Running GetMinJs` );
@@ -27,7 +39,7 @@ export const GetMinJs = ( jsFiles ) => {
 	return new Promise ( ( resolve, reject ) => {
 		let js = [];
 
-		if ( jsFiles.length <= 0 ) {
+		if( jsFiles.length <= 0 ) {
 			reject( 'The jsFiles must have at least one file' );
 		}
 
@@ -45,7 +57,13 @@ export const GetMinJs = ( jsFiles ) => {
 	})
 }
 
-
+/**
+ * Uglify - Minify the js in a promise with errors
+ *
+ * @param  {string} js      - A string with all of the javascript
+ *
+ * @return {string} minJs   - The minified js
+ */
 export const Uglify = ( js ) => {
 	Log.verbose( `Running Uglify` );
 

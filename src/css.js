@@ -8,30 +8,31 @@
  *
  **************************************************************************************************************************************************************/
 
+
 'use strict';
 
 
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Dependencies
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
-import Sass from 'node-sass';
+import Sass         from 'node-sass';
 import Autoprefixer from 'autoprefixer';
-import Postcss from 'postcss';
+import Postcss      from 'postcss';
 
 
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Local
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 import { SETTINGS } from './settings';
-import { Log } from './helper';
+import { Log }      from './helper';
 
 
 /**
  * GetMinCss - Takes sass and returns css that is minified and autoprefixed
  *
- * @param { string } sassString - A string of sass to be turned into css
+ * @param  {string} sassString - A string of sass to be turned into css
  *
- * @return { Promise }          - Resolves when node-sass and autoprefixer have been ran.
+ * @return {string}            - Resolves minified css from node-sass and autoprefixer.
  */
 export const GetMinCss = ( sassString ) => {
 	Log.verbose( `Running GetMinCss`);
@@ -49,10 +50,10 @@ export const GetMinCss = ( sassString ) => {
 /**
  * Sassify - Promisified node-sass, compile Sass code into CSS
  *
- * @param  { string } scss - The Sass file to be compiled
- * @param  { string } css  - The location where the CSS should be written to
+ * @param  {string} scss - The Sass file to be compiled
+ * @param  {string} css  - The location where the CSS should be written to
  *
- * @return { Promise }     - Resolves the minified css
+ * @return {string}     - Minified css as a string
  */
 export const Sassify = ( scss ) => {
 	Log.verbose( `Running Sassify`);
@@ -82,9 +83,9 @@ export const Sassify = ( scss ) => {
 /**
  * Autoprefix - Automatically adds autoprefixes to a css file
  *
- * @param  { string } file - The file to be prefixed
+ * @param  {string} file - The file to be prefixed
  *
- * @return { Promise }     - Resolves the prefixed css
+ * @return {string}     - Prefixed css as a string
  */
 export const Autoprefix = ( css ) => {
 	Log.verbose( `Running Autoprefix`);

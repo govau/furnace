@@ -1,21 +1,25 @@
-/**
+/***************************************************************************************************************************************************************
  *
- * Export shared helper code
+ * Helper functions for use across the system
  *
  * Style - Returning ansi escape color codes
- * Log - A logging method
+ * Log   - A logging object for logging prettiness
  *
- */
+ **************************************************************************************************************************************************************/
+
 
 'use strict';
 
+
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Dependencies
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------
 import Notifier from 'node-notifier';
-import Path from 'path';
+import Path     from 'path';
 
 
 /**
- * Returning ansi escape color codes
+ * Style - Returning ansi escape color codes
  * Credit to: https://github.com/chalk/ansi-styles
  *
  * @type {Object}

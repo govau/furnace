@@ -6,6 +6,7 @@
  *
  **************************************************************************************************************************************************************/
 
+
 'use strict';
 
 
@@ -18,20 +19,20 @@ import Path from 'path';
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Local
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
-import { SETTINGS } from './settings';
-import { Log } from './helper';
-import { GetMinCss } from './css';
-import { GetMinJs } from './javascript';
+import { SETTINGS }         from './settings';
+import { Log }              from './helper';
+import { GetMinCss }        from './css';
+import { GetMinJs }         from './javascript';
 import { AddFile, AddGlob } from './zip';
-import { ReadFile } from './files';
+import { ReadFile }         from './files';
 
 
 /**
  * Bundle - Iterates over the components, bundles tasks together and adds file to zip
  *
- * @param  { object } data - The request.body and it's dependencies formatted from the POST
+ * @param  {object} data - The request.body and it's dependencies formatted from the POST
  *
- * @return { Promise }     - Resolves once all bundles are moved into zipFile
+ * @return {Promise}     - Resolves once all bundles are moved into zipFile
  */
 export const Bundle = ( data ) => {
 	Log.verbose( `Running PrepareBundle` );

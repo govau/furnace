@@ -1,34 +1,37 @@
-/**
+/***************************************************************************************************************************************************************
  *
  * Initialise the Furnace (express server)
  *
  * Server - Collect POST data and run HandlePost function on it
  *
- */
+ **************************************************************************************************************************************************************/
 
 'use strict';
 
+
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Dependencies
-import Express from 'express';
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------
+import Express    from 'express';
 import BodyParser from 'body-parser';
 
 
-// Local dependencies
-import { Log } from './helper';
-import { SETTINGS } from './settings';
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------
+// Local
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------
+import { Log }        from './helper';
+import { SETTINGS }   from './settings';
 import { HandlePost } from './prepare';
 
 
 // Check if the user is in verbose mode
-if (process.argv.includes('-v') || process.argv.includes('--verbose')) {
+if(process.argv.includes('-v') || process.argv.includes('--verbose')) {
 	Log.verboseMode = true;
 }
 
 
 /**
- *
  * Server - Collect POST data and run HandlePost function on it
- *
  */
 export const Server = Express();
 
