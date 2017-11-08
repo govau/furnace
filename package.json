@@ -25,7 +25,8 @@
 		"unitTest:detail": "jest --coverage",
 		"unitTest:watch": "jest --watch --coverage",
 		"intTest": "node __tests__/integration/tester.js",
-		"intTest:watch": "nodemon --watch __tests__/integration/ --exec npm run intTest",
+		"intTest:verbose": "node __tests__/integration/tester.js --verbose",
+		"intTest:watch": "nodemon --watch __tests__/integration --exec npm run intTest:verbose",
 		"start": "node dist/init.js",
 		"build": "babel src --out-dir dist --presets=es2015",
 		"build:verbose": "npm run build && node dist/init.js --verbose",
@@ -44,6 +45,10 @@
 	},
 	"devDependencies": {
 		"babel-cli": "^6.26.0",
+		"child_process": "^1.0.2",
+		"copy-dir": "^0.3.0",
+		"del": "^3.0.0",
+		"dirsum": "^0.1.1",
 		"jest-cli": "^21.2.1",
 		"nodemon": "^1.12.1"
 	},
