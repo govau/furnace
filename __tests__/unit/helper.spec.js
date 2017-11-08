@@ -1,23 +1,34 @@
-/**
- * helper.js unit tests
- */
+/***************************************************************************************************************************************************************
+ *
+ * Helper.js unit tests
+ *
+ * @file src/helper.js
+ *
+ * Tested methods:
+ * - Log
+ * - Style
+ *
+ **************************************************************************************************************************************************************/
 
 
+// -------------------------------------------------------------------------------------------------------------------------------------------------------------
+// Local
+// -------------------------------------------------------------------------------------------------------------------------------------------------------------
 import { Log, Style } from '../../src/helper';
 
 
-// ----------------------------------------------------------------
-// Log
-//
-// Log.space
-// Log.info
-// Log.welcome
-// Log.ok
-// Log.done
-// Log.verbose
-// Log.verbose
-// Log.error
-// ----------------------------------------------------------------
+/***************************************************************************************************************************************************************
+ * Log
+ *
+ * Log.space
+ * Log.info
+ * Log.welcome
+ * Log.ok
+ * Log.done
+ * Log.verbose
+ * Log.verbose
+ * Log.error
+ **************************************************************************************************************************************************************/
 test('Log.welcome: should should be formatted correctly', () => {
 	console.log = jest.fn();
 
@@ -86,6 +97,7 @@ test('Log.verbose: should not print if verboseMode is false', () => {
 	expect( console.info.mock.calls.length ).toBe( 0 );
 });
 
+
 test('Log.verbose: should should be formatted correctly', () => {
 	console.info = jest.fn();
 
@@ -111,15 +123,15 @@ test('Log.space: should should be formatted correctly', () => {
 });
 
 
-// ----------------------------------------------------------------
-// Style
-//
-// Style.parse
-// Style.parse
-// Style.parse
-// Style.[color|bold]
-// Style.[color] nesting
-// ----------------------------------------------------------------
+/***************************************************************************************************************************************************************
+ * Style
+ *
+ * Style.parse
+ * Style.parse
+ * Style.parse
+ * Style.[color|bold]
+ * Style.[color] nesting
+ **************************************************************************************************************************************************************/
 test('Style.parse - undefined argument should return empty string', () => {
 	expect( Style.parse( undefined ) ).toBe('');
 });
@@ -134,6 +146,7 @@ test('Style.parse - start and end ansi code can be nested', () => {
 	expect( Style.parse( `TEST ${ Style.parse( 'SUBTEST', '666m', '777m' ) } STRING`, '666m', '777m' ) )
 		.toBe('\u001B[666mTEST \u001B[666mSUBTEST\u001B[666m STRING\u001b[777m');
 });
+
 
 test('Style: function should return correct string and colour', () => {
 	expect( Style.black('test black') ).toBe('\u001B[30mtest black\u001b[39m');

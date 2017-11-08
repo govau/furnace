@@ -1,6 +1,14 @@
-/**
- * prepare.js unit tests
- */
+/***************************************************************************************************************************************************************
+ *
+ * Prepare.js unit tests
+ *
+ * @file src/prepare.js
+ *
+ * Tested methods:
+ * - HandleData
+ *
+ **************************************************************************************************************************************************************/
+
 
 import { HandleData } from '../../src/prepare';
 
@@ -9,7 +17,6 @@ import { HandleData } from '../../src/prepare';
 // HandleData
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
 test('HandleData: takes an object then formats it', () => {
-
 	const data = {
 		components: [ 'accordion', 'breadcrumbs' ],
 		styleOutput: 'css',
@@ -29,7 +36,6 @@ test('HandleData: takes an object then formats it', () => {
 
 
 test('HandleData: should error with a component that does not exist', () => {
-
 	console.error = jest.fn();
 
 	const data = {
@@ -48,7 +54,6 @@ test('HandleData: should error with a component that does not exist', () => {
 
 
 test('HandleData: takes an object then formats it', () => {
-
 	const data = {
 		styleOutput: 'css',
 		jsOutput: 'js',
