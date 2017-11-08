@@ -25,11 +25,11 @@ export const ReadFile = ( pathToFile ) => {
 			if( error && error.code !== 'EEXIST' ) {
 				reject( `File not found: ${ pathToFile }` );
 			}
-
-			Log.verbose( `Read: ${ pathToFile }` );
-			resolve( fileContents );
+			else {
+				Log.verbose( `Read: ${ pathToFile }` );
+				resolve( fileContents );
+			}
 
 		});
-
 	})
 }

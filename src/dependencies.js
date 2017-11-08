@@ -27,10 +27,10 @@ export const GetDependencies = (
 
 		// Add the prefix if it doesn't have it
 		component = component.startsWith( prefix )
-		? component
-		: prefix + component;
+			? component
+			: prefix + component;
 
-		if ( json[ component ] !== undefined ) {
+		if( json[ component ] !== undefined ) {
 
 			// Add the dependencies first
 			Object.keys( json[ component ].peerDependencies ).map( dependency => {
