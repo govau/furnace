@@ -13,5 +13,5 @@ lerna-debug.log
 dist
 coverage
 
-tests/integration/*/zip/*
-tests/integration/*/docs/*
+# Remove zip files and directories from git
+__tests__/integration/*/GOLD-AU*

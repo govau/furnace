@@ -18,7 +18,8 @@ const Copydir     = require( 'copy-dir' );
 const Fs          = require( 'fs' );
 const Dirsum      = require( 'dirsum' );
 const Request     = require( 'request' );
-const Querystring = require('querystring');
+const Querystring = require( 'querystring' );
+const AdmZip      = require( 'adm-zip' );
 
 
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -30,17 +31,47 @@ const { Log } = require( '../../dist/helper' );
 // Check if the user is in verbose mode
 if(process.argv.includes('-v') || process.argv.includes('--verbose')) {
 	Log.verboseMode = true;
+	Log.verbose( `--- YOLO mode activated, messages will contain references and bad jokes ---`);
 }
 
 
 let PASS = true;
 
+const allComponents = [
+	'core',
+	'animate',
+	'accordion',
+	'body',
+	'link-list',
+	'breadcrumbs',
+	'buttons',
+	'callout',
+	'control-input',
+	'cta-link',
+	'direction-links',
+	'footer',
+	'grid-12',
+	'header',
+	'headings',
+	'inpage-nav',
+	'keyword-list',
+	'page-alerts',
+	'progress-indicator',
+	'responsive-media',
+	'select',
+	'skip-link',
+	'tags',
+	'text-inputs'
+];
+
+const someComponents = [ 'accordion', 'breadcrumbs' ];
+
 const TESTS = [
 	{
-		name: 'Test1: testing minified css, minified js and dependency fetching.',
+		name: 'Test1: testing some modules with minified css, minified js and dependency fetching.',
 		folder: 'zip-01',
 		post: {
-			components: [ 'accordion', 'breadcrumbs' ],
+			components: someComponents,
 			styleOutput: 'css',
 			jsOutput: 'js',
 		},
@@ -48,10 +79,10 @@ const TESTS = [
 		empty: false,
 	},
 	{
-		name: 'Test2: testing css modules, js modules and dependency fetching.',
+		name: 'Test2: testing all modules with css modules, js modules and dependency fetching.',
 		folder: 'zip-02',
 		post: {
-			components: [ 'accordion', 'breadcrumbs' ],
+			components: allComponents,
 			styleOutput: 'cssModules',
 			jsOutput: 'jsModules',
 		},
@@ -59,10 +90,10 @@ const TESTS = [
 		empty: false,
 	},
 	{
-		name: 'Test3: testing sass modules, react and dependency fetching.',
+		name: 'Test3: testing some modules with sass modules, react and dependency fetching.',
 		folder: 'zip-03',
 		post: {
-			components: [ 'accordion', 'breadcrumbs' ],
+			components: someComponents,
 			styleOutput: 'sassModules',
 			jsOutput: 'react',
 		},
@@ -70,35 +101,10 @@ const TESTS = [
 		empty: false,
 	},
 	{
-		name: 'Test4: testing all modules with minified css and minified js.',
+		name: 'Test4: testing all modules with minified css, minified js and dependency fetching.. ',
 		folder: 'zip-04',
 		post: {
-			components: [
-				'core',
-				'animate',
-				'accordion',
-				'body',
-				'link-list',
-				'breadcrumbs',
-				'buttons',
-				'callout',
-				'control-input',
-				'cta-link',
-				'direction-links',
-				'footer',
-				'grid-12',
-				'header',
-				'headings',
-				'inpage-nav',
-				'keyword-list',
-				'page-alerts',
-				'progress-indicator',
-				'responsive-media',
-				'select',
-				'skip-link',
-				'tags',
-				'text-inputs'
-			],
+			components: allComponents,
 			styleOutput: 'css',
 			jsOutput: 'js',
 		},
@@ -119,12 +125,11 @@ const Tester = ( ( tests ) => {
 
 		allTasks.push(
 			Delete( scriptFolder )
-				.catch( error  => Log.error( `Noooooo: ${ error }` ) )
 				.then( ()      => CopyFixtures( scriptFolder, test ) )    // copy fixtures
-				.then( ()      => Run( test ) )                           // now run script
-				.then( ()      => Fixture( scriptFolder, test ) )         // get hash for fixture
-				.then( result  => Result( scriptFolder, test, result ) )  // get hash for result of test
-				.then( result  => Compare( test, result ) )               // now compare both and detail errors
+				.then( ()      => RequestZip( scriptFolder, test ) )      // now get zip
+				//.then( ()      => Fixture( scriptFolder, test ) )         // get hash for fixture
+				//.then( result  => Result( scriptFolder, test, result ) )  // get hash for result of test
+				//.then( result  => Compare( test, result ) )               // now compare both and detail errors
 				.then( success => {                                       // cleaning up after ourself
 					if( success ) {
 						return Delete( scriptFolder );
@@ -133,6 +138,7 @@ const Tester = ( ( tests ) => {
 						return Promise.resolve();
 					}
 				})
+				.catch( error  => Log.error( `Noooooo: ${ error }` ) )
 		);
 	})
 
@@ -144,13 +150,13 @@ const Tester = ( ( tests ) => {
 			process.exit( 1 );
 		})
 		.then( () => {
-			if( SETTINGS.PASS ) {
-				Log.finished(`😅  All tests have passed`);
+			if( PASS ) {
+				Log.done(`😅  All tests have passed`);
 
 				process.exit( 0 );
 			}
 			else {
-				Log.finished(`😳  Ouch! Some tests failed`);
+				Log.done(`😳  Ouch! Some tests failed`);
 
 				process.exit( 1 );
 			}
@@ -166,7 +172,7 @@ const Tester = ( ( tests ) => {
  * @return {Promise object}
  */
 const Delete = ( path ) => {
-	Log.verbose( 'Running delete' );
+	Log.verbose( 'Deleting files from previous tests' );
 
 	const trash = [
 		Path.normalize(`${ path }/site`),
@@ -175,6 +181,8 @@ const Delete = ( path ) => {
 		Path.normalize(`${ path }/*.log.*`),
 		Path.normalize(`${ path }/assets/**/.DS_Store`),
 		Path.normalize(`${ path }/fixture/**/.DS_Store`),
+		Path.normalize(`${ path }/GOLDAU.zip`),
+		Path.normalize(`${ path }/GOLDAU/`),
 		Path.normalize(`${ path }/_fixture/`),
 	];
 
@@ -201,7 +209,7 @@ const Delete = ( path ) => {
  * @return {Promise object}
  */
 const CopyFixtures = ( path, settings ) => {
-	Log.verbose( 'Running CopyFixtures' );
+	Log.verbose( 'Copying fixtures' );
 
 	return new Promise( ( resolve, reject ) => {
 		if( settings.empty ) {
@@ -222,15 +230,15 @@ const CopyFixtures = ( path, settings ) => {
 
 
 /**
- * Running shell script
+ * Mock a request to the furnace (express server) and get a zip file
  *
  * @param  {string} path     - The path to the shell script
  * @param  {object} settings - The settings object for this test
  *
  * @return {Promise object}
  */
-const Run = ( settings ) => {
-	Log.verbose( 'Rrrrunrunrun' );
+const RequestZip = ( path, settings ) => {
+	Log.verbose( 'Requesting a zip from the furnace' );
 
 	return new Promise( ( resolve, reject ) => {
 
@@ -241,14 +249,33 @@ const Run = ( settings ) => {
 			headers: {
 				'User-Agent': 'stress-tester',
 			},
-		}, ( error, response, body ) => {
-			if( error ) {
-				reject( error );
+		},
+		( error, response, body ) => {
+			if( !error && response.statusCode === 200 ) {
+				Log.verbose( 'Got a hot nugget from Furnace' );
+
+				Fs.writeFile( `${ path }/GOLD-AU.zip`, body, 'binary', ( error ) => {
+					if( error ) {
+						Log.error( 'Unable to save zip file' );
+						reject( error );
+					}
+					else {
+						Log.verbose( `Sneaking zip into: ${ settings.folder }/GOLD-AU.zip` );
+
+						const zip = new AdmZip( `${ path }/GOLD-AU.zip` );
+						zip.extractAllTo( `${ path }/GOLD-AU/`, true );
+
+						Log.verbose( `Zip unpacked: ${ settings.folder }/GOLD-AU.zip -> ${ settings.folder }/GOLD-AU/`);
+
+						resolve();
+					}
+				})
 			}
 			else {
-				resolve( body );
+				Log.verbose( 'There was an issue finding the furnace, maybe try a torch?' );
+				error ? reject( error ) : reject();
 			}
-		});
+		})
 
 	});
 };
@@ -263,13 +290,13 @@ const Run = ( settings ) => {
  * @return {Promise object}  - The hash object of all files inside the fixture
  */
 const Fixture = ( path, settings ) => {
-	Log.verbose( 'Running Fixture' );
+	Log.verbose( 'Get the hash for the fixture of a test' );
 
 	return new Promise( ( resolve, reject ) => {
 		if( !settings.empty ) {
 			Dirsum.digest( Path.normalize(`${ path }/_fixture/${ settings.compare }/`), 'sha256', ( error, hashes ) => {
 				if( error ) {
-					Log.pass( error );
+					Log.error( error );
 
 					PASS = false;
 
@@ -297,7 +324,7 @@ const Fixture = ( path, settings ) => {
  * @return {Promise object}  - The hash object of all files inside the resulting files
  */
 const Result = ( path, settings, fixture ) => {
-	Log.verbose( 'Running Result' );
+	Log.verbose( 'Get the hash for the result of the test' );
 
 	const location = Path.normalize(`${ path }/${ settings.compare }/`);
 
@@ -372,7 +399,7 @@ const Result = ( path, settings, fixture ) => {
  * @return {Promise object}  - The hash object of all files inside the fixture
  */
 const Compare = ( settings, hashes ) => {
-	Log.verbose( 'Running Compare' );
+	Log.verbose( 'Comparing the output of a test against its fixture' );
 
 	return new Promise( ( resolve, reject ) => {
 		if( hashes.fixture.hash === hashes.result.hash ) {

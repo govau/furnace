@@ -44,6 +44,7 @@
 		"uglify-js": "^3.1.4"
 	},
 	"devDependencies": {
+		"adm-zip": "^0.4.7",
 		"babel-cli": "^6.26.0",
 		"copy-dir": "^0.3.0",
 		"del": "^3.0.0",
