@@ -14,6 +14,7 @@
 // Dependencies
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
 import Path from 'path';
+import Archiver from 'archiver';
 
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -34,11 +35,11 @@ import { ReadFile }         from './files';
  *
  * @return {Promise}     - Resolves once all bundles are moved into zipFile
  */
-export const Bundle = ( data ) => {
+export const Bundle = ( data, zipFile = Archiver(`zip`) ) => {
 	Log.verbose( `Running PrepareBundle` );
 
 	// An array of promises that adds files and globs to the zip.
-	const bundle      = [];
+	const bundle = [];
 
 	// Sass @imports for minification and sassModules, always starts with sassVersioning.
 	let cssImports    = `@import '${ SETTINGS.npm.sassVersioning }';\n\n`;
@@ -49,7 +50,7 @@ export const Bundle = ( data ) => {
 	const jsDirectory = SETTINGS.uikit.jsOutput[ data.jsOutput ].directory;
 
 	// Array of JS files to be uglified
-	const jsMin       = [];
+	const jsMin = [];
 
 	return new Promise ( ( resolve, reject ) => {
 
@@ -73,7 +74,7 @@ export const Bundle = ( data ) => {
 				else {
 					bundle.push(
 						ReadFile( Path.normalize( jsFile ) )
-							.then( jsData => AddFile( jsData, `${ component }/js/${ jsFileName }.js` ) )
+							.then( jsData => AddFile( jsData, `${ component }/js/${ jsFileName }.js`, zipFile ) )
 					);
 				}
 			}
@@ -103,7 +104,7 @@ export const Bundle = ( data ) => {
 				// Compile the CSS and add the file to the Zip
 				bundle.push(
 					GetMinCss( cssModuleImport )
-						.then( cssMin => AddFile( cssMin, `${ component }/css/styles.css` ) )
+						.then( cssMin => AddFile( cssMin, `${ component }/css/styles.css`, zipFile ) )
 				);
 			}
 
@@ -112,7 +113,7 @@ export const Bundle = ( data ) => {
 			const sassDirectory = Path.normalize( sassFile ).replace('_module.scss', '');
 			if( data.styleOutput === 'sassModules' ) {
 				sassImports += `@import '${ component }/sass/_module.scss';\n`;
-				bundle.push( AddGlob( `*.scss`, sassDirectory, `${ component }/sass/` ) );
+				bundle.push( AddGlob( `*.scss`, sassDirectory, `${ component }/sass/`, zipFile ) );
 			}
 		});
 
@@ -121,7 +122,7 @@ export const Bundle = ( data ) => {
 		if( data.styleOutput === 'css' ) {
 			bundle.push(
 				GetMinCss( cssImports )
-					.then( cssMin => AddFile( cssMin, 'css/furnace.min.css' ) )
+					.then( cssMin => AddFile( cssMin, 'css/furnace.min.css', zipFile ) )
 			);
 		}
 
@@ -130,11 +131,11 @@ export const Bundle = ( data ) => {
 		if( data.styleOutput === 'sassModules' ) {
 			bundle.push(
 				ReadFile( SETTINGS.npm.sassVersioning )
-					.then( sassVersioning => AddFile( sassVersioning, `node_modules/sass-versioning/dist/_index.scss` ) )
+					.then( sassVersioning => AddFile( sassVersioning, `node_modules/sass-versioning/dist/_index.scss`, zipFile ) )
 			);
 
 			bundle.push(
-				AddFile( sassImports, 'main.scss' )
+				AddFile( sassImports, 'main.scss', zipFile )
 			);
 		}
 
@@ -143,7 +144,7 @@ export const Bundle = ( data ) => {
 		if( jsMin.length !== 0 ) {
 			bundle.push(
 				GetMinJs( jsMin )
-					.then( jsMinData => AddFile( jsMinData, `js/furnace.min.js` ) )
+					.then( jsMinData => AddFile( jsMinData, `js/furnace.min.js`, zipFile ) )
 			)
 		}
 
@@ -151,7 +152,7 @@ export const Bundle = ( data ) => {
 		// Run all of the promises
 		Promise.all( bundle )
 			.catch( error => reject( error ) )
-			.then( resolve );
+			.then( () => resolve( zipFile ) );
 
 	})
 };

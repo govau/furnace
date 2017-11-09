@@ -15,7 +15,6 @@
 // Dependencies
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
 import Path     from 'path';
-import Archiver from 'archiver';
 import Fs       from 'fs';
 
 
@@ -44,7 +43,7 @@ export const HandlePost = ( request, response ) => {
 
 	HandleData( data )
 		.then( Bundle )
-		.then( () => GetZip( response ) )
+		.then( zip => GetZip( response, zip ) )
 		.catch( error => {
 			Log.error( error );
 			response.status( 400 ).send( `400: ${ error }` );

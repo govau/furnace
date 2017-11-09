@@ -24,10 +24,6 @@ import Archiver from 'archiver';
 import { Log } from './helper';
 
 
-// Create a new empty zip on first run
-let zipFile = Archiver(`zip`);
-
-
 /**
  *
  * AddFile - Adds a file and returns it as a string
@@ -35,7 +31,7 @@ let zipFile = Archiver(`zip`);
  * @param {string} content     - The string of content to go into the file
  * @param {string} archivePath - The location of the files in the zip
  */
-export const AddFile = ( content, archivePath ) => {
+export const AddFile = ( content, archivePath, zipFile ) => {
 	Log.verbose(`AddFile: ${ archivePath }`);
 
 	if( typeof content !== `string` || typeof archivePath !== `string` ) {
@@ -54,7 +50,7 @@ export const AddFile = ( content, archivePath ) => {
  * @param {string} directory   - The directory for the glob to be applied to
  * @param {string} archivePath - The location of the files in the zip
  */
-export const AddGlob = ( pattern, directory, archivePath ) => {
+export const AddGlob = ( pattern, directory, archivePath, zipFile ) => {
 	Log.verbose(`AddGlob: ${ directory + pattern }`);
 
 	if( typeof pattern !== `string` || typeof directory !== `string` || typeof archivePath !== `string` ) {
@@ -71,7 +67,7 @@ export const AddGlob = ( pattern, directory, archivePath ) => {
  *
  * @param response - The response containing the archiver head
  */
-export const GetZip = ( response ) => {
+export const GetZip = ( response, zipFile ) => {
 	Log.verbose( `GetZip: Compiling zip` );
 
 	response.writeHead(200, {
@@ -88,6 +84,4 @@ export const GetZip = ( response ) => {
 	catch( error ) {
 		Log.error( error );
 	}
-
-	zipFile = Archiver( `zip` );
 };

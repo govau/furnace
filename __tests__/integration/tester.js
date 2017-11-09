@@ -68,7 +68,7 @@ const someComponents = [ 'accordion', 'breadcrumbs' ];
 
 const TESTS = [
 	{
-		name: 'Test1: testing some modules with minified css, minified js and dependency fetching.',
+		name: 'Test1: Some components minfied css/js',
 		folder: 'zip-01',
 		post: {
 			components: someComponents,
@@ -79,7 +79,7 @@ const TESTS = [
 		empty: false,
 	},
 	{
-		name: 'Test2: testing all modules with css modules, js modules and dependency fetching.',
+		name: 'Test2: All components css/js modules',
 		folder: 'zip-02',
 		post: {
 			components: allComponents,
@@ -90,7 +90,7 @@ const TESTS = [
 		empty: false,
 	},
 	{
-		name: 'Test3: testing some modules with sass modules, react and dependency fetching.',
+		name: 'Test3: Some components sass/react modules',
 		folder: 'zip-03',
 		post: {
 			components: someComponents,
@@ -101,7 +101,7 @@ const TESTS = [
 		empty: false,
 	},
 	{
-		name: 'Test4: testing all modules with minified css, minified js and dependency fetching.. ',
+		name: 'Test4: All components minfied css/js',
 		folder: 'zip-04',
 		post: {
 			components: allComponents,
@@ -127,9 +127,9 @@ const Tester = ( ( tests ) => {
 			Delete( scriptFolder )
 				.then( ()      => CopyFixtures( scriptFolder, test ) )    // copy fixtures
 				.then( ()      => RequestZip( scriptFolder, test ) )      // now get zip
-				//.then( ()      => Fixture( scriptFolder, test ) )         // get hash for fixture
-				//.then( result  => Result( scriptFolder, test, result ) )  // get hash for result of test
-				//.then( result  => Compare( test, result ) )               // now compare both and detail errors
+				.then( ()      => Fixture( scriptFolder, test ) )         // get hash for fixture
+				.then( result  => Result( scriptFolder, test, result ) )  // get hash for result of test
+				.then( result  => Compare( test, result ) )               // now compare both and detail errors
 				.then( success => {                                       // cleaning up after ourself
 					if( success ) {
 						return Delete( scriptFolder );
@@ -181,8 +181,8 @@ const Delete = ( path ) => {
 		Path.normalize(`${ path }/*.log.*`),
 		Path.normalize(`${ path }/assets/**/.DS_Store`),
 		Path.normalize(`${ path }/fixture/**/.DS_Store`),
-		Path.normalize(`${ path }/GOLDAU.zip`),
-		Path.normalize(`${ path }/GOLDAU/`),
+		Path.normalize(`${ path }/GOLD-AU.zip`),
+		Path.normalize(`${ path }/GOLD-AU/`),
 		Path.normalize(`${ path }/_fixture/`),
 	];
 
@@ -352,7 +352,7 @@ const Result = ( path, settings, fixture ) => {
 			Fs.access( location, Fs.constants.R_OK, error => {
 
 				if( !error || error.code !== 'ENOENT' ) {
-					Log.fail(`${ settings.name } failed becasue it produced files but really shoudn’t`);
+					Log.error(`${ settings.name } failed becasue it produced files but really shoudn’t`);
 
 					PASS = false;
 
@@ -403,17 +403,17 @@ const Compare = ( settings, hashes ) => {
 
 	return new Promise( ( resolve, reject ) => {
 		if( hashes.fixture.hash === hashes.result.hash ) {
-			Log.pass(`${ settings.name } passed`); // yay
+			Log.done(`${ settings.name } passed`); // yay
 
 			resolve( true );
 		}
 		else { // grr
 			PASS = false;
-			Log.fail(`${ settings.name } failed`);
+			Log.error(`${ settings.name } failed`);
 
 			// flatten hash object
-			const fixture = Flatten( hashes.fixture.files );
-			const result = Flatten( hashes.result.files );
+			const fixture = hashes.fixture.files;
+			const result = hashes.result.files;
 
 			// iterate over fixture
 			for( const file of Object.keys( fixture ) ) {
