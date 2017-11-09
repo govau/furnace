@@ -79,14 +79,14 @@ export const Bundle = ( data ) => {
 				if( data.jsOutput === 'react' ) {
 					bundle.push(
 						ReadFile( Path.normalize( jsFile ) )
-							.then( jsData => AddFile( jsData, `/${ jsDirectory }/${ component }.js`, zipFile ) )
+							.then( jsData => AddFile( jsData, `/${ SETTINGS.packageJson.pancake.react.location }${ component }.js`, zipFile ) )
 					);
 				}
 
 				if( data.jsOutput === 'jsModules' ) {
 					bundle.push(
 						GetMinJs( [ Path.normalize( jsFile ) ] )
-							.then( jsData => AddFile( jsData, `/${ jsDirectory }/${ component }.js`, zipFile ) )
+							.then( jsData => AddFile( jsData, `/${ SETTINGS.packageJson.pancake.js.location }/${ component }.js`, zipFile ) )
 					);
 				}
 			}
@@ -134,7 +134,7 @@ export const Bundle = ( data ) => {
 		if( data.styleOutput === 'css' ) {
 			bundle.push(
 				GetMinCss( cssImports )
-					.then( cssMin => AddFile( cssMin, 'css/furnace.min.css', zipFile ) )
+					.then( cssMin => AddFile( cssMin, `${ SETTINGS.packageJson.pancake.css.location }${ SETTINGS.packageJson.pancake.css.name }`, zipFile ) )
 			);
 		}
 
@@ -147,7 +147,7 @@ export const Bundle = ( data ) => {
 			);
 
 			bundle.push(
-				AddFile( sassImports, 'main.scss', zipFile )
+				AddFile( sassImports, SETTINGS.packageJson.pancake.sass.name, zipFile )
 			);
 		}
 
@@ -156,15 +156,15 @@ export const Bundle = ( data ) => {
 		if( jsMin.length !== 0 ) {
 			bundle.push(
 				GetMinJs( jsMin )
-					.then( jsMinData => AddFile( jsMinData, `js/furnace.min.js`, zipFile ) )
+					.then( jsMinData => AddFile( jsMinData, `${ SETTINGS.packageJson.pancake.js.location }${ SETTINGS.packageJson.pancake.js.name }`, zipFile ) )
 			)
 		}
 
 
 		// Run all of the promises
 		Promise.all( bundle )
-			.catch( error => reject( error ) )
-			.then( () => resolve( zipFile ) );
+			.then( () => resolve( zipFile ) )
+			.catch( error => reject( error ) );
 
 	})
 };

@@ -79,4 +79,40 @@ export const SETTINGS = {
 			},
 		},
 	},
+	packageJson: {
+		"name": "furnace",
+		"version": "1.0.0",
+		"description": "This was built with the furnace",
+		"author": "Your name goes here",
+		"license": "MIT",
+		"dependencies": {},
+		"pancake": {
+			"auto-save": true,
+			"plugins": true,
+			"ignore": [],
+			"css": {
+				"minified": true,
+				"browsers": [
+					"last 2 versions",
+					"ie 8",
+					"ie 9",
+					"ie 10"
+				],
+				"location": "css/",
+				"name": "furnace.min.css"
+			},
+			"sass": {
+				"location": "./",
+				"name": "main.scss"
+			},
+			"js": {
+				"minified": true,
+				"location": "js/",
+				"name": "furnace.min.js"
+			},
+			"react": {
+				"location": "react/"
+			}
+		}
+	}
 };
