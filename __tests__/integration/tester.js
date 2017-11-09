@@ -36,6 +36,7 @@ if(process.argv.includes('-v') || process.argv.includes('--verbose')) {
 
 
 let PASS = true;
+const zipName = `GOLD-AU`;
 
 const allComponents = [
 	'core',
@@ -64,6 +65,7 @@ const allComponents = [
 	'text-inputs'
 ];
 
+// Accordion is complex, breadcrumbs has lots of dependencies
 const someComponents = [ 'accordion', 'breadcrumbs' ];
 
 const TESTS = [
@@ -75,7 +77,7 @@ const TESTS = [
 			styleOutput: 'css',
 			jsOutput: 'js',
 		},
-		compare: 'GOLD-AU/',
+		compare: `${ zipName }/`,
 		empty: false,
 	},
 	{
@@ -86,7 +88,7 @@ const TESTS = [
 			styleOutput: 'cssModules',
 			jsOutput: 'jsModules',
 		},
-		compare: 'GOLD-AU/',
+		compare: `${ zipName }/`,
 		empty: false,
 	},
 	{
@@ -97,7 +99,7 @@ const TESTS = [
 			styleOutput: 'sassModules',
 			jsOutput: 'react',
 		},
-		compare: 'GOLD-AU/',
+		compare: `${ zipName }/`,
 		empty: false,
 	},
 	{
@@ -108,7 +110,7 @@ const TESTS = [
 			styleOutput: 'css',
 			jsOutput: 'js',
 		},
-		compare: 'GOLD-AU/',
+		compare: `${ zipName }/`,
 		empty: false,
 	},
 ];
@@ -181,8 +183,8 @@ const Delete = ( path ) => {
 		Path.normalize(`${ path }/*.log.*`),
 		Path.normalize(`${ path }/assets/**/.DS_Store`),
 		Path.normalize(`${ path }/fixture/**/.DS_Store`),
-		Path.normalize(`${ path }/GOLD-AU.zip`),
-		Path.normalize(`${ path }/GOLD-AU/`),
+		Path.normalize(`${ path }/${ zipName }.zip`),
+		Path.normalize(`${ path }/${ zipName }/`),
 		Path.normalize(`${ path }/_fixture/`),
 	];
 
@@ -254,19 +256,19 @@ const RequestZip = ( path, settings ) => {
 			if( !error && response.statusCode === 200 ) {
 				Log.verbose( 'Got a hot nugget from Furnace' );
 
-				Fs.writeFile( `${ path }/GOLD-AU.zip`, body, 'binary', ( error ) => {
+				Fs.writeFile( `${ path }/${ zipName }.zip`, body, 'binary', ( error ) => {
 					if( error ) {
 						Log.error( 'Unable to save zip file' );
 						reject( error );
 					}
 					else {
-						Log.verbose( `Tossing the zip recklessly into: ${ settings.folder }/GOLD-AU.zip` );
+						Log.verbose( `Tossing the zip recklessly into: ${ settings.folder }/${ zipName }.zip` );
 
-						Log.verbose( `Cracking open the nugget: ${ settings.folder }/GOLD-AU.zip -> ${ settings.folder }/GOLD-AU/`);
-						const zip = new AdmZip( `${ path }/GOLD-AU.zip` );
-						zip.extractAllTo( `${ path }/GOLD-AU/`, true );
+						Log.verbose( `Cracking open the nugget: ${ settings.folder }/${ zipName }.zip -> ${ settings.folder }/${ zipName }/`);
+						const zip = new AdmZip( `${ path }/${ zipName }.zip` );
+						zip.extractAllTo( `${ path }/${ zipName }/`, true );
 
-						Log.verbose( `Nugget cracked open and revealed: ${ settings.folder }/GOLD-AU/`);
+						Log.verbose( `Nugget cracked open and revealed: ${ settings.folder }/${ zipName }/`);
 
 						resolve();
 					}
