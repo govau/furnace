@@ -74,7 +74,7 @@ export const Bundle = ( data, zipFile = Archiver(`zip`) ) => {
 				else {
 					bundle.push(
 						ReadFile( Path.normalize( jsFile ) )
-							.then( jsData => AddFile( jsData, `${ component }/js/${ jsFileName }.js`, zipFile ) )
+							.then( jsData => AddFile( jsData, `/${ jsDirectory }/${ component }.js`, zipFile ) )
 					);
 				}
 			}
@@ -104,7 +104,7 @@ export const Bundle = ( data, zipFile = Archiver(`zip`) ) => {
 				// Compile the CSS and add the file to the Zip
 				bundle.push(
 					GetMinCss( cssModuleImport )
-						.then( cssMin => AddFile( cssMin, `${ component }/css/styles.css`, zipFile ) )
+						.then( cssMin => AddFile( cssMin, `/css/${ component }.css`, zipFile ) )
 				);
 			}
 
@@ -112,8 +112,8 @@ export const Bundle = ( data, zipFile = Archiver(`zip`) ) => {
 			// sassModules was selected, create an @import for the zipFile, addGlob to zip
 			const sassDirectory = Path.normalize( sassFile ).replace('_module.scss', '');
 			if( data.styleOutput === 'sassModules' ) {
-				sassImports += `@import '${ component }/sass/_module.scss';\n`;
-				bundle.push( AddGlob( `*.scss`, sassDirectory, `${ component }/sass/`, zipFile ) );
+				sassImports += `@import 'node_modules/@gov.au/${ component }/lib/sass/_module.scss';\n`;
+				bundle.push( AddGlob( `*.scss`, sassDirectory, `node_modules/@gov.au/${ component }/lib/sass/`, zipFile ) );
 			}
 		});
 
