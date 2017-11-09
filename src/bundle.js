@@ -71,9 +71,16 @@ export const Bundle = ( data, zipFile = Archiver(`zip`) ) => {
 				}
 
 				// minfyJs not selected in the form, add JS modules based on the fileName/Directory
-				else {
+				if( data.jsOutput === 'react' ) {
 					bundle.push(
 						ReadFile( Path.normalize( jsFile ) )
+							.then( jsData => AddFile( jsData, `/${ jsDirectory }/${ component }.js`, zipFile ) )
+					);
+				}
+
+				if( data.jsOutput === 'jsModules' ) {
+					bundle.push(
+						GetMinJs( [ Path.normalize( jsFile ) ] )
 							.then( jsData => AddFile( jsData, `/${ jsDirectory }/${ component }.js`, zipFile ) )
 					);
 				}

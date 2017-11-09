@@ -1,8 +1,8 @@
 @import 'node_modules/sass-versioning/dist/_index.scss';
 
-@import 'core/sass/_module.scss';
-@import 'animate/sass/_module.scss';
-@import 'accordion/sass/_module.scss';
-@import 'link-list/sass/_module.scss';
-@import 'body/sass/_module.scss';
-@import 'breadcrumbs/sass/_module.scss';
+@import 'node_modules/@gov.au/core/lib/sass/_module.scss';
+@import 'node_modules/@gov.au/animate/lib/sass/_module.scss';
+@import 'node_modules/@gov.au/accordion/lib/sass/_module.scss';
+@import 'node_modules/@gov.au/link-list/lib/sass/_module.scss';
+@import 'node_modules/@gov.au/body/lib/sass/_module.scss';
+@import 'node_modules/@gov.au/breadcrumbs/lib/sass/_module.scss';

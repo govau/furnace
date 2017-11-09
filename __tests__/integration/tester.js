@@ -430,7 +430,7 @@ const Compare = ( settings, hashes ) => {
 					const fileName = file.split('/');
 
 					if( fixture[ file ] !== compare && fileName[ fileName.length - 1 ] !== 'hash' ) { // we don’t want to compare folders
-						Log.error(`Difference inside ${ settings.folder + file } file`);
+						Log.error(`Difference inside ${ settings.folder} ${ file } file`);
 					}
 				}
 			}
