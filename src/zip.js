@@ -30,6 +30,7 @@ import { Log } from './helper';
  *
  * @param {string} content     - The string of content to go into the file
  * @param {string} archivePath - The location of the files in the zip
+ * @param {object} zipFile     - The current zipFile for the iteration
  */
 export const AddFile = ( content, archivePath, zipFile ) => {
 	Log.verbose(`AddFile: ${ archivePath }`);
@@ -49,6 +50,7 @@ export const AddFile = ( content, archivePath, zipFile ) => {
  * @param {string} pattern     - The glob to match files and add to the zip
  * @param {string} directory   - The directory for the glob to be applied to
  * @param {string} archivePath - The location of the files in the zip
+ * @param {object} zipFile     - The current zipFile for the iteration
  */
 export const AddGlob = ( pattern, directory, archivePath, zipFile ) => {
 	Log.verbose(`AddGlob: ${ directory + pattern }`);
@@ -65,7 +67,8 @@ export const AddGlob = ( pattern, directory, archivePath, zipFile ) => {
 /**
  * GetZip - Send the zip back to the user in the response.writeHead
  *
- * @param response - The response containing the archiver head
+ * @param response             - The response containing the archiver head
+ * @param {object} zipFile     - The current zipFile for the iteration
  */
 export const GetZip = ( response, zipFile ) => {
 	Log.verbose( `GetZip: Compiling zip` );

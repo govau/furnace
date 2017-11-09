@@ -31,12 +31,15 @@ import { ReadFile }         from './files';
 /**
  * Bundle - Iterates over the components, bundles tasks together and adds file to zip
  *
- * @param  {object} data - The request.body and it's dependencies formatted from the POST
+ * @param  {object} data    - The request.body and it's dependencies formatted from the POST
  *
- * @return {Promise}     - Resolves once all bundles are moved into zipFile
+ * @return {object} zipFile - The zipFile which will be sent back to the user
  */
-export const Bundle = ( data, zipFile = Archiver(`zip`) ) => {
+export const Bundle = ( data ) => {
 	Log.verbose( `Running PrepareBundle` );
+
+	// A new instance of the zipFile
+	let zipFile = Archiver(`zip`);
 
 	// An array of promises that adds files and globs to the zip.
 	const bundle = [];
@@ -51,6 +54,8 @@ export const Bundle = ( data, zipFile = Archiver(`zip`) ) => {
 
 	// Array of JS files to be uglified
 	const jsMin = [];
+
+	const packageJson = {};
 
 	return new Promise ( ( resolve, reject ) => {
 
