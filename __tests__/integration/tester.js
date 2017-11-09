@@ -260,12 +260,13 @@ const RequestZip = ( path, settings ) => {
 						reject( error );
 					}
 					else {
-						Log.verbose( `Sneaking zip into: ${ settings.folder }/GOLD-AU.zip` );
+						Log.verbose( `Tossing the zip recklessly into: ${ settings.folder }/GOLD-AU.zip` );
 
+						Log.verbose( `Cracking open the nugget: ${ settings.folder }/GOLD-AU.zip -> ${ settings.folder }/GOLD-AU/`);
 						const zip = new AdmZip( `${ path }/GOLD-AU.zip` );
 						zip.extractAllTo( `${ path }/GOLD-AU/`, true );
 
-						Log.verbose( `Zip unpacked: ${ settings.folder }/GOLD-AU.zip -> ${ settings.folder }/GOLD-AU/`);
+						Log.verbose( `Nugget cracked open and revealed: ${ settings.folder }/GOLD-AU/`);
 
 						resolve();
 					}
