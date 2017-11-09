@@ -13,6 +13,7 @@
 // DEPENDENCIES
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
 const Path        = require( 'path' );
+const Spawn       = require( 'child_process' );
 const Del         = require( 'del' );
 const Copydir     = require( 'copy-dir' );
 const Fs          = require( 'fs' );
@@ -119,52 +120,61 @@ const TESTS = [
 const Tester = ( ( tests ) => {
 	Log.info( 'Running tests' );
 
-	const allTasks = [];
+	Furnace( 'start' )
+		.then( ( furnaceId ) =>  {
+			const allTasks = [];
 
-	tests.map( test => {
+			tests.map( test => {
 
-		const scriptFolder = Path.normalize( `${ __dirname }/${ test.folder }` );
+				const scriptFolder = Path.normalize( `${ __dirname }/${ test.folder }` );
 
-		allTasks.push(
-			Delete( scriptFolder )
-				.then( ()      => CopyFixtures( scriptFolder, test ) )    // copy fixtures
-				.then( ()      => ReplaceFixture( scriptFolder, test ) )  // Adds extra bits in the fixture
-				.then( ()      => RequestZip( scriptFolder, test ) )      // now get zip and open it
-				.then( ()      => UnZip( scriptFolder, test ) )			  	  // open the zip files
-				.then( ()      => Fixture( scriptFolder, test ) )         // get hash for fixture
-				.then( result  => Result( scriptFolder, test, result ) )  // get hash for result of test
-				.then( result  => Compare( test, result ) )               // now compare both and detail errors
-				.then( success => {                                       // cleaning up after ourself
-					if( success ) {
-						return Delete( scriptFolder );
+				allTasks.push(
+					Delete( scriptFolder )
+						.then( ()      => CopyFixtures( scriptFolder, test ) )    // copy fixtures
+						.then( ()      => ReplaceFixture( scriptFolder, test ) )  // Adds extra bits in the fixture
+						.then( ()      => RequestZip( scriptFolder, test ) )      // now get zip and open it
+						.then( ()      => UnZip( scriptFolder, test ) )			  	  // open the zip files
+						.then( ()      => Fixture( scriptFolder, test ) )         // get hash for fixture
+						.then( result  => Result( scriptFolder, test, result ) )  // get hash for result of test
+						.then( result  => Compare( test, result ) )               // now compare both and detail errors
+						.then( success => {                                       // cleaning up after ourself
+							if( success ) {
+								return Delete( scriptFolder );
+							}
+							else {
+								return Promise.resolve();
+							}
+						})
+						.catch( error  => Log.error( `Noooooo: ${ error }` ) )
+				);
+			});
+
+
+			// Addded all tests to the promise array
+			Promise.all( allTasks )
+				.catch( error => {
+					Log.error(`An error occurred: ${ Path.basename( error ) }`);
+					Furnace( 'exit', furnaceId );
+					process.exit( 1 );
+				})
+				.then( () => {
+					Furnace( 'exit', furnaceId );
+
+					if( PASS ) {
+						Log.done(`😅  All tests have passed`);
+
+						process.exit( 0 );
 					}
 					else {
-						return Promise.resolve();
+						Log.done(`😳  Ouch! Some tests failed`);
+
+						process.exit( 1 );
 					}
-				})
-				.catch( error  => Log.error( `Noooooo: ${ error }` ) )
-		);
-	})
+			});
 
-	// finished with all tests
-	Promise.all( allTasks )
-		.catch( error => {
-			Log.error(`An error occurred: ${ Path.basename( error ) }`);
-
-			process.exit( 1 );
 		})
-		.then( () => {
-			if( PASS ) {
-				Log.done(`😅  All tests have passed`);
+		.catch( error => Log.error( error ) );
 
-				process.exit( 0 );
-			}
-			else {
-				Log.done(`😳  Ouch! Some tests failed`);
-
-				process.exit( 1 );
-			}
-	});
 });
 
 
@@ -267,6 +277,43 @@ const ReplaceFixture = ( path, settings ) => {
 	});
 };
 
+
+const Furnace = ( action, furnaceProcess = {} ) => {
+	Log.verbose( `${ action } running for furnace` );
+
+	return new Promise ( ( resolve, reject ) => {
+		if( action === 'start' ) {
+			let errors;
+
+			// `npm run start` in base directory
+			const command = Spawn.spawn(
+				'npm',
+				[ 'run', 'start' ],
+				{
+					cwd: Path.normalize( `${ __dirname }/../../` )
+				}
+			);
+
+			// Logging errors found in furnace
+			command.stderr.on('data', ( data ) => {
+				reject( data.toString() );
+			});
+
+			command.stdout.on('data', ( data ) => {
+				if( data.toString().indexOf( 'Furnace is ready to melt GOLD' ) > -1 ) {
+					resolve( command );
+				}
+			})
+
+		}
+		else {
+			furnaceProcess.kill();
+			furnaceProcess.on('close', ( code, signal ) => {
+				resolve();
+			});
+		}
+	})
+}
 
 
 /**
@@ -510,6 +557,5 @@ const Compare = ( settings, hashes ) => {
 		}
 	});
 };
-
 
 Tester( TESTS );

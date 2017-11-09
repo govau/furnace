@@ -91,6 +91,7 @@ export const SETTINGS = {
 			"plugins": true,
 			"ignore": [],
 			"css": {
+				"minified": true,
 				"browsers": [
 					"last 2 versions",
 					"ie 8",
@@ -105,6 +106,7 @@ export const SETTINGS = {
 				"name": "main.scss"
 			},
 			"js": {
+				"minified": true,
 				"location": "js/",
 				"name": "furnace.min.js"
 			},
