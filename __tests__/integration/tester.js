@@ -71,7 +71,7 @@ const someComponents = [ 'accordion', 'breadcrumbs' ];
 const TESTS = [
 	{
 		name: 'Test1: Some components minfied css/js',
-		folder: 'zip-01',
+		folder: 'test-01',
 		post: {
 			components: someComponents,
 			styleOutput: 'css',
@@ -82,7 +82,7 @@ const TESTS = [
 	},
 	{
 		name: 'Test2: All components css/js modules',
-		folder: 'zip-02',
+		folder: 'test-02',
 		post: {
 			components: allComponents,
 			styleOutput: 'cssModules',
@@ -93,7 +93,7 @@ const TESTS = [
 	},
 	{
 		name: 'Test3: Some components sass/react modules',
-		folder: 'zip-03',
+		folder: 'test-03',
 		post: {
 			components: someComponents,
 			styleOutput: 'sassModules',
@@ -104,7 +104,7 @@ const TESTS = [
 	},
 	{
 		name: 'Test4: All components minfied css/js',
-		folder: 'zip-04',
+		folder: 'test-04',
 		post: {
 			components: allComponents,
 			styleOutput: 'css',
@@ -128,7 +128,9 @@ const Tester = ( ( tests ) => {
 		allTasks.push(
 			Delete( scriptFolder )
 				.then( ()      => CopyFixtures( scriptFolder, test ) )    // copy fixtures
-				.then( ()      => RequestZip( scriptFolder, test ) )      // now get zip
+				.then( ()      => ReplaceFixture( scriptFolder, test ) )  // Adds extra bits in the fixture
+				.then( ()      => RequestZip( scriptFolder, test ) )      // now get zip and open it
+				.then( ()      => UnZip( scriptFolder, test ) )			  	  // open the zip files
 				.then( ()      => Fixture( scriptFolder, test ) )         // get hash for fixture
 				.then( result  => Result( scriptFolder, test, result ) )  // get hash for result of test
 				.then( result  => Compare( test, result ) )               // now compare both and detail errors
@@ -177,11 +179,6 @@ const Delete = ( path ) => {
 	Log.verbose( 'Deleting files from previous tests' );
 
 	const trash = [
-		Path.normalize(`${ path }/site`),
-		Path.normalize(`${ path }/docs`),
-		Path.normalize(`${ path }/testfolder/`),
-		Path.normalize(`${ path }/*.log.*`),
-		Path.normalize(`${ path }/assets/**/.DS_Store`),
 		Path.normalize(`${ path }/fixture/**/.DS_Store`),
 		Path.normalize(`${ path }/${ zipName }.zip`),
 		Path.normalize(`${ path }/${ zipName }/`),
@@ -232,6 +229,47 @@ const CopyFixtures = ( path, settings ) => {
 
 
 /**
+ * Replace placeholders in temp fixtures
+ *
+ * @param  {string} path     - The path to the folder that needs cleaning
+ * @param  {object} settings - The settings object for this test
+ *
+ * @return {Promise object}
+ */
+const ReplaceFixture = ( path, settings ) => {
+	return new Promise( ( resolve, reject ) => {
+		if( settings.empty ) {
+			resolve();
+		}
+		else {
+			// maybe in the future we have dynamic paths that depend on the system they are tested on.
+
+			// Replace({
+			// 		files: [
+			// 			Path.normalize(`${ path }/_fixture/**`),
+			// 		],
+			// 		from: [
+			// 			/\[thing\]/g,
+			// 		],
+			// 		to: [
+			// 			'thing',
+			// 		],
+			// 		allowEmptyPaths: true,
+			// 		encoding: 'utf8',
+			// 	})
+			// 	.catch( error => {
+			// 		reject( error );
+			// 	})
+			// 	.then( changedFiles => {
+					resolve();
+			// });
+		}
+	});
+};
+
+
+
+/**
  * Mock a request to the furnace (express server) and get a zip file
  *
  * @param  {string} path     - The path to the shell script
@@ -254,7 +292,7 @@ const RequestZip = ( path, settings ) => {
 		},
 		( error, response, body ) => {
 			if( !error && response.statusCode === 200 ) {
-				Log.verbose( 'Got a hot nugget from Furnace' );
+				Log.verbose( 'Got a huge, hot nugget from Furnace' );
 
 				Fs.writeFile( `${ path }/${ zipName }.zip`, body, 'binary', ( error ) => {
 					if( error ) {
@@ -263,13 +301,6 @@ const RequestZip = ( path, settings ) => {
 					}
 					else {
 						Log.verbose( `Tossing the zip recklessly into: ${ settings.folder }/${ zipName }.zip` );
-
-						Log.verbose( `Cracking open the nugget: ${ settings.folder }/${ zipName }.zip -> ${ settings.folder }/${ zipName }/`);
-						const zip = new AdmZip( `${ path }/${ zipName }.zip` );
-						zip.extractAllTo( `${ path }/${ zipName }/`, true );
-
-						Log.verbose( `Nugget cracked open and revealed: ${ settings.folder }/${ zipName }/`);
-
 						resolve();
 					}
 				})
@@ -282,6 +313,36 @@ const RequestZip = ( path, settings ) => {
 
 	});
 };
+
+
+/**
+ * Unzip the file
+ *
+ * @param  {string} path     - The path to the shell script
+ *
+ * @return {Promise object}
+ */
+const UnZip = ( path, settings ) => {
+	Log.verbose( 'unZip the file' );
+
+	return new Promise ( ( resolve, reject ) => {
+
+		Log.verbose( `Cracking open the nugget: ${ settings.folder }/${ zipName }.zip -> ${ settings.folder }/${ zipName }/`);
+
+		try {
+			const zip = new AdmZip( `${ path }/${ zipName }.zip` );
+			zip.extractAllTo( `${ path }/${ zipName }/`, true );
+
+			Log.verbose( `Nugget cracked open and revealed: ${ settings.folder }/${ zipName }/`);
+			resolve();
+		}
+		catch( error ) {
+			reject( error );
+		}
+
+
+	})
+}
 
 
 /**

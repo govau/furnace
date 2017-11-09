@@ -20,7 +20,7 @@
 		}
 	],
 	"scripts": {
-		"test": "npm run unit-test && npm run integration-test",
+		"test": "npm run build && npm run unit-test && npm run integration-test",
 		"unit-test": "jest",
 		"unit-test:detail": "jest --coverage",
 		"unit-test:watch": "jest --watch --coverage",
