@@ -130,6 +130,10 @@ export const Bundle = ( data ) => {
 			}
 		});
 
+		// --------------------------------------------------------------------------------
+		// ^ Iteration ended
+		// --------------------------------------------------------------------------------
+
 
 		// minifyCss was selected, turn cssImports into a minified css file
 		if( data.styleOutput === 'css' ) {
@@ -138,6 +142,11 @@ export const Bundle = ( data ) => {
 				GetMinCss( cssImports )
 					.then( cssMin => AddFile( cssMin, `${ SETTINGS.packageJson.pancake.css.location }${ SETTINGS.packageJson.pancake.css.name }`, zipFile ) )
 			);
+		}
+
+
+		if( data.styleOutput === 'cssModules' ){
+			packageJson.pancake.css.modules = true;
 		}
 
 
@@ -162,6 +171,10 @@ export const Bundle = ( data ) => {
 				GetMinJs( jsMin )
 					.then( jsMinData => AddFile( jsMinData, `${ SETTINGS.packageJson.pancake.js.location }${ SETTINGS.packageJson.pancake.js.name }`, zipFile ) )
 			)
+		}
+
+		if( data.jsOutput === 'jsModules' ) {
+			packageJson.pancake.js.modules = true;
 		}
 
 		bundle.push(

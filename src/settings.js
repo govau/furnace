@@ -80,7 +80,7 @@ export const SETTINGS = {
 		},
 	},
 	packageJson: {
-		name: 'Furnace',
+		name: 'furnace',
 		version: '1.0.0',
 		description: 'Furnace has smelted this project from the finest GOLD',
 		license: 'MIT',
@@ -105,7 +105,7 @@ export const SETTINGS = {
 				name: 'main.scss'
 			},
 			js: {
-				minified: 'false',
+				minified: false,
 				location: 'js/',
 				name: 'furnace.min.js'
 			},
