@@ -179,6 +179,53 @@ const Tester = ( ( tests ) => {
 
 
 /**
+ * Starting and ending the furnaceProcess
+ *
+ * @param  {string} action         - The action that the furnace is about to partake in
+ * @param  {object} furnaceProcess - The process that is being created or running
+ *
+ * @return {Promise object}
+ */
+const Furnace = ( action, furnaceProcess = {} ) => {
+	Log.verbose( `${ action } running for furnace` );
+
+	return new Promise ( ( resolve, reject ) => {
+		if( action === 'start' ) {
+			let errors;
+
+			// `npm run start` in base directory
+			const command = Spawn.spawn(
+				'npm',
+				[ 'run', 'start' ],
+				{
+					cwd: Path.normalize( `${ __dirname }/../../` )
+				}
+			);
+
+			// Logging errors found in furnace
+			command.stderr.on('data', ( data ) => {
+				reject( data.toString() );
+			});
+
+			// Check that the furnace is running, resolve the current process
+			command.stdout.on('data', ( data ) => {
+				if( data.toString().indexOf( 'Furnace is ready to melt GOLD' ) > -1 ) {
+					resolve( command );
+				}
+			})
+
+		}
+		else {
+			furnaceProcess.kill();
+			furnaceProcess.on('close', ( code, signal ) => {
+				resolve();
+			});
+		}
+	})
+}
+
+
+/**
  * Deleting files from previous tests
  *
  * @param  {string} path     - The path to the folder that needs cleaning
@@ -276,44 +323,6 @@ const ReplaceFixture = ( path, settings ) => {
 		}
 	});
 };
-
-
-const Furnace = ( action, furnaceProcess = {} ) => {
-	Log.verbose( `${ action } running for furnace` );
-
-	return new Promise ( ( resolve, reject ) => {
-		if( action === 'start' ) {
-			let errors;
-
-			// `npm run start` in base directory
-			const command = Spawn.spawn(
-				'npm',
-				[ 'run', 'start' ],
-				{
-					cwd: Path.normalize( `${ __dirname }/../../` )
-				}
-			);
-
-			// Logging errors found in furnace
-			command.stderr.on('data', ( data ) => {
-				reject( data.toString() );
-			});
-
-			command.stdout.on('data', ( data ) => {
-				if( data.toString().indexOf( 'Furnace is ready to melt GOLD' ) > -1 ) {
-					resolve( command );
-				}
-			})
-
-		}
-		else {
-			furnaceProcess.kill();
-			furnaceProcess.on('close', ( code, signal ) => {
-				resolve();
-			});
-		}
-	})
-}
 
 
 /**

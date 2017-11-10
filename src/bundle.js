@@ -55,7 +55,7 @@ export const Bundle = ( data ) => {
 	// Array of JS files to be uglified
 	const jsMin = [];
 
-	const packageJson = {};
+	const packageJson = SETTINGS.packageJson;
 
 	return new Promise ( ( resolve, reject ) => {
 
@@ -65,6 +65,7 @@ export const Bundle = ( data ) => {
 			// The uikit.json object for the current component
 			const componentJson = SETTINGS.uikit.json[`${ SETTINGS.uikit.prefix }${ component }`];
 
+			packageJson.dependencies[ `${ SETTINGS.uikit.prefix }${ component }`] = componentJson.version;
 
 			// If the current component has javascript
 			if( componentJson['pancake-module'][ jsDirectory ] ) {
@@ -132,6 +133,7 @@ export const Bundle = ( data ) => {
 
 		// minifyCss was selected, turn cssImports into a minified css file
 		if( data.styleOutput === 'css' ) {
+			packageJson.pancake.css.minified = true;
 			bundle.push(
 				GetMinCss( cssImports )
 					.then( cssMin => AddFile( cssMin, `${ SETTINGS.packageJson.pancake.css.location }${ SETTINGS.packageJson.pancake.css.name }`, zipFile ) )
@@ -141,6 +143,7 @@ export const Bundle = ( data ) => {
 
 		// sassModules was selected, create the main.scss and add sass-versioning
 		if( data.styleOutput === 'sassModules' ) {
+			packageJson.pancake.sass.modules = true;
 			bundle.push(
 				ReadFile( SETTINGS.npm.sassVersioning )
 					.then( sassVersioning => AddFile( sassVersioning, `node_modules/sass-versioning/dist/_index.scss`, zipFile ) )
@@ -154,12 +157,16 @@ export const Bundle = ( data ) => {
 
 		// jsMin was selected, create a minified js file
 		if( jsMin.length !== 0 ) {
+			packageJson.pancake.js.minified = true;
 			bundle.push(
 				GetMinJs( jsMin )
 					.then( jsMinData => AddFile( jsMinData, `${ SETTINGS.packageJson.pancake.js.location }${ SETTINGS.packageJson.pancake.js.name }`, zipFile ) )
 			)
 		}
 
+		bundle.push(
+			AddFile( JSON.stringify( packageJson ), `package.json`, zipFile )
+		);
 
 		// Run all of the promises
 		Promise.all( bundle )
