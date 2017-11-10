@@ -131,7 +131,7 @@ export const Bundle = ( data ) => {
 		});
 
 		// --------------------------------------------------------------------------------
-		// ^ Iteration ended
+		// ^Iteration ended
 		// --------------------------------------------------------------------------------
 
 
@@ -177,12 +177,9 @@ export const Bundle = ( data ) => {
 			packageJson.pancake.js.modules = true;
 		}
 
-		bundle.push(
-			AddFile( JSON.stringify( packageJson ), `package.json`, zipFile )
-		);
-
 		// Run all of the promises
 		Promise.all( bundle )
+			.then( () => AddFile( JSON.stringify( packageJson ), `package.json`, zipFile ) )
 			.then( () => resolve( zipFile ) )
 			.catch( error => reject( error ) );
 
