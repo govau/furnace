@@ -117,5 +117,5 @@ const SETTINGS = {
 
 
 export const SettingsGet = () => {
-	return Object.assign( {}, SETTINGS );
+	return JSON.parse( JSON.stringify( SETTINGS ) );
 }

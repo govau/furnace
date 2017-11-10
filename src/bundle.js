@@ -54,7 +54,6 @@ export const Bundle = ( data ) => {
 	// Array of JS files to be uglified
 	const jsMin = [];
 
-	console.log( `Should be an empty object: ${ JSON.stringify( SettingsGet().packageJson.dependencies ) }` );
 	const packageJson = SettingsGet().packageJson;
 
 	return new Promise ( ( resolve, reject ) => {
@@ -66,7 +65,6 @@ export const Bundle = ( data ) => {
 			const componentJson = SettingsGet().uikit.json[`${ SettingsGet().uikit.prefix }${ component }`];
 
 			packageJson.dependencies[ `${ SettingsGet().uikit.prefix }${ component }` ] = componentJson.version;
-			console.log( `Loop adding deps: ${ JSON.stringify( SettingsGet().packageJson.dependencies ) }` );
 
 			// If the current component has javascript
 			if( componentJson['pancake-module'][ jsDirectory ] ) {
@@ -180,7 +178,7 @@ export const Bundle = ( data ) => {
 
 		// Run all of the promises
 		Promise.all( bundle )
-			.then( () => AddFile( JSON.stringify( packageJson ), `package.json`, zipFile ) )
+			.then( () => AddFile( JSON.stringify( packageJson, null, '\t' ), `package.json`, zipFile ) )
 			.then( () => resolve( zipFile ) )
 			.catch( error => reject( error ) );
 

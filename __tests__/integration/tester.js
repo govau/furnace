@@ -120,63 +120,99 @@ const TESTS = [
 const Tester = ( ( tests ) => {
 	Log.info( 'Running tests' );
 
-	// Furnace( 'start' )
-	Promise.resolve()
+	Furnace( 'start' )
 		.then( ( furnaceId ) =>  {
 			const allTasks = [];
 
 			tests.map( test => {
 
-				const scriptFolder = Path.normalize( `${ __dirname }/${ test.folder }` );
-
 				allTasks.push(
-					Delete( scriptFolder )
-						.then( ()      => CopyFixtures( scriptFolder, test ) )    // copy fixtures
-						.then( ()      => ReplaceFixture( scriptFolder, test ) )  // Adds extra bits in the fixture
-						.then( ()      => RequestZip( scriptFolder, test ) )      // now get zip and open it
-						.then( ()      => UnZip( scriptFolder, test ) )			  	  // open the zip files
-						.then( ()      => Fixture( scriptFolder, test ) )         // get hash for fixture
-						.then( result  => Result( scriptFolder, test, result ) )  // get hash for result of test
-						.then( result  => Compare( test, result ) )               // now compare both and detail errors
-						.then( success => {                                       // cleaning up after ourself
-							if( success ) {
-								return Delete( scriptFolder );
-							}
-							else {
-								return Promise.resolve();
-							}
-						})
-						.catch( error  => Log.error( `Noooooo: ${ error }` ) )
+					Test( test )
 				);
 			});
-
 
 			// Addded all tests to the promise array
 			Promise.all( allTasks )
 				.catch( error => {
 					Log.error(`An error occurred: ${ Path.basename( error ) }`);
-					// Furnace( 'exit', furnaceId );
+					Furnace( 'exit', furnaceId );
 					process.exit( 1 );
 				})
 				.then( () => {
-					// Furnace( 'exit', furnaceId );
+					// Run the test one more time to check for memory leaks
+					Test( tests[ 0 ] )
+						.then( () => {
+							Furnace( 'exit', furnaceId );
 
-					if( PASS ) {
-						Log.done(`😅  All tests have passed`);
+							if( PASS ) {
+								Log.done(`😅  All tests have passed`);
 
-						process.exit( 0 );
-					}
-					else {
-						Log.done(`😳  Ouch! Some tests failed`);
+								process.exit( 0 );
+							}
+							else {
+								Log.done(`😳  Ouch! Some tests failed`);
 
-						process.exit( 1 );
-					}
+								process.exit( 1 );
+							}
+						})
+						.catch( error => {
+							Log.error( error );
+							process.exit( 1 );
+						});
 			});
 
 		})
-		.catch( error => Log.error( error ) );
+		.catch( error => {
+			Log.error( `Nooooooooo: ${ error }` );
+			process.exit( 1 );
+		});
 
 });
+
+
+/**
+ * Test - Run a single test
+ *
+ * @param {object} test             - A single object containing the tests
+ * @param {object}.name             - The name of the test
+ * @param {object}.folder           - The folder the test is in
+ * @param {object}.post             - The post object that contains mock post data
+ * @param {object}.post.components  - The components to create a zip from
+ * @param {object}.post.styleOutput - The style output to create a zip from
+ * @param {object}.post.jsOutput    - The js output to create a zip from
+ * @param {object}.compare          - The name of the fixture folder to compare against
+ * @param {object}.empty            - Check if the folder is supposed to be empty
+ *
+ * @return {promise object}
+ */
+const Test = ( test ) => {
+	Log.verbose(`Running test`);
+
+	const scriptFolder = Path.normalize( `${ __dirname }/${ test.folder }` );
+
+	return new Promise( ( resolve, reject ) => {
+
+		Delete( scriptFolder )
+			.then( ()      => CopyFixtures( scriptFolder, test ) )    // copy fixtures
+			.then( ()      => ReplaceFixture( scriptFolder, test ) )  // Adds extra bits in the fixture
+			.then( ()      => RequestZip( scriptFolder, test ) )      // now get zip and open it
+			.then( ()      => UnZip( scriptFolder, test ) )			  	  // open the zip files
+			.then( ()      => Fixture( scriptFolder, test ) )         // get hash for fixture
+			.then( result  => Result( scriptFolder, test, result ) )  // get hash for result of test
+			.then( result  => Compare( test, result ) )               // now compare both and detail errors
+			.then( success => {                                       // cleaning up after ourself
+				if( success ) {
+					Delete( scriptFolder )
+						.then( resolve )
+						.catch( error => reject( error ) );
+				}
+				else {
+					resolve();
+				}
+			})
+			.catch( error  => reject( error ) );
+	})
+}
 
 
 /**

@@ -1,1 +1,61 @@
-{"name":"furnace","version":"1.0.0","description":"Furnace has smelted this project from the finest GOLD","license":"MIT","dependencies":{"@gov.au/core":"0.1.3","@gov.au/animate":"0.1.5","@gov.au/accordion":"0.3.0","@gov.au/link-list":"0.3.0","@gov.au/body":"0.1.2","@gov.au/breadcrumbs":"0.3.1","@gov.au/buttons":"0.5.0","@gov.au/callout":"0.3.0","@gov.au/control-input":"0.3.0","@gov.au/cta-link":"0.3.0","@gov.au/direction-links":"0.3.0","@gov.au/footer":"0.3.0","@gov.au/grid-12":"0.1.1","@gov.au/header":"1.2.0","@gov.au/headings":"0.3.0","@gov.au/inpage-nav":"0.3.0","@gov.au/keyword-list":"0.3.0","@gov.au/page-alerts":"0.3.0","@gov.au/progress-indicator":"1.0.0","@gov.au/responsive-media":"0.1.1","@gov.au/select":"0.3.0","@gov.au/skip-link":"0.3.0","@gov.au/tags":"0.3.0","@gov.au/text-inputs":"0.1.1"},"pancake":{"auto-save":true,"plugins":true,"ignore":[],"css":{"minified":true,"browsers":["last 2 versions","ie 8","ie 9","ie 10"],"location":"css/","name":"furnace.min.css","modules":true},"sass":{"location":"./","name":"main.scss"},"js":{"minified":true,"location":"js/","name":"furnace.min.js","modules":true},"react":{"location":"react/"}}}
+{
+	"name": "furnace",
+	"version": "1.0.0",
+	"description": "Furnace has smelted this project from the finest GOLD",
+	"dependencies": {
+		"@gov.au/core": "0.1.3",
+		"@gov.au/animate": "0.1.5",
+		"@gov.au/accordion": "0.3.0",
+		"@gov.au/body": "0.1.2",
+		"@gov.au/link-list": "0.3.0",
+		"@gov.au/breadcrumbs": "0.3.1",
+		"@gov.au/buttons": "0.5.0",
+		"@gov.au/callout": "0.3.0",
+		"@gov.au/control-input": "0.3.0",
+		"@gov.au/cta-link": "0.3.0",
+		"@gov.au/direction-links": "0.3.0",
+		"@gov.au/footer": "0.3.0",
+		"@gov.au/grid-12": "0.1.1",
+		"@gov.au/header": "1.2.0",
+		"@gov.au/headings": "0.3.0",
+		"@gov.au/inpage-nav": "0.3.0",
+		"@gov.au/keyword-list": "0.3.0",
+		"@gov.au/page-alerts": "0.3.0",
+		"@gov.au/progress-indicator": "1.0.0",
+		"@gov.au/responsive-media": "0.1.1",
+		"@gov.au/select": "0.3.0",
+		"@gov.au/skip-link": "0.3.0",
+		"@gov.au/tags": "0.3.0",
+		"@gov.au/text-inputs": "0.1.1"
+	},
+	"pancake": {
+		"auto-save": true,
+		"plugins": true,
+		"ignore": [],
+		"css": {
+			"minified": false,
+			"browsers": [
+				"last 2 versions",
+				"ie 8",
+				"ie 9",
+				"ie 10"
+			],
+			"location": "css/",
+			"name": "furnace.min.css",
+			"modules": true
+		},
+		"sass": {
+			"location": "./",
+			"name": "main.scss"
+		},
+		"js": {
+			"minified": false,
+			"location": "js/",
+			"name": "furnace.min.js",
+			"modules": true
+		},
+		"react": {
+			"location": "react/"
+		}
+	}
+}
