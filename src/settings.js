@@ -23,7 +23,7 @@ import Fs   from 'fs';
  *
  * @type {Object}
  */
-export const SETTINGS = {
+const SETTINGS = {
 	folder: {
 		cwd: Path.normalize(`${ process.cwd() }/`),
 		site: Path.normalize(`${ process.cwd() }/site/`),

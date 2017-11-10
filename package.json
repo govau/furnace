@@ -30,7 +30,8 @@
 		"start": "node dist/init.js",
 		"build": "babel src --out-dir dist --presets=es2015",
 		"build:verbose": "npm run build && node dist/init.js --verbose",
-		"watch": "nodemon --watch src --exec npm run build:verbose"
+		"watch": "nodemon --watch src --exec npm run build && npm run start",
+		"watch:verbose": "nodemon --watch src --exec npm run build:verbose"
 	},
 	"dependencies": {
 		"archiver": "^2.0.3",

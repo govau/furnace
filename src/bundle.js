@@ -20,7 +20,7 @@ import Archiver from 'archiver';
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Local
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
-import { SETTINGS, SettingsGet }      from './Settings';
+import { SettingsGet }      from './Settings';
 import { Log }              from './helper';
 import { GetMinCss }        from './css';
 import { GetMinJs }         from './javascript';
@@ -54,7 +54,7 @@ export const Bundle = ( data ) => {
 	// Array of JS files to be uglified
 	const jsMin = [];
 
-	console.log( `Should be an empty object ${ JSON.stringify( SETTINGS.packageJson.dependencies ) }` );
+	console.log( `Should be an empty object: ${ JSON.stringify( SettingsGet().packageJson.dependencies ) }` );
 	const packageJson = SettingsGet().packageJson;
 
 	return new Promise ( ( resolve, reject ) => {
@@ -65,7 +65,8 @@ export const Bundle = ( data ) => {
 			// The uikit.json object for the current component
 			const componentJson = SettingsGet().uikit.json[`${ SettingsGet().uikit.prefix }${ component }`];
 
-			packageJson.dependencies[ `${ SettingsGet().uikit.prefix }${ component }`] = componentJson.version;
+			packageJson.dependencies[ `${ SettingsGet().uikit.prefix }${ component }` ] = componentJson.version;
+			console.log( `Loop adding deps: ${ JSON.stringify( SettingsGet().packageJson.dependencies ) }` );
 
 			// If the current component has javascript
 			if( componentJson['pancake-module'][ jsDirectory ] ) {
