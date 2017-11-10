@@ -22,7 +22,6 @@ import UglifyJs from 'uglify-js';
 // Local
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
 import { ReadFile } from './files';
-import { SETTINGS } from './settings';
 import { Log }      from './helper';
 
 

@@ -19,9 +19,9 @@ import BodyParser from 'body-parser';
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Local
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
-import { Log }        from './helper';
-import { SETTINGS }   from './settings';
-import { HandlePost } from './prepare';
+import { Log }         from './helper';
+import { SettingsGet } from './settings';
+import { HandlePost }  from './prepare';
 
 
 // Check if the user is in verbose mode
@@ -40,14 +40,14 @@ Server
 	.use( BodyParser.urlencoded( { extended: false } ) )
 
 	// On post to the server run the HandlePost function
-	.post( SETTINGS.server.root, HandlePost )
+	.post( SettingsGet().server.root, HandlePost )
 
 	// When a user gets on the express server, redirect them
 	.get( "*", ( request, response ) => {
-		response.redirect( 301, SETTINGS.server.redirect );
+		response.redirect( 301, SettingsGet().server.redirect );
 	})
 
 	// Start the express server
-	.listen( SETTINGS.server.port, ( request, response ) => {
-		Log.welcome( `Furnace is ready to melt GOLD on port ${ SETTINGS.server.port }` );
+	.listen( SettingsGet().server.port, ( request, response ) => {
+		Log.welcome( `Furnace is ready to melt GOLD on port ${ SettingsGet().server.port }` );
 	});

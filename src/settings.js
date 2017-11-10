@@ -83,7 +83,6 @@ export const SETTINGS = {
 		name: 'furnace',
 		version: '1.0.0',
 		description: 'Furnace has smelted this project from the finest GOLD',
-		license: 'MIT',
 		dependencies: {},
 		pancake: {
 			'auto-save': true,
@@ -115,3 +114,8 @@ export const SETTINGS = {
 		}
 	}
 };
+
+
+export const SettingsGet = () => {
+	return Object.assign( {}, SETTINGS );
+}

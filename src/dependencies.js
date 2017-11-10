@@ -14,7 +14,7 @@
 // Local
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
 import { Log }      from './helper';
-import { SETTINGS } from './settings';
+import { SettingsGet } from './settings';
 
 
 /**
@@ -30,8 +30,8 @@ import { SETTINGS } from './settings';
 export const GetDependencies = (
 	components,
 	result = [ 'core' ],
-	json = SETTINGS.uikit.json,
-	prefix = SETTINGS.uikit.prefix
+	json = SettingsGet().uikit.json,
+	prefix = SettingsGet().uikit.prefix
 ) => {
 	Log.verbose( `Running GetDependencies`);
 
