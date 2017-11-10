@@ -29,8 +29,9 @@
 		"integration-test:watch": "nodemon --watch __tests__/integration --exec npm run integration-test:verbose",
 		"start": "node dist/init.js",
 		"build": "babel src --out-dir dist --presets=es2015",
+		"build:start": "npm run build && node dist/init.js",
 		"build:verbose": "npm run build && node dist/init.js --verbose",
-		"watch": "nodemon --watch src --exec npm run build && npm run start",
+		"watch": "nodemon --watch src --exec npm run build:start",
 		"watch:verbose": "nodemon --watch src --exec npm run build:verbose"
 	},
 	"dependencies": {
