@@ -34,7 +34,7 @@ test('Bundle: css minified and jsminified.', () => {
 	};
 
 	Bundle( data )
-		.then( data => expect( data._entriesCount ).toEqual( 2 ) );
+		.then( data => expect( data._entriesCount ).toEqual( 3 ) );
 
 });
 
@@ -47,7 +47,7 @@ test('Bundle: sassModules and react modules.', () => {
 	};
 
 	Bundle( data )
-		.then( data => expect( data._entriesCount ).toEqual( 23 ));
+		.then( data => expect( data._entriesCount ).toEqual( 24 ));
 
 });
 
@@ -61,6 +61,6 @@ test('Bundle: cssModules and jsModules with dependencies.', () => {
 	};
 
 	Bundle( data )
-		.then( data => expect( data._entriesCount ).toEqual( 3 ) );
+		.then( data => expect( data._entriesCount ).toEqual( 4 ) );
 
 });
