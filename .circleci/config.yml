@@ -1,0 +1,90 @@
+# Node CircleCI 2.0 configuration file to DTA cloud 2.0
+
+version: 2
+jobs:
+  # BUILD JOB
+  # installing dependencies, building assets and testing
+  build:
+    docker:
+      - image: circleci/node:8.9.1
+
+    working_directory: $CIRCLE_WORKING_DIRECTORY
+
+    steps:
+      - checkout
+      - run: sudo apt-get install tree
+      - run: rm -rf node_modules
+      - run: npm install
+      - run: tree -C
+      - run: npm test
+
+
+  # PREDEPLOY JOB
+  # installing cf tool
+  predeploy:
+    docker:
+      - image: circleci/node:8.9.1
+
+    working_directory: $CIRCLE_WORKING_DIRECTORY
+
+    steps:
+      - run: |
+        wget -q -O - https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key | sudo apt-key add -
+        echo "deb http://packages.cloudfoundry.org/debian stable main" | sudo tee /etc/apt/sources.list.d/cloudfoundry-cli.list
+        sudo apt-get update
+        sudo apt-get install cf-cli
+        cf version
+
+
+  # DEPLOY-STAGING JOB
+  # deploying files to Y cloud (staging)
+  deploy-staging:
+    docker:
+      - image: circleci/node:8.9.1
+
+    working_directory: $CIRCLE_WORKING_DIRECTORY
+
+    steps:
+      - run: |
+        cf login --sso -a api.system.y.cld.gov.au -o $CF_ORG_STAGING -s $CF_SPACE_STAGING -u $CF_USER_STAGING -p $CF_PASSWORD_STAGING
+        cf push -f manifest-staging.yml
+
+
+  # DEPLOY-STAGING JOB
+  # deploying files to B cloud (production)
+  deploy-prod:
+    docker:
+      - image: circleci/node:8.9.1
+
+    working_directory: $CIRCLE_WORKING_DIRECTORY
+
+    steps:
+      - run: |
+        cf login --sso -a api.system.b.cld.gov.au -o $CF_ORG_PROD -s $CF_SPACE_PROD -u $CF_USER_PROD -p $CF_PASSWORD_PROD
+        cf push -f manifest-prod.yml
+
+
+# OUR WORKFLOW
+workflows:
+  version: 2
+  build-deploy:
+    jobs:
+      - build                # building all branches
+
+      - deploy-staging:      # building development branch
+          requires:
+            - build-job      # we need to build
+            - predeploy      # then install cloud tools
+            - deploy-staging # and finally deploy
+          filters:
+            branches:
+              only: develop
+
+      - deploy-prod:         # building master branch
+          requires:
+            - build-job      # we need to build
+            - predeploy      # then install cloud tools
+            - deploy-prod    # and finally deploy
+          filters:
+            branches:
+              only: master
