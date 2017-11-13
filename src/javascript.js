@@ -35,7 +35,7 @@ import { Log }      from './helper';
 export const GetMinJs = ( jsFiles ) => {
 	Log.verbose( `Running GetMinJs` );
 
-	return new Promise ( ( resolve, reject ) => {
+	return new Promise( ( resolve, reject ) => {
 		let js = [];
 
 		if( jsFiles.length <= 0 ) {

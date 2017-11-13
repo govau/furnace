@@ -23,7 +23,7 @@ import Postcss      from 'postcss';
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Local
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
-import { Log }      from './helper';
+import { Log } from './helper';
 
 
 /**
@@ -88,7 +88,7 @@ export const Sassify = ( scss ) => {
 export const Autoprefix = ( css ) => {
 	Log.verbose( `Running Autoprefix`);
 
-	return new Promise ( ( resolve, reject ) => {
+	return new Promise( ( resolve, reject ) => {
 
 		// Run autoprefixer with uikit helper.js settings
 		Postcss([ Autoprefixer({ browsers: ['last 2 versions', 'ie 8', 'ie 9', 'ie 10'] }) ])
