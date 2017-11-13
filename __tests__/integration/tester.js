@@ -120,7 +120,8 @@ const TESTS = [
 const Tester = ( ( tests ) => {
 	Log.info( 'Running tests' );
 
-	Furnace( 'start' )
+	//Furnace( 'start' )
+	Promise.resolve()
 		.then( ( furnaceId ) =>  {
 			const allTasks = [];
 
@@ -135,14 +136,14 @@ const Tester = ( ( tests ) => {
 			Promise.all( allTasks )
 				.catch( error => {
 					Log.error(`An error occurred: ${ Path.basename( error ) }`);
-					Furnace( 'exit', furnaceId );
+					//Furnace( 'exit', furnaceId );
 					process.exit( 1 );
 				})
 				.then( () => {
 					// Run the test one more time to check for memory leaks
 					Test( tests[ 0 ] )
 						.then( () => {
-							Furnace( 'exit', furnaceId );
+							//Furnace( 'exit', furnaceId );
 
 							if( PASS ) {
 								Log.done(`😅  All tests have passed`);

@@ -54,7 +54,7 @@ export const Bundle = ( data ) => {
 	// Array of JS files to be uglified
 	const jsMin = [];
 
-	const packageJson = Settings.get().packageJson;
+	const packageJson = JSON.parse( JSON.stringify( Settings.get().packageJson ) );
 
 	return new Promise ( ( resolve, reject ) => {
 
@@ -178,7 +178,9 @@ export const Bundle = ( data ) => {
 
 		// Run all of the promises
 		Promise.all( bundle )
-			.then( () => AddFile( JSON.stringify( packageJson, null, '\t' ), `package.json`, zipFile ) )
+			.then( () => {
+				AddFile( JSON.stringify( packageJson, null, '\t' ), `package.json`, zipFile )
+			})
 			.then( () => resolve( zipFile ) )
 			.catch( error => reject( error ) );
 
