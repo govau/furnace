@@ -21,7 +21,7 @@ import Fs       from 'fs';
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Local
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
-import { SettingsGet }        from './settings';
+import { Settings }           from './settings';
 import { Log }                from './helper';
 import { CompileZip, GetZip } from './zip';
 import { Bundle }             from './bundle';
@@ -77,8 +77,8 @@ export const HandleData = ( data ) => {
 
 			resolve({
 				components: GetDependencies( components ),
-				styleOutput: SettingsGet().uikit.styleOutput[ data.styleOutput ].option,
-				jsOutput: SettingsGet().uikit.jsOutput[ data.jsOutput ].option,
+				styleOutput: Settings.get().uikit.styleOutput[ data.styleOutput ].option,
+				jsOutput: Settings.get().uikit.jsOutput[ data.jsOutput ].option,
 			})
 		}
 	});

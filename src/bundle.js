@@ -20,12 +20,12 @@ import Archiver from 'archiver';
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Local
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
-import { SettingsGet }      from './Settings';
 import { Log }              from './helper';
 import { GetMinCss }        from './css';
 import { GetMinJs }         from './javascript';
 import { AddFile, AddGlob } from './zip';
 import { ReadFile }         from './files';
+import { Settings }         from './settings';
 
 
 /**
@@ -36,7 +36,7 @@ import { ReadFile }         from './files';
  * @return {object} zipFile - The zipFile which will be sent back to the user
  */
 export const Bundle = ( data ) => {
-	Log.verbose( `Running PrepareBundle` );
+	Log.verbose( `Running Bundle` );
 
 	// A new instance of the zipFile
 	let zipFile = Archiver(`zip`);
@@ -45,16 +45,16 @@ export const Bundle = ( data ) => {
 	const bundle = [];
 
 	// Sass @imports for minification and sassModules, always starts with sassVersioning.
-	let cssImports    = `@import '${ SettingsGet().npm.sassVersioning }';\n\n`;
+	let cssImports    = `@import '${ Settings.get().npm.sassVersioning }';\n\n`;
 	let sassImports   = `@import 'node_modules/sass-versioning/dist/_index.scss';\n\n`;
 
 	// JS values based on the form input
-	const jsDirectory = SettingsGet().uikit.jsOutput[ data.jsOutput ].directory;
+	const jsDirectory = Settings.get().uikit.jsOutput[ data.jsOutput ].directory;
 
 	// Array of JS files to be uglified
 	const jsMin = [];
 
-	const packageJson = SettingsGet().packageJson;
+	const packageJson = Settings.get().packageJson;
 
 	return new Promise ( ( resolve, reject ) => {
 
@@ -62,13 +62,13 @@ export const Bundle = ( data ) => {
 		data.components.map( component => {
 
 			// The uikit.json object for the current component
-			const componentJson = SettingsGet().uikit.json[`${ SettingsGet().uikit.prefix }${ component }`];
+			const componentJson = Settings.get().uikit.json[`${ Settings.get().uikit.prefix }${ component }`];
 
-			packageJson.dependencies[ `${ SettingsGet().uikit.prefix }${ component }` ] = componentJson.version;
+			packageJson.dependencies[ `${ Settings.get().uikit.prefix }${ component }` ] = componentJson.version;
 
 			// If the current component has javascript
 			if( componentJson['pancake-module'][ jsDirectory ] ) {
-				const jsFile = Path.normalize( `uikit/packages/${ component }/${ componentJson['pancake-module'][ jsDirectory ].path }` );
+				const jsFile = Path.normalize( `${ Settings.get().uikit.componentLocation }/${ component }/${ componentJson['pancake-module'][ jsDirectory ].path }` );
 
 				// minifyJs was selected in the form, add the directory to the array
 				if( data.jsOutput === 'js' ) {
@@ -79,7 +79,7 @@ export const Bundle = ( data ) => {
 				if( data.jsOutput === 'react' ) {
 					bundle.push(
 						ReadFile( Path.normalize( jsFile ) )
-							.then( jsData => AddFile( jsData, `/${ SettingsGet().packageJson.pancake.react.location }${ component }.js`, zipFile ) )
+							.then( jsData => AddFile( jsData, `/${ Settings.get().packageJson.pancake.react.location }${ component }.js`, zipFile ) )
 					);
 				}
 
@@ -87,14 +87,14 @@ export const Bundle = ( data ) => {
 				if( data.jsOutput === 'jsModules' ) {
 					bundle.push(
 						GetMinJs( [ Path.normalize( jsFile ) ] )
-							.then( jsData => AddFile( jsData, `/${ SettingsGet().packageJson.pancake.js.location }/${ component }.js`, zipFile ) )
+							.then( jsData => AddFile( jsData, `/${ Settings.get().packageJson.pancake.js.location }/${ component }.js`, zipFile ) )
 					);
 				}
 			}
 
 
 			// minifyCss was selected, create an @Import string
-			const sassFile = Path.normalize( `uikit/packages/${ component }/${ componentJson['pancake-module'].sass.path }` );
+			const sassFile = Path.normalize( `${ Settings.get().uikit.componentLocation }/${ component }/${ componentJson['pancake-module'].sass.path }` );
 			if( data.styleOutput === 'css' ) {
 				cssImports += `@import '${ sassFile }';\n`;
 			}
@@ -104,15 +104,15 @@ export const Bundle = ( data ) => {
 			const dependencies = componentJson.peerDependencies;
 			if( data.styleOutput === 'cssModules' && Object.keys( dependencies ).length ) {
 				// Create an @import string for CSS modules, add sassVersioning first.
-				let cssModuleImport = `@import '${ SettingsGet().npm.sassVersioning }';\n\n`;
+				let cssModuleImport = `@import '${ Settings.get().npm.sassVersioning }';\n\n`;
 
 				// Add an @import for each dependency
 				Object.keys( dependencies ).map( dependency => {
-					cssModuleImport += `@import '${ `uikit/packages/${ dependency.replace('@gov.au/', '') }/${ componentJson['pancake-module'].sass.path }` }';\n`;
+					cssModuleImport += `@import '${ `${ Settings.get().uikit.componentLocation }/${ dependency.replace('@gov.au/', '') }/${ componentJson['pancake-module'].sass.path }` }';\n`;
 				});
 
 				// Add an @import for the current component
-				cssModuleImport += `@import '${ `uikit/packages/${ component }/${ componentJson['pancake-module'].sass.path }` }';\n`;
+				cssModuleImport += `@import '${ `${ Settings.get().uikit.componentLocation }/${ component }/${ componentJson['pancake-module'].sass.path }` }';\n`;
 
 				// Compile the CSS and add the file to the Zip
 				bundle.push(
@@ -138,7 +138,7 @@ export const Bundle = ( data ) => {
 			packageJson.pancake.css.minified = true;
 			bundle.push(
 				GetMinCss( cssImports )
-					.then( cssMin => AddFile( cssMin, `${ SettingsGet().packageJson.pancake.css.location }${ SettingsGet().packageJson.pancake.css.name }`, zipFile ) )
+					.then( cssMin => AddFile( cssMin, `${ Settings.get().packageJson.pancake.css.location }${ Settings.get().packageJson.pancake.css.name }`, zipFile ) )
 			);
 		}
 
@@ -152,12 +152,12 @@ export const Bundle = ( data ) => {
 		if( data.styleOutput === 'sassModules' ) {
 			packageJson.pancake.sass.modules = true;
 			bundle.push(
-				ReadFile( SettingsGet().npm.sassVersioning )
+				ReadFile( Settings.get().npm.sassVersioning )
 					.then( sassVersioning => AddFile( sassVersioning, `node_modules/sass-versioning/dist/_index.scss`, zipFile ) )
 			);
 
 			bundle.push(
-				AddFile( sassImports, SettingsGet().packageJson.pancake.sass.name, zipFile )
+				AddFile( sassImports, Settings.get().packageJson.pancake.sass.name, zipFile )
 			);
 		}
 
@@ -167,7 +167,7 @@ export const Bundle = ( data ) => {
 			packageJson.pancake.js.minified = true;
 			bundle.push(
 				GetMinJs( jsMin )
-					.then( jsMinData => AddFile( jsMinData, `${ SettingsGet().packageJson.pancake.js.location }${ SettingsGet().packageJson.pancake.js.name }`, zipFile ) )
+					.then( jsMinData => AddFile( jsMinData, `${ Settings.get().packageJson.pancake.js.location }${ Settings.get().packageJson.pancake.js.name }`, zipFile ) )
 			)
 		}
 
