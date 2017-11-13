@@ -67,23 +67,26 @@ jobs:
 # OUR WORKFLOW
 workflows:
   version: 2
-  build-deploy:
+  doing-the-thing:
     jobs:
-      - build                # building all branches
+      - build
+      - predeploy
+      - deploy-staging
+      - deploy-prod
 
-      - deploy-staging:      # building development branch
+      - staging:             # building development branch
           requires:
             - build          # we need to build
-            - predeploy      # then install cloud tools
+            - predeploy
             - deploy-staging # and finally deploy
           filters:
             branches:
               only: develop
 
-      - deploy-prod:         # building master branch
+      - prod:                # building master branch
           requires:
             - build          # we need to build
-            - predeploy      # then install cloud tools
+            - predeploy
             - deploy-prod    # and finally deploy
           filters:
             branches:
