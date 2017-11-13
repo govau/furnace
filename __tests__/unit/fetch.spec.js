@@ -2,7 +2,7 @@
  *
  * Fetch.js unit tests
  *
- * @file src/prepare.js
+ * @file src/fetch.js
  *
  * Tested methods:
  * - Fetch
@@ -15,6 +15,7 @@
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
 import { Fetch } from '../../src/fetch';
 
+const uikitJson = require( './mocks/uikit.json' );
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Fetch
@@ -22,7 +23,14 @@ import { Fetch } from '../../src/fetch';
 test('Fetch: should return a string value from a file', () => {
 	const url = 'https://raw.githubusercontent.com/govau/furnace/develop/__tests__/unit/mocks/uikit.json';
 
-	Fetch( url )
-		.then( data => expect( data ).toBe( 'abc' ) )
-		.catch( error => console.log( error ) );
+	return Fetch( url )
+		.then( data => expect( data ).toEqual( uikitJson ) )
+});
+
+
+test('Fetch: should return a string value from a file', () => {
+	const url = 'abc';
+
+	return Fetch( url )
+		.catch( error => expect( error.message ).toBe( `Invalid URI "abc"` ) );
 });

@@ -73,7 +73,6 @@ export const Sassify = ( scss ) => {
 			else {
 				error ? reject( error ) : reject();
 			}
-
 		})
 	});
 };
