@@ -8,8 +8,6 @@ jobs:
     docker:
       - image: circleci/node:8.9.1
 
-    working_directory: $CIRCLE_WORKING_DIRECTORY
-
     steps:
       - checkout
       - run: sudo apt-get install tree
@@ -24,8 +22,6 @@ jobs:
   predeploy:
     docker:
       - image: circleci/node:8.9.1
-
-    working_directory: $CIRCLE_WORKING_DIRECTORY
 
     steps:
       - run: |
@@ -42,8 +38,6 @@ jobs:
     docker:
       - image: circleci/node:8.9.1
 
-    working_directory: $CIRCLE_WORKING_DIRECTORY
-
     steps:
       - run: |
           cf login --sso -a api.system.y.cld.gov.au -o $CF_ORG_STAGING -s $CF_SPACE_STAGING -u $CF_USER_STAGING -p $CF_PASSWORD_STAGING
@@ -55,8 +49,6 @@ jobs:
   deploy-prod:
     docker:
       - image: circleci/node:8.9.1
-
-    working_directory: $CIRCLE_WORKING_DIRECTORY
 
     steps:
       - run: |
