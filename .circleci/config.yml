@@ -73,7 +73,7 @@ workflows:
 
       - deploy-staging:      # building development branch
           requires:
-            - build-job      # we need to build
+            - build          # we need to build
             - predeploy      # then install cloud tools
             - deploy-staging # and finally deploy
           filters:
@@ -82,7 +82,7 @@ workflows:
 
       - deploy-prod:         # building master branch
           requires:
-            - build-job      # we need to build
+            - build          # we need to build
             - predeploy      # then install cloud tools
             - deploy-prod    # and finally deploy
           filters:
