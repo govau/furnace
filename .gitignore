@@ -3,7 +3,7 @@
 *.sublime-workspace
 codekit-config.json
 *.codekit
-node_modules
+/node_modules
 .sass-cache
 .idea
 validation-report.json
