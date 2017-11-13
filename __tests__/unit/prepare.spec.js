@@ -62,7 +62,7 @@ test('HandleData: should error with a component that does not exist', () => {
 	HandleData( data )
 		.then( data => {
 			expect( console.error.mock.calls.length ).toBe( 1 );
-			expect( console.error.mock.calls[0][0] ).toBe(` 🔥 🔥        \u001B[31mERROR:   Component @gov.au/oisjdoioioj not found.\u001b[39m`);
+			expect( console.error.mock.calls[0][0] ).toBe(` 🔥 🔥        \u001B[31mERROR:   Component @gov.au/oisjdoioioj not found in uikit.json\u001b[39m`);
 		});
 
 });
