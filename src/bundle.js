@@ -13,7 +13,7 @@
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
 // Dependencies
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
-import Path from 'path';
+import Path     from 'path';
 import Archiver from 'archiver';
 
 
@@ -45,8 +45,8 @@ export const Bundle = ( data ) => {
 	const bundle = [];
 
 	// Sass @imports for minification and sassModules, always starts with sassVersioning.
-	let cssImports    = `@import '${ Settings.get().npm.sassVersioning }';\n\n`;
-	let sassImports   = `@import 'node_modules/sass-versioning/dist/_index.scss';\n\n`;
+	let cssImports  = `@import '${ Settings.get().npm.sassVersioning }';\n\n`;
+	let sassImports = `@import 'node_modules/sass-versioning/dist/_index.scss';\n\n`;
 
 	// JS values based on the form input
 	const jsDirectory = Settings.get().uikit.jsOutput[ data.jsOutput ].directory;
@@ -56,7 +56,7 @@ export const Bundle = ( data ) => {
 
 	const packageJson = JSON.parse( JSON.stringify( Settings.get().packageJson ) );
 
-	return new Promise ( ( resolve, reject ) => {
+	return new Promise( ( resolve, reject ) => {
 
 		// Iterate through components and dependencies
 		data.components.map( component => {
@@ -108,7 +108,8 @@ export const Bundle = ( data ) => {
 
 				// Add an @import for each dependency
 				Object.keys( dependencies ).map( dependency => {
-					cssModuleImport += `@import '${ `${ Settings.get().uikit.componentLocation }/${ dependency.replace('@gov.au/', '') }/${ componentJson['pancake-module'].sass.path }` }';\n`;
+					cssModuleImport += `@import '` +
+						`${ `${ Settings.get().uikit.componentLocation }/${ dependency.replace('@gov.au/', '') }/${ componentJson['pancake-module'].sass.path }` }';\n`;
 				});
 
 				// Add an @import for the current component
@@ -167,7 +168,9 @@ export const Bundle = ( data ) => {
 			packageJson.pancake.js.minified = true;
 			bundle.push(
 				GetMinJs( jsMin )
-					.then( jsMinData => AddFile( jsMinData, `${ Settings.get().packageJson.pancake.js.location }${ Settings.get().packageJson.pancake.js.name }`, zipFile ) )
+					.then( jsMinData =>
+						AddFile( jsMinData, `${ Settings.get().packageJson.pancake.js.location }${ Settings.get().packageJson.pancake.js.name }`, zipFile )
+					)
 			)
 		}
 
