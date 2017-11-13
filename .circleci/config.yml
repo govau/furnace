@@ -61,20 +61,19 @@ workflows:
   version: 2
   doing-the-thing:
     jobs:
-      - staging:             # building development branch
+      - build
+      - predeploy:
           requires:
-            - build          # we need to build
+            - build
+      - deploy-staging:
+          requires:
             - predeploy
-            - deploy-staging # and finally deploy
           filters:
             branches:
               only: develop
-
-      - prod:                # building master branch
+      - deploy-prod:
           requires:
-            - build          # we need to build
             - predeploy
-            - deploy-prod    # and finally deploy
           filters:
             branches:
               only: master
