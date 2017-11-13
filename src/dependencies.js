@@ -54,7 +54,7 @@ export const GetDependencies = (
 
 		}
 		else {
-			Log.error( `Component ${ component } not found.`);
+			Log.error( `Component ${ component } not found in uikit.json`);
 		}
 
 	});
