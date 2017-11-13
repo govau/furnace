@@ -54,6 +54,7 @@ export const Bundle = ( data ) => {
 	// Array of JS files to be uglified
 	const jsMin = [];
 
+	// We clone the default so we can make changes
 	const packageJson = JSON.parse( JSON.stringify( Settings.get().packageJson ) );
 
 	return new Promise( ( resolve, reject ) => {
