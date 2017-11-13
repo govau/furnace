@@ -33,7 +33,7 @@ import { Log } from './helper';
  * @param {object} zipFile     - The current zipFile for the iteration
  */
 export const AddFile = ( content, archivePath, zipFile ) => {
-	Log.verbose(`AddFile: ${ archivePath }`);
+	Log.verbose( `AddFile: ${ archivePath }` );
 
 	if( typeof content !== `string` || typeof archivePath !== `string` ) {
 		Log.error( `AddFile: content (${ typeof content }) and archivePath (${ typeof archivePath }) can only be string.` );
@@ -53,7 +53,7 @@ export const AddFile = ( content, archivePath, zipFile ) => {
  * @param {object} zipFile     - The current zipFile for the iteration
  */
 export const AddGlob = ( pattern, directory, archivePath, zipFile ) => {
-	Log.verbose(`AddGlob: ${ directory + pattern }`);
+	Log.verbose( `AddGlob: ${ directory + pattern }` );
 
 	if( typeof pattern !== `string` || typeof directory !== `string` || typeof archivePath !== `string` ) {
 		Log.error( `AddGlob: pattern (${ typeof pattern }), directory (${ typeof directory }) and archivePath (${ typeof archivePath }) can only be string.` );
