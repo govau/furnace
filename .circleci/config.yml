@@ -61,11 +61,6 @@ workflows:
   version: 2
   doing-the-thing:
     jobs:
-      - build
-      - predeploy
-      - deploy-staging
-      - deploy-prod
-
       - staging:             # building development branch
           requires:
             - build          # we need to build
