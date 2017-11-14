@@ -53,6 +53,7 @@ jobs:
       - run: npm install
       - run: npm run build
       - run: rm -rf node_modules
+      - run: sudo apt-get install tree
       - run: wget -q -O - https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key | sudo apt-key add -
       - run: echo "deb https://packages.cloudfoundry.org/debian stable main" | sudo tee /etc/apt/sources.list.d/cloudfoundry-cli.list
       - run: sudo apt-get install apt-transport-https
