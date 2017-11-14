@@ -2,9 +2,9 @@
 
 version: 2
 jobs:
-  # BUILD JOB
+  # TEST JOB
   # installing dependencies, building assets and testing
-  build:
+  test:
     docker:
       - image: circleci/node:8.9.1
 
@@ -18,31 +18,32 @@ jobs:
 
 
   # DEPLOY-STAGING JOB
-  # deploying files to Y cloud (staging)
+  # installing dependencies, building assets and deploying to staging
   deploy-staging:
     docker:
       - image: circleci/node:8.9.1
 
     steps:
-      - checkout
-      - run: rm -rf node_modules
-      - run: npm install
-      - run: npm run build
-      - run: rm -rf node_modules
-      - run: sudo apt-get install tree
+      - checkout                       # get the files from the repo (why would you ever not want the files????)
+      - run: rm -rf node_modules       # delete node_modules to bust caching
+      - run: npm install               # duh
+      - run: npm run build             # required build step
+      - run: rm -rf node_modules       # delete node_modules folder again to not push it to cf
+      # install packages: cf-cli and tree
       - run: wget -q -O - https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key | sudo apt-key add -
       - run: echo "deb https://packages.cloudfoundry.org/debian stable main" | sudo tee /etc/apt/sources.list.d/cloudfoundry-cli.list
       - run: sudo apt-get install apt-transport-https
+      - run: sudo apt-get install tree
       - run: sudo apt-get update
       - run: sudo apt-get install cf-cli
-      - run: cf version
+      - run: cf version                # log what version we are running
       - run: cf login -a api.system.y.cld.gov.au -o $CF_ORG_STAGING -s $CF_SPACE_STAGING -u $CF_USER_STAGING -p $CF_PASSWORD_STAGING
-      - run: tree -C
+      - run: tree -C                   # log all files before we push
       - run: cf push -f manifest-staging.yml
 
 
   # DEPLOY-STAGING JOB
-  # deploying files to B cloud (production)
+  # installing dependencies, building assets and deploying to production
   deploy-prod:
     docker:
       - image: circleci/node:8.9.1
@@ -53,10 +54,10 @@ jobs:
       - run: npm install
       - run: npm run build
       - run: rm -rf node_modules
-      - run: sudo apt-get install tree
       - run: wget -q -O - https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key | sudo apt-key add -
       - run: echo "deb https://packages.cloudfoundry.org/debian stable main" | sudo tee /etc/apt/sources.list.d/cloudfoundry-cli.list
       - run: sudo apt-get install apt-transport-https
+      - run: sudo apt-get install tree
       - run: sudo apt-get update
       - run: sudo apt-get install cf-cli
       - run: cf version
@@ -66,20 +67,23 @@ jobs:
 
 
 # OUR WORKFLOW
+# this is where we orchestrate our jobs
 workflows:
   version: 2
   testing-deploying:
     jobs:
-      - build
-      - deploy-staging:
+      - test                # run tests first
+
+      - deploy-staging:     # run deploy staging
           requires:
-            - build
+            - test          # but make sure `test` has finished
           filters:
             branches:
-              only: develop
-      - deploy-prod:
+              only: develop # and only on the `develop` branch
+
+      - deploy-prod:        # run deploy production
           requires:
-            - build
+            - test          # but make sure `test` has finished
           filters:
             branches:
-              only: master
+              only: master  # and only on the `master` branch
