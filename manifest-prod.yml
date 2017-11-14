@@ -1,6 +1,6 @@
 ---
 host: furnace
-buildpack: https://github.com/cloudfoundry/nodejs-buildpack.git
+buildpack: nodejs_buildpack
 memory: 256M
 instances: 1
 env:
