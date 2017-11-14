@@ -79,6 +79,9 @@
 		"jest-cli": "^21.2.1",
 		"nodemon": "^1.12.1"
 	},
+	"engines": {
+		"node": "8.9.1"
+	},
 	"jest": {
 		"testEnvironment": "node",
 		"testRegex": "\\.spec.js$",
