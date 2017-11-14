@@ -32,9 +32,9 @@ jobs:
       # install packages: cf-cli and tree
       - run: wget -q -O - https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key | sudo apt-key add -
       - run: echo "deb https://packages.cloudfoundry.org/debian stable main" | sudo tee /etc/apt/sources.list.d/cloudfoundry-cli.list
+      - run: sudo apt-get update
       - run: sudo apt-get install apt-transport-https
       - run: sudo apt-get install tree
-      - run: sudo apt-get update
       - run: sudo apt-get install cf-cli
       - run: cf version                # log what version we are running
       - run: cf login -a api.system.y.cld.gov.au -o $CF_ORG_STAGING -s $CF_SPACE_STAGING -u $CF_USER_STAGING -p $CF_PASSWORD_STAGING
@@ -56,9 +56,9 @@ jobs:
       - run: rm -rf node_modules
       - run: wget -q -O - https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key | sudo apt-key add -
       - run: echo "deb https://packages.cloudfoundry.org/debian stable main" | sudo tee /etc/apt/sources.list.d/cloudfoundry-cli.list
+      - run: sudo apt-get update
       - run: sudo apt-get install apt-transport-https
       - run: sudo apt-get install tree
-      - run: sudo apt-get update
       - run: sudo apt-get install cf-cli
       - run: cf version
       - run: cf login -a api.system.b.cld.gov.au -o $CF_ORG_PROD -s $CF_SPACE_PROD -u $CF_USER_PROD -p $CF_PASSWORD_PROD
