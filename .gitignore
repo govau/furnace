@@ -3,7 +3,7 @@
 *.sublime-workspace
 codekit-config.json
 *.codekit
-/node_modules
+node_modules
 .sass-cache
 .idea
 validation-report.json
@@ -15,7 +15,11 @@ lerna-debug.log
 dist
 coverage
 
-# If integration test fails, don't commit test files
+# Don’t commit temp test files
 __tests__/integration/*/_fixture
 __tests__/integration/*/GOLD-AU/*
 __tests__/integration/*/GOLD-AU.zip
+
+# Do commit fixtures in full
+!__tests__/integration/**/fixture/**/dist/
+!__tests__/integration/**/fixture/*/node_modules/
