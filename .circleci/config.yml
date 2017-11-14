@@ -24,6 +24,9 @@ jobs:
       - image: circleci/node:8.9.1
 
     steps:
+      - checkout
+      - run: rm -rf node_modules
+      - run: npm install
       - run: |
           wget -q -O - https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key | sudo apt-key add -
           echo "deb https://packages.cloudfoundry.org/debian stable main" | sudo tee /etc/apt/sources.list.d/cloudfoundry-cli.list
@@ -42,6 +45,9 @@ jobs:
       - image: circleci/node:8.9.1
 
     steps:
+      - checkout
+      - run: rm -rf node_modules
+      - run: npm install
       - run: |
           wget -q -O - https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key | sudo apt-key add -
           echo "deb https://packages.cloudfoundry.org/debian stable main" | sudo tee /etc/apt/sources.list.d/cloudfoundry-cli.list
