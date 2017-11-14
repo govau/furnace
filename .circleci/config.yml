@@ -30,10 +30,10 @@ jobs:
       - run: npm run build             # required build step
       - run: rm -rf node_modules       # delete node_modules folder again to not push it to cf
       # install packages: cf-cli and tree
+      - run: sudo apt-get install apt-transport-https
       - run: wget -q -O - https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key | sudo apt-key add -
       - run: echo "deb https://packages.cloudfoundry.org/debian stable main" | sudo tee /etc/apt/sources.list.d/cloudfoundry-cli.list
       - run: sudo apt-get update
-      - run: sudo apt-get install apt-transport-https
       - run: sudo apt-get install tree
       - run: sudo apt-get install cf-cli
       - run: cf version                # log what version we are running
@@ -54,10 +54,10 @@ jobs:
       - run: npm install
       - run: npm run build
       - run: rm -rf node_modules
+      - run: sudo apt-get install apt-transport-https
       - run: wget -q -O - https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key | sudo apt-key add -
       - run: echo "deb https://packages.cloudfoundry.org/debian stable main" | sudo tee /etc/apt/sources.list.d/cloudfoundry-cli.list
       - run: sudo apt-get update
-      - run: sudo apt-get install apt-transport-https
       - run: sudo apt-get install tree
       - run: sudo apt-get install cf-cli
       - run: cf version
