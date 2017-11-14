@@ -1,0 +1,25 @@
+.DS_Store
+*.sublime-project
+*.sublime-workspace
+codekit-config.json
+*.codekit
+node_modules
+.sass-cache
+.idea
+validation-report.json
+validation-status.json
+npm-debug.log
+lerna-debug.log
+
+# Jest files
+dist
+coverage
+
+# Don’t commit temp test files
+__tests__/integration/*/_fixture
+__tests__/integration/*/GOLD-AU/*
+__tests__/integration/*/GOLD-AU.zip
+
+# Do commit fixtures in full
+!__tests__/integration/**/fixture/**/dist/
+!__tests__/integration/**/fixture/*/node_modules/

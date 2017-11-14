@@ -1,0 +1,13 @@
+---
+host: furnace
+buildpack: nodejs_buildpack
+memory: 256M
+instances: 1
+env:
+  NODE_MODULES_CACHE: false
+path: ./
+command: node dist/init.js
+
+applications:
+- name: furnace-blue
+- name: furnace-green

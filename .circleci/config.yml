@@ -1,0 +1,84 @@
+# Node CircleCI 2.0 configuration file to DTA cloud 2.0
+
+version: 2
+jobs:
+  # BUILD JOB
+  # installing dependencies, building assets and testing
+  build:
+    docker:
+      - image: circleci/node:8.9.1
+
+    steps:
+      - checkout
+      - run: sudo apt-get install tree
+      - run: rm -rf node_modules
+      - run: npm install
+      - run: tree -C
+      - run: npm test
+
+
+  # DEPLOY-STAGING JOB
+  # deploying files to Y cloud (staging)
+  deploy-staging:
+    docker:
+      - image: circleci/node:8.9.1
+
+    steps:
+      - checkout
+      - run: rm -rf node_modules
+      - run: npm install
+      - run: npm run build
+      - run: rm -rf node_modules
+      - run: sudo apt-get install tree
+      - run: wget -q -O - https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key | sudo apt-key add -
+      - run: echo "deb https://packages.cloudfoundry.org/debian stable main" | sudo tee /etc/apt/sources.list.d/cloudfoundry-cli.list
+      - run: sudo apt-get install apt-transport-https
+      - run: sudo apt-get update
+      - run: sudo apt-get install cf-cli
+      - run: cf version
+      - run: cf login -a api.system.y.cld.gov.au -o $CF_ORG_STAGING -s $CF_SPACE_STAGING -u $CF_USER_STAGING -p $CF_PASSWORD_STAGING
+      - run: tree -C
+      - run: cf push -f manifest-staging.yml
+
+
+  # DEPLOY-STAGING JOB
+  # deploying files to B cloud (production)
+  deploy-prod:
+    docker:
+      - image: circleci/node:8.9.1
+
+    steps:
+      - checkout
+      - run: rm -rf node_modules
+      - run: npm install
+      - run: npm run build
+      - run: rm -rf node_modules
+      - run: wget -q -O - https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key | sudo apt-key add -
+      - run: echo "deb https://packages.cloudfoundry.org/debian stable main" | sudo tee /etc/apt/sources.list.d/cloudfoundry-cli.list
+      - run: sudo apt-get install apt-transport-https
+      - run: sudo apt-get update
+      - run: sudo apt-get install cf-cli
+      - run: cf version
+      - run: cf login -a api.system.b.cld.gov.au -o $CF_ORG_PROD -s $CF_SPACE_PROD -u $CF_USER_PROD -p $CF_PASSWORD_PROD
+      - run: tree -C
+      - run: cf push -f manifest-prod.yml
+
+
+# OUR WORKFLOW
+workflows:
+  version: 2
+  testing-deploying:
+    jobs:
+      - build
+      - deploy-staging:
+          requires:
+            - build
+          filters:
+            branches:
+              only: develop
+      - deploy-prod:
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
