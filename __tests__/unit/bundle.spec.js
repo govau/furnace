@@ -71,6 +71,6 @@ test('Bundle: cssModules and jsModules with dependencies.', () => {
 	};
 
 	Bundle( data )
-		.then( data => expect( data._entriesCount ).toEqual( 4 ) );
+		.then( data => expect( data._entriesCount ).toEqual( 7 ) );
 
 });

@@ -59,6 +59,7 @@
 		"@gov.au/skip-link": "latest",
 		"@gov.au/tags": "latest",
 		"@gov.au/text-inputs": "latest",
+		"@slack/client": "^3.14.1",
 		"archiver": "^2.0.3",
 		"autoprefixer": "^7.1.5",
 		"babel-preset-es2015": "^6.24.1",

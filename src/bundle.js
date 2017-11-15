@@ -26,6 +26,7 @@ import { GetMinJs }         from './javascript';
 import { AddFile, AddGlob } from './zip';
 import { ReadFile }         from './files';
 import { Settings }         from './settings';
+import { GetDependencies }  from './dependencies';
 
 
 /**
@@ -37,6 +38,9 @@ import { Settings }         from './settings';
  */
 export const Bundle = ( data ) => {
 	Log.verbose( `Running Bundle` );
+
+	// Get the components dependencies
+	const components = GetDependencies( data.components );
 
 	// A new instance of the zipFile
 	let zipFile = Archiver(`zip`);
@@ -50,8 +54,6 @@ export const Bundle = ( data ) => {
 
 	// JS values based on the form input
 	const jsDirectory = Settings.get().uikit.jsOutput[ data.jsOutput ].directory;
-
-	// Array of JS files to be uglified
 	const jsMin = [];
 
 	// We clone the default so we can make changes
@@ -60,7 +62,7 @@ export const Bundle = ( data ) => {
 	return new Promise( ( resolve, reject ) => {
 
 		// Iterate through components and dependencies
-		data.components.map( component => {
+		components.map( component => {
 
 			// The uikit.json object for the current component
 			const componentJson = Settings.get().uikit.json[`${ Settings.get().uikit.prefix }${ component }`];
