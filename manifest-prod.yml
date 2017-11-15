@@ -5,6 +5,7 @@ memory: 256M
 instances: 1
 env:
   NODE_MODULES_CACHE: false
+  SLACK_WEBHOOK_URL: $SLACK_WEBHOOK_URL
 path: ./
 command: node dist/init.js
 
