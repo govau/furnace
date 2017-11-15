@@ -27,6 +27,9 @@ export const SlackMessage = ( messageData ) => {
 	return new Promise( ( resolve, reject ) => {
 
 		if( URL && URL.length > 0 ) {
+
+			console.log( URL );
+
 			const message = {
 				text: `*Furnace*:\n\n`,
 				attachments: [{

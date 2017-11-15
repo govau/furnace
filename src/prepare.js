@@ -74,8 +74,3 @@ export const HandlePost = ( request, response ) => {
 			});
 	}
 }
-
-
-
-
-
