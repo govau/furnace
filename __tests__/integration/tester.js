@@ -239,6 +239,10 @@ const Furnace = ( action, furnaceProcess = {} ) => {
 				}
 			);
 
+			command.stdout.on('data', ( data ) => {
+				console.log( data.toString() );
+			});
+
 			// Logging errors found in furnace
 			command.stderr.on('data', ( data ) => {
 				reject( data.toString() );
