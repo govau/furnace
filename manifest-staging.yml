@@ -6,7 +6,7 @@ instances: 1
 env:
   NODE_MODULES_CACHE: false
 path: ./
-command: SLACK_WEBHOOK=$SLACK_WEBHOOK_STAGING node dist/init.js staging
+command: node dist/init.js staging
 
 applications:
 - name: furnace-blue
