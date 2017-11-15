@@ -65,16 +65,16 @@ test('Log.info: should should be formatted correctly', () => {
 });
 
 
-test('Log.message: should should be formatted correctly', () => {
-	console.log = jest.fn();
+// test('Log.message: should should be formatted correctly', () => {
+// 	console.log = jest.fn();
 
-	Log.message(`message test`);
-	Log.message(`message test 2`);
+// 	Log.message(`message test`);
+// 	Log.message(`message test 2`);
 
-	expect( console.log.mock.calls.length ).toBe( 2 );
-	expect( console.log.mock.calls[0][0] ).toBe(`message test`);
-	expect( console.log.mock.calls[1][0] ).toBe(`message test 2`);
-});
+// 	expect( console.log.mock.calls.length ).toBe( 2 );
+// 	expect( console.log.mock.calls[0][0] ).toBe(`message test`);
+// 	expect( console.log.mock.calls[1][0] ).toBe(`message test 2`);
+// });
 
 
 test('Log.ok: should should be formatted correctly', () => {
