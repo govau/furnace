@@ -30,11 +30,11 @@ The above `POST` would return a zip file containing minified `css` and `js` for 
 An `array` of components that relates to the currently live components in the [uikit](https://github.com/govau/uikit/tree/master/packages).
 
 ### `styleOutput`
-- __`css`:__         css minified
-- __`cssModules`:__  css modules for each component
-- __`sassModules`:__ sass modules for each component
+- __`css`__: css minified
+- __`cssModules`__: css modules for each component
+- __`sassModules`__: sass modules for each component
 
 ### `jsOutput`
-- __`js`:__        js minified
-- __`jsModules`:__ js modules for each component
-- __`react`:__     react modules for each component
+- __`js`__: js minified
+- __`jsModules`__: js modules for each component
+- __`react`__: react modules for each component
