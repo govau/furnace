@@ -30,14 +30,14 @@ import { Log, Style } from '../../src/helper';
  * Log.error
  **************************************************************************************************************************************************************/
 test('Log.welcome: should should be formatted correctly', () => {
-	console.log = jest.fn();
+	console.info = jest.fn();
 
 	Log.welcome(`welcome test`);
 	Log.welcome(`welcome test 2`);
 
-	expect( console.log.mock.calls.length ).toBe( 2 );
-	expect( console.log.mock.calls[0][0] ).toBe(` 🔥🔥🔥        \u001B[1mwelcome test\u001b[22m`);
-	expect( console.log.mock.calls[1][0] ).toBe(` 🔥🔥🔥        \u001B[1mwelcome test 2\u001b[22m`);
+	expect( console.info.mock.calls.length ).toBe( 2 );
+	expect( console.info.mock.calls[0][0] ).toBe(` 🔥🔥🔥        \u001B[1mwelcome test\u001b[22m`);
+	expect( console.info.mock.calls[1][0] ).toBe(` 🔥🔥🔥        \u001B[1mwelcome test 2\u001b[22m`);
 });
 
 
@@ -63,6 +63,18 @@ test('Log.info: should should be formatted correctly', () => {
 	expect( console.info.mock.calls[0][0] ).toBe(` 🔔 🔥        INFO:    info test`);
 	expect( console.info.mock.calls[1][0] ).toBe(` 🔔 🔥        INFO:    info test 2`);
 });
+
+
+// test('Log.message: should should be formatted correctly', () => {
+// 	console.log = jest.fn();
+
+// 	Log.message(`message test`);
+// 	Log.message(`message test 2`);
+
+// 	expect( console.log.mock.calls.length ).toBe( 2 );
+// 	expect( console.log.mock.calls[0][0] ).toBe(`message test`);
+// 	expect( console.log.mock.calls[1][0] ).toBe(`message test 2`);
+// });
 
 
 test('Log.ok: should should be formatted correctly', () => {

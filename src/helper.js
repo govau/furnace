@@ -74,7 +74,16 @@ export const Log = {
 	 * @param  {string} text - The text you want to log
 	 */
 	welcome: ( text ) => {
-		console.log(` 🔥🔥🔥        ${ Style.bold(`${ text }`) }`);
+		console.info(` 🔥🔥🔥        ${ Style.bold(`${ text }`) }`);
+	},
+
+	/**
+	 * Log a message
+	 *
+	 * @param  {string}  text - The text you want to log
+	 */
+	message: ( text ) => {
+		console.log( `${ new Date().toString() } : ${ text }`);
 	},
 
 	/**
@@ -87,7 +96,7 @@ export const Log = {
 	},
 
 	/**
-	 * Log a message
+	 * Log some information
 	 *
 	 * @param  {string}  text - The text you want to log
 	 */
