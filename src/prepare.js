@@ -38,8 +38,6 @@ import { SlackMessage }       from './slack';
 export const HandlePost = ( request, response ) => {
 	Log.verbose( `Running HandlePost`);
 
-	console.log( request.headers['x-forwarded-for'] );
-
 	const ip = request.headers['x-forwarded-for']
 		? `${ request.headers['x-forwarded-for'].split(',')[0] }`
 		: `${ request.connection.remoteAddress }`;

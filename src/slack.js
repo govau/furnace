@@ -17,7 +17,7 @@ import { Log }                from './helper';
 
 
 const IncomingWebhook = require('@slack/client').IncomingWebhook;
-const URL             = process.env.SLACK_WEBHOOK_URL || '';
+const URL             = process.env.SLACK_WEBHOOK || '';
 const Webhook         = new IncomingWebhook( URL );
 
 

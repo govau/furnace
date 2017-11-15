@@ -83,7 +83,7 @@ export const Log = {
 	 * @param  {string}  text - The text you want to log
 	 */
 	message: ( text ) => {
-		console.log(`${ text }`);
+		console.log( `${ new Date().toString() } : ${ text }`);
 	},
 
 	/**
