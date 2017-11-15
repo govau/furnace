@@ -42,6 +42,7 @@ jobs:
       - run: cf set-env furnace-blue SLACK_WEBHOOK_URL $SLACK_WEBHOOK_URL
       - run: tree -C                   # log all files before we push
       - run: cf push -f manifest-staging.yml
+      - run: $SLACK_WEBHOOK_URL
 
 
   # DEPLOY-STAGING JOB
@@ -68,6 +69,7 @@ jobs:
       - run: cf set-env furnace-blue SLACK_WEBHOOK_URL $SLACK_WEBHOOK_URL
       - run: tree -C
       - run: cf push -f manifest-prod.yml
+      - run: $SLACK_WEBHOOK_URL
 
 
 # OUR WORKFLOW
