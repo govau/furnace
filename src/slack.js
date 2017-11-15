@@ -18,7 +18,6 @@ import { Log }                from './helper';
 
 const IncomingWebhook = require('@slack/client').IncomingWebhook;
 const URL             = process.env.SLACK_WEBHOOK;
-const Webhook         = new IncomingWebhook( URL );
 
 
 export const SlackMessage = ( messageData ) => {
@@ -27,8 +26,7 @@ export const SlackMessage = ( messageData ) => {
 	return new Promise( ( resolve, reject ) => {
 
 		if( URL && URL.length > 0 ) {
-
-			console.log( URL );
+			const Webhook = new IncomingWebhook( URL );
 
 			const message = {
 				text: `*Furnace*:\n\n`,
