@@ -27,9 +27,10 @@ jobs:
       - run: cf version                # log what version we are running
       - run: cf login -a api.system.y.cld.gov.au -o $CF_ORG_STAGING -s $CF_SPACE_STAGING -u $CF_USER_STAGING -p $CF_PASSWORD_STAGING
       # adding environment variables to cf so we can access them in our app
-      - run: cf set-env furnace SLACK_WEBHOOK helloworld
       - run: tree -C                   # log all files before we push
       - run: cf zero-downtime-push furnace -f manifest-staging.yml
+      - run: cf set-env furnace SLACK_WEBHOOK $SLACK_WEBHOOK_STAGING 2>&1 >/dev/null
+
 
 
   # DEPLOY-STAGING JOB
