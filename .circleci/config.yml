@@ -30,7 +30,7 @@ jobs:
       - run: cf zero-downtime-push furnace -f manifest-staging.yml
 
 
-  # DEPLOY-STAGING JOB
+  # DEPLOY-PROD JOB
   # installing dependencies, testing, building assets and deploying to production
   deploy-prod:
     docker:
