@@ -12,3 +12,6 @@ applications:
 
 routes:
 - route: gold.service.gov.au/furnace
+
+services:
+- ups-furnace

@@ -9,3 +9,6 @@ command: node dist/init.js staging
 
 applications:
 - name: furnace
+
+services:
+- ups-furnace
