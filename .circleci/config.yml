@@ -53,7 +53,7 @@ jobs:
       - run: cf version
       - run: cf login -a api.system.b.cld.gov.au -o $CF_ORG_PROD -s $CF_SPACE_PROD -u $CF_USER_PROD -p $CF_PASSWORD_PROD
       - run: tree -C
-      - run: cf zero-downtime-push furnace -f manifest-staging.yml
+      - run: cf zero-downtime-push furnace -f manifest-prod.yml
 
 
 # OUR WORKFLOW
