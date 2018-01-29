@@ -68,13 +68,19 @@ export const Uglify = ( js ) => {
 
 	return new Promise( ( resolve, reject ) => {
 
-		const minJs = UglifyJs.minify( js );
+		try {
+			const minJs = UglifyJs.minify( js );
 
-		if( minJs.error ) {
-			reject( minJs.error );
+			if( minJs.error ) {
+				reject( minJs.error );
+			}
+			else {
+				resolve( minJs );
+			}
 		}
-		else {
-			resolve( minJs );
+		catch( error ) {
+			reject( `Error running UglifyJS: ${ error }` );
 		}
+
 	});
 }

@@ -32,7 +32,7 @@ const { Log } = require( '../../dist/helper' );
 // Check if the user is in verbose mode
 if(process.argv.includes('-v') || process.argv.includes('--verbose')) {
 	Log.verboseMode = true;
-	Log.verbose( `--- YOLO mode activated, messages will contain references and bad jokes ---`);
+	Log.verbose( `Verbose mode activated`);
 }
 
 
@@ -228,7 +228,6 @@ const Furnace = ( action, furnaceProcess = {} ) => {
 
 	return new Promise ( ( resolve, reject ) => {
 		if( action === 'start' ) {
-			let errors;
 
 			// `npm run start` in base directory
 			const command = Spawn.spawn(

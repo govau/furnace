@@ -27,7 +27,7 @@ import { Fetch }      from './fetch';
 
 
 // Check if the user is in verbose mode
-if(process.argv.includes('-v') || process.argv.includes('--verbose')) {
+if( process.argv.includes('-v') || process.argv.includes('--verbose') ) {
 	Log.verboseMode = true;
 }
 

@@ -15,9 +15,9 @@
 import { Settings }           from './settings';
 import { Log }                from './helper';
 
-
+const envVars = process.env.VCAP_SERVICES ? JSON.parse( process.env.VCAP_SERVICES ) : {};
 const IncomingWebhook = require('@slack/client').IncomingWebhook;
-const URL             = process.env.SLACK_WEBHOOK;
+const URL             = envVars['user-provided'] ? envVars['user-provided'][ 0 ].credentials.SLACK_WEBHOOK : '';
 
 
 export const SlackMessage = ( messageData ) => {

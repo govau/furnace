@@ -1,5 +1,4 @@
 ---
-host: furnace
 buildpack: nodejs_buildpack
 memory: 256M
 instances: 1
@@ -9,5 +8,10 @@ path: ./
 command: node dist/init.js
 
 applications:
-- name: furnace-blue
-- name: furnace-green
+- name: furnace
+
+routes:
+- route: gold.service.gov.au/furnace
+
+services:
+- ups-furnace
