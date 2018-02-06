@@ -46,31 +46,31 @@ export const HandlePost = ( request, response ) => {
 	let data = request.body;
 
 	if( !data.components ) {
-		Log.error( `No components selected` );
+		data.components = 'core';
 	}
-	else {
-		// Format the data so that it's in an array
-		const components = typeof data.components === 'string' ? [ data.components ] : data.components;
-		const styleOutput = Settings.get().uikit.styleOutput[ data.styleOutput ].option;
-		const jsOutput = Settings.get().uikit.jsOutput[ data.jsOutput ].option;
 
-		Log.message( `${ components.length } components: ${ components.join(', ') }` );
-		Log.message( `Style output: ${ data.styleOutput }` );
-		Log.message( `JS output:    ${ data.jsOutput }` );
+	// Format the data so that it's in an array
+	const components = typeof data.components === 'string' ? [ data.components ] : data.components;
+	const styleOutput = Settings.get().uikit.styleOutput[ data.styleOutput ].option;
+	const jsOutput = Settings.get().uikit.jsOutput[ data.jsOutput ].option;
 
-		const formattedRequest = {
-			components: components,
-			styleOutput: styleOutput,
-			jsOutput: jsOutput,
-			ip: ip
-		};
+	Log.message( `${ components.length } components: ${ components.join(', ') }` );
+	Log.message( `Style output: ${ data.styleOutput }` );
+	Log.message( `JS output:    ${ data.jsOutput }` );
 
-		Bundle( formattedRequest )
-			.then( zip => GetZip( response, zip ) )
-			.then( () => SlackMessage( formattedRequest ) )
-			.catch( error => {
-				Log.error( error );
-				response.status( 400 ).send( `400: ${ error }` );
-			});
-	}
+	const formattedRequest = {
+		components: components,
+		styleOutput: styleOutput,
+		jsOutput: jsOutput,
+		ip: ip
+	};
+
+	Bundle( formattedRequest )
+		.then( zip => GetZip( response, zip ) )
+		.then( () => SlackMessage( formattedRequest ) )
+		.catch( error => {
+			Log.error( error );
+			response.status( 400 ).send( `400: ${ error }` );
+		});
+
 }
