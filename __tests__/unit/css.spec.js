@@ -39,7 +39,7 @@ test('GetMinCss: should throw an error', () => {
 // ----------------------------------------------------------------
 // Autoprefixer
 // ----------------------------------------------------------------
-test('Autoprefixer: should throw a warning', () => {
+test('GetMinCSS: should throw a warning for invalid autoprefix', () => {
 	console.warn = jest.fn();
 	const sass = 'body { display: box; }';
 	const warning = `autoprefixer: <css input>:1:6: You should write display: flex by final spec instead of display: box`;

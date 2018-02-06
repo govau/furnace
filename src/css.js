@@ -91,8 +91,10 @@ export const Autoprefix = ( css ) => {
 	return new Promise( ( resolve, reject ) => {
 
 		// Run autoprefixer with uikit helper.js settings
-		Postcss([ Autoprefixer({ browsers: ['last 2 versions', 'ie 8', 'ie 9', 'ie 10'] }) ])
-			.process( css )
+		Postcss([ Autoprefixer({
+			browsers: ['last 2 versions', 'ie 8', 'ie 9', 'ie 10']
+		}) ])
+			.process( css, { from: undefined } )
 			.then( ( prefixed ) => {
 				prefixed
 					.warnings()
@@ -104,3 +106,4 @@ export const Autoprefix = ( css ) => {
 
 	})
 };
+
