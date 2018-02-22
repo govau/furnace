@@ -45,7 +45,7 @@ export const GetDependencies = (
 		if( json[ component ] !== undefined ) {
 
 			// Add the dependencies first
-			Object.keys( json[ component ].peerDependencies ).map( dependency => {
+			Object.keys( json[ component ].dependencies ).map( dependency => {
 				result.push( dependency.replace( prefix, '' ) );
 			});
 

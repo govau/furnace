@@ -70,8 +70,8 @@ export const Bundle = ( data ) => {
 			packageJson.dependencies[ `${ Settings.get().uikit.prefix }${ component }` ] = componentJson.version;
 
 			// If the current component has javascript
-			if( componentJson['pancake-module'][ jsDirectory ] ) {
-				const jsFile = Path.normalize( `${ Settings.get().uikit.componentLocation }/${ component }/${ componentJson['pancake-module'][ jsDirectory ].path }` );
+			if( componentJson['settings'][ jsDirectory ] ) {
+				const jsFile = Path.normalize( `${ Settings.get().uikit.componentLocation }/${ component }/${ componentJson[ 'settings' ][ jsDirectory ].path }` );
 
 				// minifyJs was selected in the form, add the directory to the array
 				if( data.jsOutput === 'js' ) {
@@ -97,26 +97,31 @@ export const Bundle = ( data ) => {
 
 
 			// minifyCss was selected, create an @Import string
-			const sassFile = Path.normalize( `${ Settings.get().uikit.componentLocation }/${ component }/${ componentJson['pancake-module'].sass.path }` );
-			if( data.styleOutput === 'css' ) {
+			const sassFile = Path.normalize( `${ Settings.get().uikit.componentLocation }/${ component }/${ componentJson[ 'settings' ].sass.path }` );
+			if( data.styleOutput === 'css' && componentJson[ 'settings' ].sass.path ) {
 				cssImports += `@import '${ sassFile }';\n`;
 			}
 
 
 			// If cssModules was selected
-			const dependencies = componentJson.peerDependencies;
-			if( data.styleOutput === 'cssModules' && Object.keys( dependencies ).length ) {
+			const dependencies = componentJson.dependencies;
+			if( data.styleOutput === 'cssModules' && Object.keys( dependencies ).length && componentJson[ 'settings' ].sass.path ) {
+
 				// Create an @import string for CSS modules, add sassVersioning first.
 				let cssModuleImport = `@import '${ Settings.get().npm.sassVersioning }';\n\n`;
 
 				// Add an @import for each dependency
 				Object.keys( dependencies ).map( dependency => {
-					cssModuleImport += `@import '` +
-						`${ `${ Settings.get().uikit.componentLocation }/${ dependency.replace('@gov.au/', '') }/${ componentJson['pancake-module'].sass.path }` }';\n`;
+					let dependencyJson = Settings.get().uikit.json[ dependency ];
+
+					if( dependencyJson[ 'settings' ].sass.path ){
+						cssModuleImport += `@import '` +
+						`${ `${ Settings.get().uikit.componentLocation }/${ dependency.replace('@gov.au/', '') }/${ componentJson[ 'settings' ].sass.path }` }';\n`;
+					}
 				});
 
 				// Add an @import for the current component
-				cssModuleImport += `@import '${ `${ Settings.get().uikit.componentLocation }/${ component }/${ componentJson['pancake-module'].sass.path }` }';\n`;
+				cssModuleImport += `@import '${ `${ Settings.get().uikit.componentLocation }/${ component }/${ componentJson[ 'settings' ].sass.path }` }';\n`;
 
 				// Compile the CSS and add the file to the Zip
 				bundle.push(
