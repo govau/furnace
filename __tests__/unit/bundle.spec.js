@@ -51,7 +51,7 @@ test('Bundle: sassModules and react modules.', () => {
 	};
 
 	Bundle( data )
-		.then( data => expect( data._entriesCount ).toEqual( 21 ));
+		.then( data => expect( data._entriesCount ).toEqual( 21 ) );
 
 });
 
