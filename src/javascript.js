@@ -56,6 +56,7 @@ export const GetMinJs = ( jsFiles ) => {
 	})
 }
 
+
 /**
  * Uglify - Minify the js in a promise with errors
  *

@@ -68,7 +68,7 @@
 		"node-sass": "^4.6.1",
 		"postcss": "^6.0.14",
 		"request": "^2.83.0",
-		"sass-versioning": "^0.2.2",
+		"sass-versioning": "^0.3.0",
 		"uglify-js": "^3.1.9"
 	},
 	"devDependencies": {
@@ -112,23 +112,16 @@
 	"homepage": "https://github.com/govau/furnace#readme",
 	"pancake": {
 		"auto-save": false,
-		"plugins": false,
-		"ignore": [],
-		"css": {
-			"name": false
-		},
-		"sass": {
-			"name": false
-		},
-		"js": {
-			"name": false
-		},
-		"react": {
-			"name": false
-		},
+		"plugins": true,
+		"ignore": [
+			"@gov.au/pancake-react",
+			"@gov.au/pancake-css",
+			"@gov.au/pancake-sass",
+			"@gov.au/pancake-js"
+		],
 		"json": {
 			"enable": true,
-			"location": "./_uikit/",
+			"location": "./",
 			"name": "uikit"
 		}
 	}

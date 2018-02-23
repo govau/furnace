@@ -29,12 +29,42 @@ Settings.set( newSettings );
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
 // GetDependencies
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
+const mockDependencies = {
+	'@a': {
+		dependencies: {
+			'@b': '1.0.0',
+			'@c': '1.0.0'
+		}
+	},
+	'@b': {
+		dependencies: {
+			'@c': '1.0.0'
+		}
+	},
+	'@c': {
+		dependencies: {}
+	},
+	'@d': {
+		dependencies: {
+			'@e': '1.0.0',
+		}
+	},
+	'@e': {
+		dependencies: {}
+	},
+	'@f': {
+		dependencies: {
+			'@e': '1.0.0'
+		}
+	}
+}
+
 test( 'GetDependencies: gets dependencies of components passed in', () => {
 
-	const componentsBefore = [ 'accordion', '@gov.au/breadcrumbs' ];
-	const componentsAfter = [ 'core', 'animate', 'accordion', 'link-list', 'body', 'breadcrumbs' ];
+	const componentsBefore = [ '@a', 'd' ];
+	const componentsAfter  = [ 'f', 'b', 'c', 'a', 'e', 'd' ];
 
-	expect( GetDependencies( componentsBefore ) ).toEqual( componentsAfter );
+	expect( GetDependencies( componentsBefore, ['f'], mockDependencies, '@' ) ).toEqual( componentsAfter );
 
 });
 
