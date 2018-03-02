@@ -145,10 +145,11 @@ export const Bundle = ( data ) => {
 
 		// minifyCss was selected, turn cssImports into a minified css file
 		if( data.styleOutput === 'css' && cssImports !== '' ) {
-			const coreSass = `@import "${ Path.normalize( Settings.get().uikit.componentLocation + '/core/lib/sass/_module.scss' ) }";`;
-
+			const coreSass = `@import "${ Path.normalize( Settings.get().uikit.componentLocation + '/core/lib/sass/_module.scss' ) }";\n`;
 			cssImports = sassVersioning + coreSass + cssImports;
+
 			packageJson.pancake.css.minified = true;
+
 			bundle.push(
 				GetMinCss( cssImports )
 					.then( cssMin => AddFile( cssMin, `${ Settings.get().packageJson.pancake.css.location }${ Settings.get().packageJson.pancake.css.name }`, zipFile ) )
