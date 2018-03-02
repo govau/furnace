@@ -114,6 +114,28 @@ const TESTS = [
 		compare: `${ zipName }/`,
 		empty: false,
 	},
+	{
+		name: 'Test5: Core only minfied css/js',
+		folder: 'test-05',
+		post: {
+			components: [ 'core' ],
+			styleOutput: 'css',
+			jsOutput: 'js',
+		},
+		compare: `${ zipName }/`,
+		empty: false,
+	},
+	{
+		name: 'Test6: Core with a module without css',
+		folder: 'test-06',
+		post: {
+			components: [ 'core', 'animate' ],
+			styleOutput: 'css',
+			jsOutput: 'js',
+		},
+		compare: `${ zipName }/`,
+		empty: false,
+	},
 ];
 
 
