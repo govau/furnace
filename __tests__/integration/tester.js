@@ -21,6 +21,8 @@ const Dirsum      = require( 'dirsum' );
 const Request     = require( 'request' );
 const Querystring = require( 'querystring' );
 const AdmZip      = require( 'adm-zip' );
+const Replace     = require( 'replace-in-file' );
+
 
 
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -362,27 +364,73 @@ const ReplaceFixture = ( path, settings ) => {
 			resolve();
 		}
 		else {
-			// maybe in the future we have dynamic paths that depend on the system they are tested on.
+			const uikitJson = require( Path.normalize( '../../uikit.json' ) );
 
-			// Replace({
-			// 		files: [
-			// 			Path.normalize(`${ path }/_fixture/**`),
-			// 		],
-			// 		from: [
-			// 			/\[thing\]/g,
-			// 		],
-			// 		to: [
-			// 			'thing',
-			// 		],
-			// 		allowEmptyPaths: true,
-			// 		encoding: 'utf8',
-			// 	})
-			// 	.catch( error => {
-			// 		reject( error );
-			// 	})
-			// 	.then( changedFiles => {
+			Replace({
+					files: [
+						Path.normalize(`${ path }/_fixture/**`),
+					],
+					from: [
+						/\[v-core\]/g,
+						/\[v-accordion\]/g,
+						/\[v-animate]/g,
+						/\[v-body]/g,
+						/\[v-breadcrumbs]/g,
+						/\[v-buttons]/g,
+						/\[v-cta-link]/g,
+						/\[v-callout]/g,
+						/\[v-control-input]/g,
+						/\[v-direction-links]/g,
+						/\[v-footer]/g,
+						/\[v-grid-12]/g,
+						/\[v-header]/g,
+						/\[v-headings]/g,
+						/\[v-inpage-nav]/g,
+						/\[v-keyword-list]/g,
+						/\[v-link-list]/g,
+						/\[v-page-alerts]/g,
+						/\[v-progress-indicator]/g,
+						/\[v-responsive-media]/g,
+						/\[v-select]/g,
+						/\[v-skip-link]/g,
+						/\[v-tags]/g,
+						/\[v-text-inputs]/g,
+					],
+					to: [
+						uikitJson[ "@gov.au/core" ].version,
+						uikitJson[ "@gov.au/accordion" ].version,
+						uikitJson[ "@gov.au/animate" ].version,
+						uikitJson[ "@gov.au/body" ].version,
+						uikitJson[ "@gov.au/breadcrumbs" ].version,
+						uikitJson[ "@gov.au/buttons" ].version,
+						uikitJson[ "@gov.au/cta-link" ].version,
+						uikitJson[ "@gov.au/callout" ].version,
+						uikitJson[ "@gov.au/control-input" ].version,
+						uikitJson[ "@gov.au/direction-links" ].version,
+						uikitJson[ "@gov.au/footer" ].version,
+						uikitJson[ "@gov.au/grid-12" ].version,
+						uikitJson[ "@gov.au/header" ].version,
+						uikitJson[ "@gov.au/headings" ].version,
+						uikitJson[ "@gov.au/inpage-nav" ].version,
+						uikitJson[ "@gov.au/keyword-list" ].version,
+						uikitJson[ "@gov.au/link-list" ].version,
+						uikitJson[ "@gov.au/page-alerts" ].version,
+						uikitJson[ "@gov.au/progress-indicator" ].version,
+						uikitJson[ "@gov.au/responsive-media" ].version,
+						uikitJson[ "@gov.au/select" ].version,
+						uikitJson[ "@gov.au/skip-link" ].version,
+						uikitJson[ "@gov.au/tags" ].version,
+						uikitJson[ "@gov.au/text-inputs" ].version,
+					],
+					allowEmptyPaths: true,
+					encoding: 'utf8',
+				})
+				.catch( error => {
+					reject( error );
+				})
+				.then( changedFiles => {
 					resolve();
-			// });
+			});
 		}
 	});
 };

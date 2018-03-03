@@ -69,7 +69,8 @@
 		"postcss": "^6.0.14",
 		"request": "^2.83.0",
 		"sass-versioning": "^0.3.0",
-		"uglify-js": "^3.1.9"
+		"uglify-js": "^3.1.9",
+		"replace-in-file": "^3.0.0"
 	},
 	"devDependencies": {
 		"adm-zip": "^0.4.7",

@@ -50,7 +50,6 @@ export const Settings = {
 		uikit: {
 			dist: Path.normalize(`${ process.cwd() }/dist/`),
 			json: {},
-			jsonLocation: 'https://raw.githubusercontent.com/govau/uikit/master/uikit.json',
 			componentLocation: 'node_modules/@gov.au',
 			prefix: '@gov.au/',
 			styleOutput: {

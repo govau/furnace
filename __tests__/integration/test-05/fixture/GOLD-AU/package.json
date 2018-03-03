@@ -3,7 +3,7 @@
 	"version": "1.0.0",
 	"description": "Furnace has smelted this project from the finest GOLD",
 	"dependencies": {
-		"@gov.au/core": "1.0.0"
+		"@gov.au/core": "[v-core]"
 	},
 	"pancake": {
 		"auto-save": true,
