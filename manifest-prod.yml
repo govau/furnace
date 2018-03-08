@@ -11,7 +11,7 @@ applications:
 - name: furnace
 
 routes:
-- route: gold.service.gov.au/furnace
+- route: designsystem.gov.au/furnace
 
 services:
 - ups-furnace
