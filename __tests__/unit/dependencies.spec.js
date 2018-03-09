@@ -81,9 +81,3 @@ test( 'GetDependencies: should fail as there is no component called `oisjdoioioj
 
 });
 
-
-test( 'GetDependencies: should always return core', () => {
-	const componentsBefore = [];
-	expect( GetDependencies( componentsBefore ) ).toEqual( [ 'core' ] );
-
-});
