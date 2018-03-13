@@ -1,6 +1,6 @@
 # :fire: Furnace
 
-> Melts down the [GOLD](https://github.com/govau/gold) components into a zip file.
+> Melts down the [GOLD](https://github.com/govau/designsystem) components into a zip file.
 
 > The furnace is an [`express`](https://expressjs.com/) server that allows users to easily get started with the _Government Open Language for Design_. The furnace dynamically builds zip files based on each selected component and options that are sent to the server.
 

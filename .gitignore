@@ -17,8 +17,8 @@ coverage
 
 # Don't commit temp test files
 __tests__/integration/*/_fixture
-__tests__/integration/*/GOLD-AU/*
-__tests__/integration/*/GOLD-AU.zip
+__tests__/integration/*/AU-DesignSystem/*
+__tests__/integration/*/AU-DesignSystem.zip
 
 # Do commit fixtures in full
 !__tests__/integration/**/fixture/**/dist/

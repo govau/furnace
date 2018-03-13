@@ -75,7 +75,7 @@ export const GetZip = ( response, zipFile ) => {
 
 	response.writeHead(200, {
 		'Content-Type': `application/zip`,
-		'Content-disposition': `attachment; filename=GOLD-AU.zip`,
+		'Content-disposition': `attachment; filename=AU-DesignSystem.zip`,
 	});
 
 	zipFile.pipe( response );

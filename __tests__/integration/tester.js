@@ -39,99 +39,84 @@ if(process.argv.includes('-v') || process.argv.includes('--verbose')) {
 
 
 let PASS = true;
-const zipName = `GOLD-AU`;
+const zipName = `AU-DesignSystem`;
 
 const allComponents = [
 	'core',
-	'animate',
-	'accordion',
-	'body',
-	'link-list',
-	'breadcrumbs',
-	'buttons',
-	'callout',
-	'control-input',
-	'cta-link',
-	'direction-links',
-	'footer',
-	'grid-12',
-	'header',
-	'headings',
-	'inpage-nav',
-	'keyword-list',
-	'page-alerts',
-	'progress-indicator',
-	'responsive-media',
-	'select',
-	'skip-link',
-	'tags',
-	'text-inputs'
+	'_test-01',
+	'_test-02',
+	'_test-03',
+	'_test-04',
+	'_test-05',
 ];
 
-// Accordion is complex, breadcrumbs has lots of dependencies
-const someComponents = [ 'accordion', 'breadcrumbs' ];
+// Core and JavascriptOnly
+const testJS = [ 'core', '_test-02' ];
+
+// Dependencies and MoreDependencies
+const testDependencies = [ '_test-01', '_test-03' ];
 
 const TESTS = [
-	{
-		name: 'Test1: Some components minfied css/js',
-		folder: 'test-01',
-		post: {
-			components: someComponents,
-			styleOutput: 'css',
-			jsOutput: 'js',
-		},
-		compare: `${ zipName }/`,
-		empty: false,
-	},
-	{
-		name: 'Test2: All components css/js modules',
-		folder: 'test-02',
-		post: {
-			components: allComponents,
-			styleOutput: 'cssModules',
-			jsOutput: 'jsModules',
-		},
-		compare: `${ zipName }/`,
-		empty: false,
-	},
-	{
-		name: 'Test3: Some components sass/react modules',
-		folder: 'test-03',
-		post: {
-			components: someComponents,
-			styleOutput: 'sassModules',
-			jsOutput: 'react',
-		},
-		compare: `${ zipName }/`,
-		empty: false,
-	},
-	{
-		name: 'Test4: All components minfied css/js',
-		folder: 'test-04',
-		post: {
-			components: allComponents,
-			styleOutput: 'css',
-			jsOutput: 'js',
-		},
-		compare: `${ zipName }/`,
-		empty: false,
-	},
-	{
-		name: 'Test5: Core only minfied css/js',
-		folder: 'test-05',
-		post: {
-			components: [ 'core' ],
-			styleOutput: 'css',
-			jsOutput: 'js',
-		},
-		compare: `${ zipName }/`,
-		empty: false,
-	},
+	// {
+	// 	name: 'Test1: Some components minfied css/js',
+	// 	folder: 'test-01',
+	// 	post: {
+	// 		components: testDependencies,
+	// 		styleOutput: 'css',
+	// 		jsOutput: 'js',
+	// 	},
+	// 	compare: `${ zipName }/`,
+	// 	empty: false,
+	// },
+	// {
+	// 	name: 'Test2: All components css/js modules',
+	// 	folder: 'test-02',
+	// 	post: {
+	// 		components: allComponents,
+	// 		styleOutput: 'cssModules',
+	// 		jsOutput: 'jsModules',
+	// 	},
+	// 	compare: `${ zipName }/`,
+	// 	empty: false,
+	// },
+	// {
+	// 	name: 'Test3: Some components sass/react modules',
+	// 	folder: 'test-03',
+	// 	post: {
+	// 		components: testDependencies,
+	// 		styleOutput: 'sassModules',
+	// 		jsOutput: 'react',
+	// 	},
+	// 	compare: `${ zipName }/`,
+	// 	empty: false,
+	// },
+	// {
+	// 	name: 'Test4: All components minfied css/js',
+	// 	folder: 'test-04',
+	// 	post: {
+	// 		components: allComponents,
+	// 		styleOutput: 'css',
+	// 		jsOutput: 'js',
+	// 	},
+	// 	compare: `${ zipName }/`,
+	// 	empty: false,
+	// },
+	// {
+	// 	name: 'Test5: Core only minfied css/js',
+	// 	folder: 'test-05',
+	// 	post: {
+	// 		components: [ 'core' ],
+	// 		styleOutput: 'css',
+	// 		jsOutput: 'js',
+	// 	},
+	// 	compare: `${ zipName }/`,
+	// 	empty: false,
+	// },
 	{
 		name: 'Test6: Core with a module without css',
 		folder: 'test-06',
 		post: {
-			components: [ 'core', 'animate' ],
+			components: [ testJS ],
 			styleOutput: 'css',
 			jsOutput: 'js',
 		},
@@ -256,16 +241,16 @@ const Furnace = ( action, furnaceProcess = {} ) => {
 			// `npm run start` in base directory
 			const command = Spawn.spawn(
 				'npm',
-				[ 'run', 'start' ],
+				[ 'run', 'integration-test:start' ],
 				{
 					cwd: Path.normalize( `${ __dirname }/../../` )
 				}
 			);
 
 			// Piping console log in when needed
-			// command.stdout.on('data', ( data ) => {
-			// 	console.log( data.toString() );
-			// });
+			command.stdout.on('data', ( data ) => {
+				console.log( data.toString() );
+			});
 
 			// Logging errors found in furnace
 			command.stderr.on('data', ( data ) => {
@@ -282,7 +267,7 @@ const Furnace = ( action, furnaceProcess = {} ) => {
 		}
 		else {
 			furnaceProcess.kill();
-			furnaceProcess.on('close', ( code, signal ) => {
+			furnaceProcess.on( 'close', ( code, signal ) => {
 				resolve();
 			});
 		}
@@ -364,7 +349,7 @@ const ReplaceFixture = ( path, settings ) => {
 			resolve();
 		}
 		else {
-			const uikitJson = require( Path.normalize( '../../uikit.json' ) );
+			const uikitJson = require( Path.normalize( '../integration/mocks/uikit.json' ) );
 
 			Replace({
 					files: [
@@ -372,55 +357,9 @@ const ReplaceFixture = ( path, settings ) => {
 					],
 					from: [
 						/\[v-core\]/g,
-						/\[v-accordion\]/g,
-						/\[v-animate]/g,
-						/\[v-body]/g,
-						/\[v-breadcrumbs]/g,
-						/\[v-buttons]/g,
-						/\[v-cta-link]/g,
-						/\[v-callout]/g,
-						/\[v-control-input]/g,
-						/\[v-direction-links]/g,
-						/\[v-footer]/g,
-						/\[v-grid-12]/g,
-						/\[v-header]/g,
-						/\[v-headings]/g,
-						/\[v-inpage-nav]/g,
-						/\[v-keyword-list]/g,
-						/\[v-link-list]/g,
-						/\[v-page-alerts]/g,
-						/\[v-progress-indicator]/g,
-						/\[v-responsive-media]/g,
-						/\[v-select]/g,
-						/\[v-skip-link]/g,
-						/\[v-tags]/g,
-						/\[v-text-inputs]/g,
 					],
 					to: [
 						uikitJson[ "@gov.au/core" ].version,
-						uikitJson[ "@gov.au/accordion" ].version,
-						uikitJson[ "@gov.au/animate" ].version,
-						uikitJson[ "@gov.au/body" ].version,
-						uikitJson[ "@gov.au/breadcrumbs" ].version,
-						uikitJson[ "@gov.au/buttons" ].version,
-						uikitJson[ "@gov.au/cta-link" ].version,
-						uikitJson[ "@gov.au/callout" ].version,
-						uikitJson[ "@gov.au/control-input" ].version,
-						uikitJson[ "@gov.au/direction-links" ].version,
-						uikitJson[ "@gov.au/footer" ].version,
-						uikitJson[ "@gov.au/grid-12" ].version,
-						uikitJson[ "@gov.au/header" ].version,
-						uikitJson[ "@gov.au/headings" ].version,
-						uikitJson[ "@gov.au/inpage-nav" ].version,
-						uikitJson[ "@gov.au/keyword-list" ].version,
-						uikitJson[ "@gov.au/link-list" ].version,
-						uikitJson[ "@gov.au/page-alerts" ].version,
-						uikitJson[ "@gov.au/progress-indicator" ].version,
-						uikitJson[ "@gov.au/responsive-media" ].version,
-						uikitJson[ "@gov.au/select" ].version,
-						uikitJson[ "@gov.au/skip-link" ].version,
-						uikitJson[ "@gov.au/tags" ].version,
-						uikitJson[ "@gov.au/text-inputs" ].version,
 					],
 					allowEmptyPaths: true,
 					encoding: 'utf8',
