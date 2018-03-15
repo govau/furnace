@@ -10,8 +10,8 @@ jobs:
       - image: circleci/node:latest
 
     steps:
-      - checkout                       # get the files from the repo (why would you ever not want the files????)
       - run: rm -rf node_modules       # delete node_modules to bust caching
+      - checkout                       # get the files from the repo (why would you ever not want the files????)
       - run: npm install               # duh
       - run: npm test                  # testing first!
       - run: npm run build             # required build step
@@ -37,8 +37,8 @@ jobs:
       - image: circleci/node:latest
 
     steps:
-      - checkout
       - run: rm -rf node_modules
+      - checkout
       - run: npm install
       - run: npm test
       - run: npm run build
