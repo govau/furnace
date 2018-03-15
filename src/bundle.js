@@ -80,7 +80,6 @@ export const Bundle = ( data ) => {
 			// If the current component has javascript
 			if( componentJson['settings'][ jsDirectory ] ) {
 				const jsFile = Path.normalize( `${ componentJson.path }/${ componentJson[ 'settings' ][ jsDirectory ].path }` );
-				console.log( jsFile );
 
 				// minifyJs was selected in the form, add the directory to the array
 				if( data.jsOutput === 'js' ) {
