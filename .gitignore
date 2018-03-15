@@ -3,7 +3,6 @@
 *.sublime-workspace
 codekit-config.json
 *.codekit
-node_modules/*
 .sass-cache
 .idea
 validation-report.json
@@ -25,6 +24,5 @@ __tests__/integration/*/AU-DesignSystem.zip
 !__tests__/integration/**/fixture/*/node_modules/
 
 # Allow integration test modules
-!node_modules/@gov.au
-node_modules/@gov.au/*
-!node_modules/@gov.au/_test-*/
+node_modules/*
+!__tests__/integration/mocks/node_modules/@gov.au/

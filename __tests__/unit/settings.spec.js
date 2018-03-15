@@ -37,7 +37,6 @@ test('Settings.get() - The default settings are correct', () => {
 		uikit: {
 			dist: Path.normalize(`${ process.cwd() }/dist/`),
 			json: {},
-			componentLocation: 'node_modules/@gov.au',
 			prefix: '@gov.au/',
 			styleOutput: {
 				css: {
@@ -136,7 +135,6 @@ test('Settings.set() - Not setting anything will merge default correctly', () =>
 		uikit: {
 			dist: Path.normalize(`${ process.cwd() }/dist/`),
 			json: {},
-			componentLocation: 'node_modules/@gov.au',
 			prefix: '@gov.au/',
 			styleOutput: {
 				css: {
@@ -251,7 +249,6 @@ test('Settings.set() - Set settings correctly', () => {
 			abc: 'test',
 			dist: Path.normalize(`${ process.cwd() }/dist/`),
 			json: {},
-			componentLocation: 'node_modules/@gov.au',
 			prefix: '@gov.au/',
 			styleOutput: {
 				css: {

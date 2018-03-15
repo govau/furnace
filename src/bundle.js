@@ -79,7 +79,8 @@ export const Bundle = ( data ) => {
 
 			// If the current component has javascript
 			if( componentJson['settings'][ jsDirectory ] ) {
-				const jsFile = Path.normalize( `${ Settings.get().uikit.componentLocation }/${ component }/${ componentJson[ 'settings' ][ jsDirectory ].path }` );
+				const jsFile = Path.normalize( `${ componentJson.path }/${ componentJson[ 'settings' ][ jsDirectory ].path }` );
+				console.log( jsFile );
 
 				// minifyJs was selected in the form, add the directory to the array
 				if( data.jsOutput === 'js' ) {
@@ -105,7 +106,7 @@ export const Bundle = ( data ) => {
 
 
 			// minifyCss was selected, create an @Import string
-			const sassFile = Path.normalize( `${ Settings.get().uikit.componentLocation }/${ component }/${ componentJson[ 'settings' ].sass.path }` );
+			const sassFile = Path.normalize( `${ componentJson.path }/${ componentJson[ 'settings' ].sass.path }` );
 			if( data.styleOutput === 'css' && componentJson[ 'settings' ].sass.path ) {
 				cssImports += `@import '${ sassFile }';\n`;
 			}
@@ -124,12 +125,12 @@ export const Bundle = ( data ) => {
 
 					if( dependencyJson[ 'settings' ].sass.path ){
 						cssModuleImport += `@import '` +
-						`${ `${ Settings.get().uikit.componentLocation }/${ dependency.replace('@gov.au/', '') }/${ componentJson[ 'settings' ].sass.path }` }';\n`;
+						`${ `${ dependencyJson.path }/${ dependencyJson[ 'settings' ].sass.path }` }';\n`;
 					}
 				});
 
 				// Add an @import for the current component
-				cssModuleImport += `@import '${ `${ Settings.get().uikit.componentLocation }/${ component }/${ componentJson[ 'settings' ].sass.path }` }';\n`;
+				cssModuleImport += `@import '${ `${ componentJson.path }/${ componentJson[ 'settings' ].sass.path }` }';\n`;
 
 				// Compile the CSS and add the file to the Zip
 				bundle.push(
