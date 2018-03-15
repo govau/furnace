@@ -21,7 +21,7 @@ const Dirsum      = require( 'dirsum' );
 const Request     = require( 'request' );
 const Querystring = require( 'querystring' );
 const AdmZip      = require( 'adm-zip' );
-const Replace     = require( 'replace-in-file' );
+// const Replace     = require( 'replace-in-file' );
 
 
 
@@ -42,7 +42,7 @@ let PASS = true;
 const zipName = `AU-DesignSystem`;
 
 const allComponents = [
-	'core',
+	'_test-00',
 	'_test-01',
 	'_test-02',
 	'_test-03',
@@ -51,72 +51,72 @@ const allComponents = [
 ];
 
 // Core and JavascriptOnly
-const testJS = [ 'core', '_test-02' ];
+const testJS = [ '_test-00', '_test-02' ];
 
 // Dependencies and MoreDependencies
 const testDependencies = [ '_test-01', '_test-03' ];
 
 const TESTS = [
-	// {
-	// 	name: 'Test1: Some components minfied css/js',
-	// 	folder: 'test-01',
-	// 	post: {
-	// 		components: testDependencies,
-	// 		styleOutput: 'css',
-	// 		jsOutput: 'js',
-	// 	},
-	// 	compare: `${ zipName }/`,
-	// 	empty: false,
-	// },
-	// {
-	// 	name: 'Test2: All components css/js modules',
-	// 	folder: 'test-02',
-	// 	post: {
-	// 		components: allComponents,
-	// 		styleOutput: 'cssModules',
-	// 		jsOutput: 'jsModules',
-	// 	},
-	// 	compare: `${ zipName }/`,
-	// 	empty: false,
-	// },
-	// {
-	// 	name: 'Test3: Some components sass/react modules',
-	// 	folder: 'test-03',
-	// 	post: {
-	// 		components: testDependencies,
-	// 		styleOutput: 'sassModules',
-	// 		jsOutput: 'react',
-	// 	},
-	// 	compare: `${ zipName }/`,
-	// 	empty: false,
-	// },
-	// {
-	// 	name: 'Test4: All components minfied css/js',
-	// 	folder: 'test-04',
-	// 	post: {
-	// 		components: allComponents,
-	// 		styleOutput: 'css',
-	// 		jsOutput: 'js',
-	// 	},
-	// 	compare: `${ zipName }/`,
-	// 	empty: false,
-	// },
-	// {
-	// 	name: 'Test5: Core only minfied css/js',
-	// 	folder: 'test-05',
-	// 	post: {
-	// 		components: [ 'core' ],
-	// 		styleOutput: 'css',
-	// 		jsOutput: 'js',
-	// 	},
-	// 	compare: `${ zipName }/`,
-	// 	empty: false,
-	// },
 	{
-		name: 'Test6: Core with a module without css',
+		name: 'Test1: Some components minfied css/js',
+		folder: 'test-01',
+		post: {
+			components: testDependencies,
+			styleOutput: 'css',
+			jsOutput: 'js',
+		},
+		compare: `${ zipName }/`,
+		empty: false,
+	},
+	{
+		name: 'Test2: All components css/js modules',
+		folder: 'test-02',
+		post: {
+			components: allComponents,
+			styleOutput: 'cssModules',
+			jsOutput: 'jsModules',
+		},
+		compare: `${ zipName }/`,
+		empty: false,
+	},
+	{
+		name: 'Test3: Some components sass/react modules',
+		folder: 'test-03',
+		post: {
+			components: testDependencies,
+			styleOutput: 'sassModules',
+			jsOutput: 'react',
+		},
+		compare: `${ zipName }/`,
+		empty: false,
+	},
+	{
+		name: 'Test4: All components minfied css/js',
+		folder: 'test-04',
+		post: {
+			components: allComponents,
+			styleOutput: 'css',
+			jsOutput: 'js',
+		},
+		compare: `${ zipName }/`,
+		empty: false,
+	},
+	{
+		name: 'Test5: Core only minfied css/js',
+		folder: 'test-05',
+		post: {
+			components: [ '_test-00' ],
+			styleOutput: 'css',
+			jsOutput: 'js',
+		},
+		compare: `${ zipName }/`,
+		empty: false,
+	},
+	{
+		name: 'Test6: Multiple modules no css',
 		folder: 'test-06',
 		post: {
-			components: [ testJS ],
+			components: testJS,
 			styleOutput: 'css',
 			jsOutput: 'js',
 		},
@@ -203,7 +203,7 @@ const Test = ( test ) => {
 
 		Delete( scriptFolder )
 			.then( ()      => CopyFixtures( scriptFolder, test ) )    // copy fixtures
-			.then( ()      => ReplaceFixture( scriptFolder, test ) )  // Adds extra bits in the fixture
+			// .then( ()      => ReplaceFixture( scriptFolder, test ) )  // Adds extra bits in the fixture
 			.then( ()      => RequestZip( scriptFolder, test ) )      // now get zip and open it
 			.then( ()      => UnZip( scriptFolder, test ) )			  	  // open the zip files
 			.then( ()      => Fixture( scriptFolder, test ) )         // get hash for fixture
@@ -248,9 +248,9 @@ const Furnace = ( action, furnaceProcess = {} ) => {
 			);
 
 			// Piping console log in when needed
-			command.stdout.on('data', ( data ) => {
-				console.log( data.toString() );
-			});
+			// command.stdout.on('data', ( data ) => {
+			// 	console.log( data.toString() );
+			// });
 
 			// Logging errors found in furnace
 			command.stderr.on('data', ( data ) => {
@@ -344,12 +344,13 @@ const CopyFixtures = ( path, settings ) => {
  * @return {Promise object}
  */
 const ReplaceFixture = ( path, settings ) => {
+	Log.verbose( 'Replacing content inside _fixture' );
 	return new Promise( ( resolve, reject ) => {
 		if( settings.empty ) {
 			resolve();
 		}
 		else {
-			const uikitJson = require( Path.normalize( '../integration/mocks/uikit.json' ) );
+			const uikitJson = require( Path.normalize( '../../uikit.json' ) );
 
 			Replace({
 					files: [
@@ -384,7 +385,7 @@ const ReplaceFixture = ( path, settings ) => {
  * @return {Promise object}
  */
 const RequestZip = ( path, settings ) => {
-	Log.verbose( 'Requesting a zip from the furnace' );
+	Log.verbose( `[ ${ settings.folder } ] Requesting a zip from the furnace` );
 
 	return new Promise( ( resolve, reject ) => {
 

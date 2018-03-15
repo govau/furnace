@@ -62,6 +62,9 @@ export const Bundle = ( data ) => {
 
 	return new Promise( ( resolve, reject ) => {
 
+		// If core is the only module don't output css
+		let _hasSass = false;
+
 		// Iterate through components and dependencies
 		components.map( component => {
 
@@ -69,6 +72,10 @@ export const Bundle = ( data ) => {
 			const componentJson = Settings.get().uikit.json[`${ Settings.get().uikit.prefix }${ component }`];
 
 			packageJson.dependencies[ `${ Settings.get().uikit.prefix }${ component }` ] = componentJson.version;
+
+			if ( component !== 'core' && component !== '_test-00' && componentJson.settings.sass.path ) {
+				_hasSass = true;
+			}
 
 			// If the current component has javascript
 			if( componentJson['settings'][ jsDirectory ] ) {
@@ -99,7 +106,7 @@ export const Bundle = ( data ) => {
 
 			// minifyCss was selected, create an @Import string
 			const sassFile = Path.normalize( `${ Settings.get().uikit.componentLocation }/${ component }/${ componentJson[ 'settings' ].sass.path }` );
-			if( data.styleOutput === 'css' && componentJson[ 'settings' ].sass.path && component !== 'core' ) {
+			if( data.styleOutput === 'css' && componentJson[ 'settings' ].sass.path ) {
 				cssImports += `@import '${ sassFile }';\n`;
 			}
 
@@ -133,7 +140,7 @@ export const Bundle = ( data ) => {
 
 
 			// sassModules was selected, create an @import for the zipFile, addGlob to zip
-			if( data.styleOutput === 'sassModules' ) {
+			if( data.styleOutput === 'sassModules' && componentJson[ 'settings' ].sass.path ) {
 				const sassDirectory = Path.normalize( sassFile ).replace('_module.scss', '');
 				sassImports += `@import 'node_modules/@gov.au/${ component }/lib/sass/_module.scss';\n`;
 				bundle.push( AddGlob( `*.scss`, sassDirectory, `node_modules/@gov.au/${ component }/lib/sass/`, zipFile ) );
@@ -144,9 +151,8 @@ export const Bundle = ( data ) => {
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 		// minifyCss was selected, turn cssImports into a minified css file
-		if( data.styleOutput === 'css' && cssImports !== '' ) {
-			const coreSass = `@import "${ Path.normalize( Settings.get().uikit.componentLocation + '/core/lib/sass/_module.scss' ) }";\n`;
-			cssImports = sassVersioning + coreSass + cssImports;
+		if( data.styleOutput === 'css' && cssImports !== '' && _hasSass ) {
+			cssImports = sassVersioning + cssImports;
 
 			packageJson.pancake.css.minified = true;
 
