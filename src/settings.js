@@ -94,7 +94,7 @@ export const Settings = {
 		packageJson: {
 			name: 'furnace',
 			version: '1.0.0',
-			description: 'Furnace has smelted this project from the finest GOLD',
+			description: 'Australian Government - Design System',
 			dependencies: {},
 			pancake: {
 				'auto-save': true,

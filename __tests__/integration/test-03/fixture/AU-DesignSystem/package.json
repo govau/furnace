@@ -1,7 +1,7 @@
 {
 	"name": "furnace",
 	"version": "1.0.0",
-	"description": "Furnace has smelted this project from the finest GOLD",
+	"description": "Australian Government - Design System",
 	"dependencies": {
 		"@gov.au/_test-02": "1.0.0",
 		"@gov.au/_test-00": "1.0.1",

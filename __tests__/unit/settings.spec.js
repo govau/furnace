@@ -81,7 +81,7 @@ test('Settings.get() - The default settings are correct', () => {
 		packageJson: {
 			name: 'furnace',
 			version: '1.0.0',
-			description: 'Furnace has smelted this project from the finest GOLD',
+			description: 'Australian Government - Design System',
 			dependencies: {},
 			pancake: {
 				'auto-save': true,
@@ -180,7 +180,7 @@ test('Settings.set() - Not setting anything will merge default correctly', () =>
 		packageJson: {
 			name: 'furnace',
 			version: '1.0.0',
-			description: 'Furnace has smelted this project from the finest GOLD',
+			description: 'Australian Government - Design System',
 			dependencies: {},
 			pancake: {
 				'auto-save': true,
@@ -295,7 +295,7 @@ test('Settings.set() - Set settings correctly', () => {
 		packageJson: {
 			name: 'furnace',
 			version: '1.0.0',
-			description: 'Furnace has smelted this project from the finest GOLD',
+			description: 'Australian Government - Design System',
 			dependencies: {},
 			pancake: {
 				'auto-save': true,
