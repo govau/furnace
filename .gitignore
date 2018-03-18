@@ -9,6 +9,7 @@ validation-report.json
 validation-status.json
 npm-debug.log
 lerna-debug.log
+uikit.json
 
 # Jest files
 dist
@@ -23,6 +24,9 @@ __tests__/integration/*/AU-DesignSystem.zip
 !__tests__/integration/**/fixture/**/dist/
 !__tests__/integration/**/fixture/*/node_modules/
 
-# Allow integration test modules
+# Ignore node_modules
 node_modules/*
+
+# Keep the mock integration test files
 !__tests__/integration/mocks/node_modules/@gov.au/
+!__tests__/integration/mocks/uikit.json
