@@ -147,29 +147,6 @@ const Tester = ( ( tests ) => {
 					Furnace( 'exit', furnaceId );
 					process.exit( 1 );
 				})
-				.then( () => {
-					// Run the test one more time to check for memory leaks
-					Test( tests[ 0 ] )
-						.then( () => {
-							Furnace( 'exit', furnaceId );
-
-							if( PASS ) {
-								Log.done(`😅  All tests have passed`);
-
-								process.exit( 0 );
-							}
-							else {
-								Log.done(`😳  Ouch! Some tests failed`);
-
-								process.exit( 1 );
-							}
-						})
-						.catch( error => {
-							Log.error( error );
-							process.exit( 1 );
-					});
-			});
-
 		})
 		.catch( error => {
 			Log.error( `Nooooooooo: ${ error }` );
