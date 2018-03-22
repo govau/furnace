@@ -21,7 +21,7 @@ const Dirsum      = require( 'dirsum' );
 const Request     = require( 'request' );
 const Querystring = require( 'querystring' );
 const AdmZip      = require( 'adm-zip' );
-// const Replace     = require( 'replace-in-file' );
+const Replace     = require( 'replace-in-file' );
 
 
 
@@ -151,12 +151,12 @@ const Tester = ( ( tests ) => {
 					Furnace( 'exit', furnaceId );
 
 					if( PASS ) {
-						Log.done(`😅  All tests have passed`);
+						Log.done( `😅  All tests have passed` );
 
 						process.exit( 0 );
 					}
 					else {
-						Log.done(`😳  Ouch! Some tests failed`);
+						Log.done( `😳  Ouch! Some tests failed` );
 
 						process.exit( 1 );
 					}
@@ -187,7 +187,7 @@ const Tester = ( ( tests ) => {
  * @return {promise object}
  */
 const Test = ( test ) => {
-	Log.verbose(`Running test`);
+	Log.verbose( `Running test` );
 
 	const scriptFolder = Path.normalize( `${ __dirname }/${ test.folder }` );
 
@@ -232,8 +232,8 @@ const Furnace = ( action, furnaceProcess = {} ) => {
 
 			// `npm run start` in base directory
 			const command = Spawn.spawn(
-				'npm',
-				[ 'run', 'integration-test:start' ],
+				'node',
+				[ 'dist/index.js', '--verbose', '-j', '../__tests__/integration/mocks/uikit.json' ],
 				{
 					cwd: Path.normalize( `${ __dirname }/../../` )
 				}
