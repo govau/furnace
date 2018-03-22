@@ -37,7 +37,6 @@ test('Settings.get() - The default settings are correct', () => {
 		uikit: {
 			dist: Path.normalize(`${ process.cwd() }/dist/`),
 			json: {},
-			componentLocation: 'node_modules/@gov.au',
 			prefix: '@gov.au/',
 			styleOutput: {
 				css: {
@@ -81,7 +80,7 @@ test('Settings.get() - The default settings are correct', () => {
 		packageJson: {
 			name: 'furnace',
 			version: '1.0.0',
-			description: 'Furnace has smelted this project from the finest GOLD',
+			description: 'Australian Government - Design System',
 			dependencies: {},
 			pancake: {
 				'auto-save': true,
@@ -136,7 +135,6 @@ test('Settings.set() - Not setting anything will merge default correctly', () =>
 		uikit: {
 			dist: Path.normalize(`${ process.cwd() }/dist/`),
 			json: {},
-			componentLocation: 'node_modules/@gov.au',
 			prefix: '@gov.au/',
 			styleOutput: {
 				css: {
@@ -180,7 +178,7 @@ test('Settings.set() - Not setting anything will merge default correctly', () =>
 		packageJson: {
 			name: 'furnace',
 			version: '1.0.0',
-			description: 'Furnace has smelted this project from the finest GOLD',
+			description: 'Australian Government - Design System',
 			dependencies: {},
 			pancake: {
 				'auto-save': true,
@@ -251,7 +249,6 @@ test('Settings.set() - Set settings correctly', () => {
 			abc: 'test',
 			dist: Path.normalize(`${ process.cwd() }/dist/`),
 			json: {},
-			componentLocation: 'node_modules/@gov.au',
 			prefix: '@gov.au/',
 			styleOutput: {
 				css: {
@@ -295,7 +292,7 @@ test('Settings.set() - Set settings correctly', () => {
 		packageJson: {
 			name: 'furnace',
 			version: '1.0.0',
-			description: 'Furnace has smelted this project from the finest GOLD',
+			description: 'Australian Government - Design System',
 			dependencies: {},
 			pancake: {
 				'auto-save': true,

@@ -45,6 +45,7 @@ export const HandlePost = ( request, response ) => {
 
 	let data = request.body;
 
+	// If there are no components make sure there is core as a minimum
 	if( !data.components ) {
 		data.components = 'core';
 	}

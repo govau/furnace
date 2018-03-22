@@ -1,0 +1,37 @@
+{
+	"name": "furnace",
+	"version": "1.0.0",
+	"description": "Australian Government - Design System",
+	"dependencies": {
+		"@gov.au/_test-00": "1.0.1",
+		"@gov.au/_test-02": "1.0.0"
+	},
+	"pancake": {
+		"auto-save": true,
+		"plugins": true,
+		"ignore": [],
+		"css": {
+			"minified": false,
+			"browsers": [
+				"last 2 versions",
+				"ie 8",
+				"ie 9",
+				"ie 10"
+			],
+			"location": "css/",
+			"name": "furnace.min.css"
+		},
+		"sass": {
+			"location": "./",
+			"name": "main.scss"
+		},
+		"js": {
+			"minified": true,
+			"location": "js/",
+			"name": "furnace.min.js"
+		},
+		"react": {
+			"location": "react/"
+		}
+	}
+}

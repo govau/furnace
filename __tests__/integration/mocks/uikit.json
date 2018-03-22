@@ -1,0 +1,112 @@
+{
+	"@gov.au/_test-00": {
+		"name": "@gov.au/_test-00",
+		"version": "1.0.1",
+		"dependencies": {},
+		"path": "__tests__/integration/mocks/node_modules/@gov.au/_test-00",
+		"settings": {
+			"version": "1.0.0",
+			"plugins": ["@gov.au/pancake-sass", "@gov.au/pancake-json"],
+			"sass": {
+				"path": "lib/sass/_module.scss",
+				"sass-versioning": true
+			}
+		}
+	},
+	"@gov.au/_test-01": {
+		"name": "@gov.au/_test-01",
+		"version": "1.0.0",
+		"dependencies": {
+			"@gov.au/_test-02": ">=1.0.0",
+			"@gov.au/_test-00": ">=1.0.0"
+		},
+		"path": "__tests__/integration/mocks/node_modules/@gov.au/_test-01",
+		"settings": {
+			"version": "1.0.0",
+			"plugins": ["@gov.au/pancake-sass", "@gov.au/pancake-js", "@gov.au/pancake-react", "@gov.au/pancake-json"],
+			"sass": {
+				"path": "lib/sass/_module.scss",
+				"sass-versioning": true
+			},
+			"js": {
+				"path": "lib/js/module.js"
+			},
+			"react": {
+				"path": "lib/js/react.js"
+			}
+		}
+	},
+	"@gov.au/_test-02": {
+		"name": "@gov.au/_test-02",
+		"version": "1.0.0",
+		"dependencies": {},
+		"path": "__tests__/integration/mocks/node_modules/@gov.au/_test-02",
+		"settings": {
+			"version": "1.0.0",
+			"plugins": ["@gov.au/pancake-js", "@gov.au/pancake-json"],
+			"js": {
+				"path": "lib/js/module.js"
+			},
+			"sass": {
+				"path": false,
+				"sass-versioning": true
+			}
+		}
+	},
+	"@gov.au/_test-05": {
+		"name": "@gov.au/_test-05",
+		"version": "1.0.0",
+		"dependencies": {
+			"@gov.au/_test-00": ">=1.0.0"
+		},
+		"path": "__tests__/integration/mocks/node_modules/@gov.au/_test-05",
+		"settings": {
+			"version": "1.0.0",
+			"plugins": ["@gov.au/pancake-sass", "@gov.au/pancake-json"],
+			"sass": {
+				"path": "lib/sass/_module.scss",
+				"sass-versioning": true
+			}
+		}
+	},
+	"@gov.au/_test-03": {
+		"name": "@gov.au/_test-03",
+		"version": "1.0.0",
+		"dependencies": {
+			"@gov.au/_test-00": ">=1.0.0",
+			"@gov.au/_test-04": ">=1.0.0"
+		},
+		"path": "__tests__/integration/mocks/node_modules/@gov.au/_test-03",
+		"settings": {
+			"version": "1.0.0",
+			"plugins": ["@gov.au/pancake-sass", "@gov.au/pancake-react", "@gov.au/pancake-json"],
+			"sass": {
+				"path": "lib/sass/_module.scss",
+				"sass-versioning": true
+			},
+			"react": {
+				"path": "lib/js/react.js"
+			}
+		}
+	},
+	"@gov.au/_test-04": {
+		"name": "@gov.au/_test-04",
+		"version": "1.0.0",
+		"dependencies": {
+			"@gov.au/_test-00": ">=1.0.0",
+			"@gov.au/_test-05": ">=1.0.0"
+		},
+		"path": "__tests__/integration/mocks/node_modules/@gov.au/_test-04",
+		"settings": {
+			"version": "1.0.0",
+			"plugins": ["@gov.au/pancake-sass", "@gov.au/pancake-react", "@gov.au/pancake-json"],
+			"sass": {
+				"path": "lib/sass/_module.scss",
+				"sass-versioning": true
+			},
+			"react": {
+				"path": "lib/js/react.js"
+			}
+		}
+	}
+}

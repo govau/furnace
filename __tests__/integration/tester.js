@@ -21,6 +21,8 @@ const Dirsum      = require( 'dirsum' );
 const Request     = require( 'request' );
 const Querystring = require( 'querystring' );
 const AdmZip      = require( 'adm-zip' );
+const Replace     = require( 'replace-in-file' );
+
 
 
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -37,44 +39,29 @@ if(process.argv.includes('-v') || process.argv.includes('--verbose')) {
 
 
 let PASS = true;
-const zipName = `GOLD-AU`;
+const zipName = `AU-DesignSystem`;
 
 const allComponents = [
-	'core',
-	'animate',
-	'accordion',
-	'body',
-	'link-list',
-	'breadcrumbs',
-	'buttons',
-	'callout',
-	'control-input',
-	'cta-link',
-	'direction-links',
-	'footer',
-	'grid-12',
-	'header',
-	'headings',
-	'inpage-nav',
-	'keyword-list',
-	'page-alerts',
-	'progress-indicator',
-	'responsive-media',
-	'select',
-	'skip-link',
-	'tags',
-	'text-inputs'
+	'_test-00',
+	'_test-01',
+	'_test-02',
+	'_test-03',
+	'_test-04',
+	'_test-05',
 ];
 
-// Accordion is complex, breadcrumbs has lots of dependencies
-const someComponents = [ 'accordion', 'breadcrumbs' ];
+// Core and JavascriptOnly
+const testJS = [ '_test-00', '_test-02' ];
+
+// Dependencies and MoreDependencies
+const testDependencies = [ '_test-01', '_test-03' ];
 
 const TESTS = [
 	{
 		name: 'Test1: Some components minfied css/js',
 		folder: 'test-01',
 		post: {
-			components: someComponents,
+			components: testDependencies,
 			styleOutput: 'css',
 			jsOutput: 'js',
 		},
@@ -96,7 +83,7 @@ const TESTS = [
 		name: 'Test3: Some components sass/react modules',
 		folder: 'test-03',
 		post: {
-			components: someComponents,
+			components: testDependencies,
 			styleOutput: 'sassModules',
 			jsOutput: 'react',
 		},
@@ -108,6 +95,28 @@ const TESTS = [
 		folder: 'test-04',
 		post: {
 			components: allComponents,
+			styleOutput: 'css',
+			jsOutput: 'js',
+		},
+		compare: `${ zipName }/`,
+		empty: false,
+	},
+	{
+		name: 'Test5: Core only minfied css/js',
+		folder: 'test-05',
+		post: {
+			components: [ '_test-00' ],
+			styleOutput: 'css',
+			jsOutput: 'js',
+		},
+		compare: `${ zipName }/`,
+		empty: false,
+	},
+	{
+		name: 'Test6: Multiple modules no css',
+		folder: 'test-06',
+		post: {
+			components: testJS,
 			styleOutput: 'css',
 			jsOutput: 'js',
 		},
@@ -139,27 +148,19 @@ const Tester = ( ( tests ) => {
 					process.exit( 1 );
 				})
 				.then( () => {
-					// Run the test one more time to check for memory leaks
-					Test( tests[ 0 ] )
-						.then( () => {
-							Furnace( 'exit', furnaceId );
+					Furnace( 'exit', furnaceId );
 
-							if( PASS ) {
-								Log.done(`😅  All tests have passed`);
+					if( PASS ) {
+						Log.done( `😅  All tests have passed` );
 
-								process.exit( 0 );
-							}
-							else {
-								Log.done(`😳  Ouch! Some tests failed`);
+						process.exit( 0 );
+					}
+					else {
+						Log.done( `😳  Ouch! Some tests failed` );
 
-								process.exit( 1 );
-							}
-						})
-						.catch( error => {
-							Log.error( error );
-							process.exit( 1 );
-					});
-			});
+						process.exit( 1 );
+					}
+				});
 
 		})
 		.catch( error => {
@@ -186,7 +187,7 @@ const Tester = ( ( tests ) => {
  * @return {promise object}
  */
 const Test = ( test ) => {
-	Log.verbose(`Running test`);
+	Log.verbose( `Running test` );
 
 	const scriptFolder = Path.normalize( `${ __dirname }/${ test.folder }` );
 
@@ -194,7 +195,7 @@ const Test = ( test ) => {
 
 		Delete( scriptFolder )
 			.then( ()      => CopyFixtures( scriptFolder, test ) )    // copy fixtures
-			.then( ()      => ReplaceFixture( scriptFolder, test ) )  // Adds extra bits in the fixture
+			// .then( ()      => ReplaceFixture( scriptFolder, test ) )  // Adds extra bits in the fixture
 			.then( ()      => RequestZip( scriptFolder, test ) )      // now get zip and open it
 			.then( ()      => UnZip( scriptFolder, test ) )			  	  // open the zip files
 			.then( ()      => Fixture( scriptFolder, test ) )         // get hash for fixture
@@ -231,8 +232,8 @@ const Furnace = ( action, furnaceProcess = {} ) => {
 
 			// `npm run start` in base directory
 			const command = Spawn.spawn(
-				'npm',
-				[ 'run', 'start' ],
+				'node',
+				[ 'dist/index.js', '--verbose', '-j', '../__tests__/integration/mocks/uikit.json' ],
 				{
 					cwd: Path.normalize( `${ __dirname }/../../` )
 				}
@@ -258,7 +259,7 @@ const Furnace = ( action, furnaceProcess = {} ) => {
 		}
 		else {
 			furnaceProcess.kill();
-			furnaceProcess.on('close', ( code, signal ) => {
+			furnaceProcess.on( 'close', ( code, signal ) => {
 				resolve();
 			});
 		}
@@ -335,32 +336,33 @@ const CopyFixtures = ( path, settings ) => {
  * @return {Promise object}
  */
 const ReplaceFixture = ( path, settings ) => {
+	Log.verbose( 'Replacing content inside _fixture' );
 	return new Promise( ( resolve, reject ) => {
 		if( settings.empty ) {
 			resolve();
 		}
 		else {
-			// maybe in the future we have dynamic paths that depend on the system they are tested on.
+			const uikitJson = require( Path.normalize( '../../uikit.json' ) );
 
-			// Replace({
-			// 		files: [
-			// 			Path.normalize(`${ path }/_fixture/**`),
-			// 		],
-			// 		from: [
-			// 			/\[thing\]/g,
-			// 		],
-			// 		to: [
-			// 			'thing',
-			// 		],
-			// 		allowEmptyPaths: true,
-			// 		encoding: 'utf8',
-			// 	})
-			// 	.catch( error => {
-			// 		reject( error );
-			// 	})
-			// 	.then( changedFiles => {
+			Replace({
+					files: [
+						Path.normalize(`${ path }/_fixture/**`),
+					],
+					from: [
+						/\[v-core\]/g,
+					],
+					to: [
+						uikitJson[ "@gov.au/core" ].version,
+					],
+					allowEmptyPaths: true,
+					encoding: 'utf8',
+				})
+				.catch( error => {
+					reject( error );
+				})
+				.then( changedFiles => {
 					resolve();
-			// });
+			});
 		}
 	});
 };
@@ -375,7 +377,7 @@ const ReplaceFixture = ( path, settings ) => {
  * @return {Promise object}
  */
 const RequestZip = ( path, settings ) => {
-	Log.verbose( 'Requesting a zip from the furnace' );
+	Log.verbose( `[ ${ settings.folder } ] Requesting a zip from the furnace` );
 
 	return new Promise( ( resolve, reject ) => {
 

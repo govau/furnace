@@ -48,9 +48,10 @@ export const Bundle = ( data ) => {
 	// An array of promises that adds files and globs to the zip.
 	const bundle = [];
 
-	// Sass @imports for minification and sassModules, always starts with sassVersioning.
-	let cssImports  = `@import '${ Settings.get().npm.sassVersioning }';\n\n`;
-	let sassImports = `@import 'node_modules/sass-versioning/dist/_index.scss';\n\n`;
+	// Sass @imports for minification and sassModules
+	let cssImports  = '';
+	let sassImports = '';
+	const sassVersioning = `@import '${ Settings.get().npm.sassVersioning }';\n\n`;
 
 	// JS values based on the form input
 	const jsDirectory = Settings.get().uikit.jsOutput[ data.jsOutput ].directory;
@@ -61,6 +62,9 @@ export const Bundle = ( data ) => {
 
 	return new Promise( ( resolve, reject ) => {
 
+		// If core is the only module don't output css
+		let _hasSass = false;
+
 		// Iterate through components and dependencies
 		components.map( component => {
 
@@ -69,9 +73,13 @@ export const Bundle = ( data ) => {
 
 			packageJson.dependencies[ `${ Settings.get().uikit.prefix }${ component }` ] = componentJson.version;
 
+			if ( component !== 'core' && component !== '_test-00' && componentJson.settings.sass.path ) {
+				_hasSass = true;
+			}
+
 			// If the current component has javascript
 			if( componentJson['settings'][ jsDirectory ] ) {
-				const jsFile = Path.normalize( `${ Settings.get().uikit.componentLocation }/${ component }/${ componentJson[ 'settings' ][ jsDirectory ].path }` );
+				const jsFile = Path.normalize( `${ componentJson.path }/${ componentJson[ 'settings' ][ jsDirectory ].path }` );
 
 				// minifyJs was selected in the form, add the directory to the array
 				if( data.jsOutput === 'js' ) {
@@ -97,7 +105,7 @@ export const Bundle = ( data ) => {
 
 
 			// minifyCss was selected, create an @Import string
-			const sassFile = Path.normalize( `${ Settings.get().uikit.componentLocation }/${ component }/${ componentJson[ 'settings' ].sass.path }` );
+			const sassFile = Path.normalize( `${ componentJson.path }/${ componentJson[ 'settings' ].sass.path }` );
 			if( data.styleOutput === 'css' && componentJson[ 'settings' ].sass.path ) {
 				cssImports += `@import '${ sassFile }';\n`;
 			}
@@ -116,12 +124,12 @@ export const Bundle = ( data ) => {
 
 					if( dependencyJson[ 'settings' ].sass.path ){
 						cssModuleImport += `@import '` +
-						`${ `${ Settings.get().uikit.componentLocation }/${ dependency.replace('@gov.au/', '') }/${ componentJson[ 'settings' ].sass.path }` }';\n`;
+						`${ `${ dependencyJson.path }/${ dependencyJson[ 'settings' ].sass.path }` }';\n`;
 					}
 				});
 
 				// Add an @import for the current component
-				cssModuleImport += `@import '${ `${ Settings.get().uikit.componentLocation }/${ component }/${ componentJson[ 'settings' ].sass.path }` }';\n`;
+				cssModuleImport += `@import '${ `${ componentJson.path }/${ componentJson[ 'settings' ].sass.path }` }';\n`;
 
 				// Compile the CSS and add the file to the Zip
 				bundle.push(
@@ -132,8 +140,8 @@ export const Bundle = ( data ) => {
 
 
 			// sassModules was selected, create an @import for the zipFile, addGlob to zip
-			const sassDirectory = Path.normalize( sassFile ).replace('_module.scss', '');
-			if( data.styleOutput === 'sassModules' ) {
+			if( data.styleOutput === 'sassModules' && componentJson[ 'settings' ].sass.path ) {
+				const sassDirectory = Path.normalize( sassFile ).replace('_module.scss', '');
 				sassImports += `@import 'node_modules/@gov.au/${ component }/lib/sass/_module.scss';\n`;
 				bundle.push( AddGlob( `*.scss`, sassDirectory, `node_modules/@gov.au/${ component }/lib/sass/`, zipFile ) );
 			}
@@ -143,8 +151,11 @@ export const Bundle = ( data ) => {
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 		// minifyCss was selected, turn cssImports into a minified css file
-		if( data.styleOutput === 'css' ) {
+		if( data.styleOutput === 'css' && cssImports !== '' && _hasSass ) {
+			cssImports = sassVersioning + cssImports;
+
 			packageJson.pancake.css.minified = true;
+
 			bundle.push(
 				GetMinCss( cssImports )
 					.then( cssMin => AddFile( cssMin, `${ Settings.get().packageJson.pancake.css.location }${ Settings.get().packageJson.pancake.css.name }`, zipFile ) )
@@ -159,6 +170,7 @@ export const Bundle = ( data ) => {
 
 		// sassModules was selected, create the main.scss and add sass-versioning
 		if( data.styleOutput === 'sassModules' ) {
+			sassImports = sassVersioning + sassImports;
 			packageJson.pancake.sass.modules = true;
 			bundle.push(
 				ReadFile( Settings.get().npm.sassVersioning )

@@ -50,8 +50,6 @@ export const Settings = {
 		uikit: {
 			dist: Path.normalize(`${ process.cwd() }/dist/`),
 			json: {},
-			jsonLocation: 'https://raw.githubusercontent.com/govau/uikit/master/uikit.json',
-			componentLocation: 'node_modules/@gov.au',
 			prefix: '@gov.au/',
 			styleOutput: {
 				css: {
@@ -95,7 +93,7 @@ export const Settings = {
 		packageJson: {
 			name: 'furnace',
 			version: '1.0.0',
-			description: 'Furnace has smelted this project from the finest GOLD',
+			description: 'Australian Government - Design System',
 			dependencies: {},
 			pancake: {
 				'auto-save': true,

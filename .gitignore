@@ -3,23 +3,30 @@
 *.sublime-workspace
 codekit-config.json
 *.codekit
-node_modules
 .sass-cache
 .idea
 validation-report.json
 validation-status.json
 npm-debug.log
 lerna-debug.log
+uikit.json
 
 # Jest files
 dist
 coverage
 
-# Don’t commit temp test files
+# Do not commit temp test files
 __tests__/integration/*/_fixture
-__tests__/integration/*/GOLD-AU/*
-__tests__/integration/*/GOLD-AU.zip
+__tests__/integration/*/AU-DesignSystem/*
+__tests__/integration/*/AU-DesignSystem.zip
 
 # Do commit fixtures in full
 !__tests__/integration/**/fixture/**/dist/
 !__tests__/integration/**/fixture/*/node_modules/
+
+# Ignore node_modules
+node_modules/*
+
+# Keep the mock integration test files
+!__tests__/integration/mocks/node_modules/@gov.au/
+!__tests__/integration/mocks/uikit.json

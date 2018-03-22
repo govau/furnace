@@ -26,11 +26,10 @@
 		"unit-test:watch": "jest --watch --coverage",
 		"integration-test": "node __tests__/integration/tester.js",
 		"integration-test:verbose": "node __tests__/integration/tester.js --verbose",
-		"integration-test:watch": "nodemon --watch __tests__/integration --exec npm run integration-test:verbose",
-		"start": "node dist/init.js",
+		"start": "node dist/index.js",
 		"build": "babel src --out-dir dist --presets=es2015",
-		"build:start": "npm run build && node dist/init.js",
-		"build:verbose": "npm run build && node dist/init.js --verbose",
+		"build:start": "npm run build && node dist/index.js",
+		"build:verbose": "npm run build && node dist/index.js --verbose",
 		"watch": "nodemon --watch src --exec npm run build:start",
 		"watch:verbose": "nodemon --watch src --exec npm run build:verbose"
 	},
@@ -69,7 +68,8 @@
 		"postcss": "^6.0.14",
 		"request": "^2.83.0",
 		"sass-versioning": "^0.3.0",
-		"uglify-js": "^3.1.9"
+		"uglify-js": "^3.1.9",
+		"replace-in-file": "^3.0.0"
 	},
 	"devDependencies": {
 		"adm-zip": "^0.4.7",

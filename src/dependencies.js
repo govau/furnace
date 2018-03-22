@@ -29,7 +29,7 @@ import { Settings } from './settings';
  */
 export const GetDependencies = (
 	components,
-	result = [ 'core' ],
+	result = [],
 	json = Settings.get().uikit.json,
 	prefix = Settings.get().uikit.prefix
 ) => {
