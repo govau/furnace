@@ -16,6 +16,7 @@
 import Express    from 'express';
 import BodyParser from 'body-parser';
 import Path       from 'path';
+import CFonts     from 'cfonts';
 
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -68,5 +69,10 @@ Server
 
 	// Start the express server
 	.listen( Settings.get().server.port, ( request, response ) => {
+		CFonts.say( '- Furnace -', {
+			font: 'chrome',
+			align:  'center',
+			colors: [ 'red', 'yellow' ],
+		});
 		Log.welcome( `Furnace is ready to melt GOLD on port ${ Settings.get().server.port }` );
 	});
