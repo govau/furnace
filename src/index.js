@@ -72,7 +72,11 @@ Server
 		CFonts.say( '- Furnace -', {
 			font: 'chrome',
 			align:  'center',
-			colors: [ 'red', 'yellow' ],
+			colors: [ 'red', 'yellow', 'blue' ],
 		});
-		Log.welcome( `Furnace is ready to melt GOLD on port ${ Settings.get().server.port }` );
+		CFonts.say( `Furnace is ready to melt GOLD on port ${ Settings.get().server.port }`, {
+			font:  'console',
+			align: 'center',
+			colors: [ 'whiteBright' ],
+		});
 	});
