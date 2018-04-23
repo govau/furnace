@@ -5,7 +5,7 @@ instances: 1
 env:
   NODE_MODULES_CACHE: false
 path: ./
-command: node dist/index.js
+command: node ./node_modules/.bin/pancake && node dist/index.js
 
 applications:
 - name: furnace
