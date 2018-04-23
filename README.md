@@ -10,7 +10,7 @@
 ```shell
 npm install
 ```
-Then run `npm start` or `npm watch` to start the server.
+Then run `npm run build && npm start` or `npm watch` to start the server.
 
 
 ## Getting started
