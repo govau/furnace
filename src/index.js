@@ -77,6 +77,6 @@ Server
 		CFonts.say( `Furnace is ready to melt GOLD on port ${ Settings.get().server.port }`, {
 			font:  'console',
 			align: 'center',
-			colors: [ 'whiteBright' ],
+			colors: [ 'white' ],
 		});
 	});
