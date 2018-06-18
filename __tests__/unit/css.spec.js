@@ -22,7 +22,7 @@ import { GetMinCss, Autoprefix } from '../../src/css';
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
 test( 'GetMinCss: should minify and autoprefix a scss string', () => {
 	const sass = `$red: red; .card{ background-color: $red; box-shadow: 10px 10px 10px #000; }`;
-	const css = `.card{background-color:red;-webkit-box-shadow:10px 10px 10px #000;box-shadow:10px 10px 10px #000}\n`;
+	const css = `.card{background-color:red;-webkit-box-shadow:10px 10px 10px #000;box-shadow:10px 10px 10px #000}`;
 
 	GetMinCss( sass ).then( data => expect( data ).toBe( css ) );
 
@@ -32,7 +32,7 @@ test( 'GetMinCss: should minify and autoprefix a scss string', () => {
 test( 'GetMinCss: should throw an error', () => {
 
 	GetMinCss( 'asasasdad' )
-		.catch( error => expect( error.message ).toBe( `Invalid CSS after "asasasdad": expected "{", was ""` ) );
+		.catch( error => expect( error.message ).toBe( `expected \"{\".\n  stdin 1:10  root stylesheet` ) );
 });
 
 
