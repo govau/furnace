@@ -82,7 +82,7 @@
 		"nodemon": "^1.17.5"
 	},
 	"engines": {
-		"node": "~9"
+		"node": "~10"
 	},
 	"jest": {
 		"testEnvironment": "node",
