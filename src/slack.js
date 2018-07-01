@@ -19,7 +19,7 @@ const envVars = process.env.VCAP_SERVICES ? JSON.parse( process.env.VCAP_SERVICE
 const IncomingWebhook = require('@slack/client').IncomingWebhook;
 
 
-export const SendMessage = ( data, URL, isPrivate = true ) => {
+export const SendMessage = ( data, URL, isPrivateChannel = true ) => {
 	Log.verbose( `Sending slack message to ${ URL }` );
 
 	return new Promise( ( resolve, reject ) => {
@@ -27,14 +27,14 @@ export const SendMessage = ( data, URL, isPrivate = true ) => {
 		if( URL && URL.length > 0 ) {
 			const Webhook = new IncomingWebhook( URL );
 
-			const clientInfo = isPrivate
-				? {}
-				: {
+			const clientInfo = isPrivateChannel
+				? {
 						'title': `Client`,
 						'value': '' +
 							'_IP_: `' + data.ip + '`',
 						'short': false,
-					};
+					}
+				? {};
 
 			const message = {
 				text: `*Furnace*:\n\n`,
@@ -93,7 +93,7 @@ export const SlackMessage = ( messageData ) => {
 
 	return new Promise( ( resolve, reject ) => {
 
-		CHANNELS.forEach( CHANNEL => allMessages.push( SendMessage = ( messageData, CHANNEL.URL, CHANNEL.isPrivate ) ) );
+		CHANNELS.forEach( CHANNEL => allMessages.push( SendMessage = ( messageData, CHANNEL.URL, CHANNEL.isPrivateChannel ) ) );
 
 		Promise.all( allMessages )
 			.catch( error => reject(error) )
