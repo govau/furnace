@@ -88,6 +88,9 @@ const SendMessage = ( data, URL, isPrivateChannel = true ) => {
 
 
 export const SlackMessage = ( messageData ) => {
+	console.log( envVars );
+	console.log( envVars[ 'user-provided' ][ 0 ].credentials );
+	console.log( envVars[ 'user-provided' ][ 0 ].credentials.SLACK_WEBHOOKS );
 	const CHANNELS = envVars[ 'user-provided' ]
 		? envVars[ 'user-provided' ][ 0 ].credentials.SLACK_WEBHOOKS
 		: [];
