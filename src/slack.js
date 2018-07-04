@@ -16,23 +16,31 @@ import { Settings }           from './settings';
 import { Log }                from './helper';
 
 const envVars = process.env.VCAP_SERVICES ? JSON.parse( process.env.VCAP_SERVICES ) : {};
-const IncomingWebhook = require('@slack/client').IncomingWebhook;
-const URL             = envVars['user-provided'] ? envVars['user-provided'][ 0 ].credentials.SLACK_WEBHOOK : '';
+const IncomingWebhook = require( '@slack/client' ).IncomingWebhook;
 
 
-export const SlackMessage = ( messageData ) => {
-	Log.verbose( `Sending slack message` );
+const SendMessage = ( data, URL, isPrivateChannel = true ) => {
+	Log.verbose( `Sending slack message to ${ URL }` );
 
 	return new Promise( ( resolve, reject ) => {
 
 		if( URL && URL.length > 0 ) {
 			const Webhook = new IncomingWebhook( URL );
 
+			const clientInfo = isPrivateChannel
+				? {
+						'title': 'Client',
+						'value': '' +
+							'_IP_: `' + data.ip + '`',
+						'short': false,
+					}
+				: {};
+
 			const message = {
 				text: `*Furnace*:\n\n`,
 				attachments: [{
-					'fallback': `_Inspect the GOLD nuggets?_`,
-					'pretext': `_Inspect the GOLD nuggets?_`,
+					'fallback': '_Inspect the GOLD nuggets?_',
+					'pretext': '_Inspect the GOLD nuggets?_',
 					'color': `#ff4500`,
 					'mrkdwn_in': [
 						`text`,
@@ -41,27 +49,22 @@ export const SlackMessage = ( messageData ) => {
 					],
 					'fields': [
 						{
-							'title': `Components`,
+							'title': 'Components',
 							'value': '' +
-								'_Selected_: `' + messageData.components.length + '`\n' +
-								'_Modules_: `' + messageData.components.join( '` , `') + '`\n\n\n',
+								'_Selected_: `' + data.components.length + '`\n' +
+								'_Modules_: `' + data.components.join( '` , `') + '`\n\n\n',
 							'short': false,
 						},
 						{
-							'title': `Options`,
+							'title': 'Options',
 							'value': '' +
-								'_JS Output_: `' + messageData.jsOutput + '`\n' +
-								'_Style Output_: `' + messageData.styleOutput + '`\n\n\n',
+								'_JS Output_: `' + data.jsOutput + '`\n' +
+								'_Style Output_: `' + data.styleOutput + '`\n\n\n',
 							'short': false,
 						},
-						{
-							'title': `Client`,
-							'value': '' +
-								'_IP_: `' + messageData.ip + '`',
-							'short': false,
-						}
+						clientInfo,
 					],
-					'footer': `:gold:`,
+					'footer': ':gold:',
 				}]
 			}
 
@@ -70,8 +73,8 @@ export const SlackMessage = ( messageData ) => {
 					reject( error );
 				}
 				else {
-					Log.verbose(`Slack received: ${ statusCode }`);
-					Log.verbose(`Slack message sent:\n ${ message }`);
+					Log.verbose( `Slack received: ${ statusCode }` );
+					Log.verbose( `Slack message sent:\n ${ message }` );
 					resolve();
 				}
 			});
@@ -80,5 +83,24 @@ export const SlackMessage = ( messageData ) => {
 			Log.message( `Failed to send slack message, SLACK_WEBHOOK (${ URL }) environment variable not found.` );
 			resolve();
 		}
-	})
+	});
+};
+
+
+export const SlackMessage = ( messageData ) => {
+	const CHANNELS = envVars[ 'user-provided' ]
+		? envVars[ 'user-provided' ][ 0 ].credentials.SLACK_WEBHOOKS
+		: [];
+	const allMessages = [];
+
+	return new Promise( ( resolve, reject ) => {
+
+		CHANNELS.forEach( CHANNEL => allMessages.push(
+			SendMessage( messageData, CHANNEL.URL, CHANNEL.isPrivateChannel )
+		) );
+
+		Promise.all( allMessages )
+			.catch( error => reject(error) )
+			.then( resolve );
+	});
 }
