@@ -80,7 +80,7 @@ const SendMessage = ( data, URL, isPrivateChannel = true ) => {
 			});
 		}
 		else {
-			Log.message( `Failed to send slack message, SLACK_WEBHOOK (${ URL }) environment variable not found.` );
+			Log.message( `Failed to send slack message, SLACK_WEBHOOKS (${ URL }) environment variable not found.` );
 			resolve();
 		}
 	});
@@ -88,18 +88,19 @@ const SendMessage = ( data, URL, isPrivateChannel = true ) => {
 
 
 export const SlackMessage = ( messageData ) => {
-	console.log( envVars );
-	console.log( envVars[ 'user-provided' ][ 0 ].credentials );
-	console.log( envVars[ 'user-provided' ][ 0 ].credentials.SLACK_WEBHOOKS );
 	const CHANNELS = envVars[ 'user-provided' ]
 		? envVars[ 'user-provided' ][ 0 ].credentials.SLACK_WEBHOOKS
 		: [];
 	const allMessages = [];
 
+	console.log( CHANNELS );
+	console.log( CHANNELS[ 0 ].url );
+	console.log( CHANNELS[ 1 ].url );
+
 	return new Promise( ( resolve, reject ) => {
 
 		CHANNELS.forEach( CHANNEL => allMessages.push(
-			SendMessage( messageData, CHANNEL.URL, CHANNEL.isPrivateChannel )
+			SendMessage( messageData, CHANNEL.url, CHANNEL.isPrivateChannel )
 		) );
 
 		Promise.all( allMessages )
