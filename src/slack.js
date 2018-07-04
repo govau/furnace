@@ -93,10 +93,6 @@ export const SlackMessage = ( messageData ) => {
 		: [];
 	const allMessages = [];
 
-	console.log( CHANNELS );
-	console.log( CHANNELS[ 0 ].url );
-	console.log( CHANNELS[ 1 ].url );
-
 	return new Promise( ( resolve, reject ) => {
 
 		CHANNELS.forEach( CHANNEL => allMessages.push(
