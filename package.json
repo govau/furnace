@@ -21,7 +21,7 @@
 	],
 	"scripts": {
 		"test": "npm run build && npm run unit-test && npm run integration-test",
-		"unit-test": "jest",
+		"unit-test": "jest --forceExit",
 		"unit-test:detail": "jest --coverage",
 		"unit-test:watch": "jest --watch --coverage",
 		"integration-test": "node __tests__/integration/tester.js",
@@ -54,8 +54,8 @@
 		"@gov.au/page-alerts": "latest",
 		"@gov.au/progress-indicator": "latest",
 		"@gov.au/responsive-media": "latest",
-		"@gov.au/side-nav": "latest",
 		"@gov.au/select": "latest",
+		"@gov.au/side-nav": "latest",
 		"@gov.au/skip-link": "latest",
 		"@gov.au/tags": "latest",
 		"@gov.au/text-inputs": "latest",
@@ -66,10 +66,10 @@
 		"body-parser": "^1.18.2",
 		"cfonts": "^2.0.1",
 		"express": "^4.16.1",
+		"node-sass": "^4.9.2",
 		"postcss": "^6.0.14",
 		"replace-in-file": "^3.0.0",
 		"request": "^2.87.0",
-		"sass": "^1.6.0",
 		"sass-versioning": "^0.3.0",
 		"uglify-js": "^3.1.9"
 	},
@@ -79,7 +79,7 @@
 		"copy-dir": "^0.3.0",
 		"del": "^3.0.0",
 		"dirsum": "^0.1.1",
-		"jest-cli": "^23.1.0",
+		"jest-cli": "^23.4.2",
 		"nodemon": "^1.17.5"
 	},
 	"engines": {
