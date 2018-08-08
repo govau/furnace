@@ -21,7 +21,7 @@
 	],
 	"scripts": {
 		"test": "npm run build && npm run unit-test && npm run integration-test",
-		"unit-test": "jest",
+		"unit-test": "jest --forceExit",
 		"unit-test:detail": "jest --coverage",
 		"unit-test:watch": "jest --watch --coverage",
 		"integration-test": "node __tests__/integration/tester.js",
@@ -79,7 +79,7 @@
 		"copy-dir": "^0.3.0",
 		"del": "^3.0.0",
 		"dirsum": "^0.1.1",
-		"jest-cli": "^23.1.0",
+		"jest-cli": "^23.4.2",
 		"nodemon": "^1.17.5"
 	},
 	"engines": {
