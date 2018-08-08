@@ -70,7 +70,7 @@ export const Uglify = ( js ) => {
 	return new Promise( ( resolve, reject ) => {
 
 		try {
-			const minJs = UglifyJs.minify( js );
+			const minJs = UglifyJs.minify( js , { ie8: true } );
 
 			if( minJs.error ) {
 				reject( minJs.error );
