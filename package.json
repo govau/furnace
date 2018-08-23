@@ -21,7 +21,7 @@
 	],
 	"scripts": {
 		"test": "npm run build && npm run unit-test && npm run integration-test",
-		"unit-test": "jest --forceExit",
+		"unit-test": "jest",
 		"unit-test:detail": "jest --coverage",
 		"unit-test:watch": "jest --watch --coverage",
 		"integration-test": "node __tests__/integration/tester.js",
@@ -51,6 +51,7 @@
 		"@gov.au/inpage-nav": "latest",
 		"@gov.au/keyword-list": "latest",
 		"@gov.au/link-list": "latest",
+		"@gov.au/main-nav": "latest",
 		"@gov.au/page-alerts": "latest",
 		"@gov.au/progress-indicator": "latest",
 		"@gov.au/responsive-media": "latest",
@@ -79,7 +80,7 @@
 		"copy-dir": "^0.3.0",
 		"del": "^3.0.0",
 		"dirsum": "^0.1.1",
-		"jest-cli": "^23.4.2",
+		"jest-cli": "^23.5.0",
 		"nodemon": "^1.17.5"
 	},
 	"engines": {
