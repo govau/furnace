@@ -37,7 +37,7 @@ test('Bundle: css minified and jsminified.', () => {
 		jsOutput: 'js',
 	};
 
-	Bundle( data )
+	return Bundle( data )
 		.then( data => expect( data._entriesCount ).toEqual( 3 ) );
 
 });
@@ -50,7 +50,7 @@ test('Bundle: sassModules and react modules.', () => {
 		jsOutput: 'react',
 	};
 
-	Bundle( data )
+	return Bundle( data )
 		.then( data => expect( data._entriesCount ).toEqual( 21 ) );
 
 });
@@ -64,7 +64,7 @@ test('Bundle: cssModules and jsModules with dependencies.', () => {
 		jsOutput: 'jsModules',
 	};
 
-	Bundle( data )
+	return Bundle( data )
 		.then( data => expect( data._entriesCount ).toEqual( 6 ) );
 
 });
