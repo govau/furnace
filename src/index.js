@@ -25,7 +25,6 @@ import CFonts     from 'cfonts';
 import { Log }        from './helper';
 import { Settings }   from './settings';
 import { HandlePost } from './prepare';
-import { Fetch }      from './fetch';
 
 
 // Check if the user is in verbose mode
@@ -74,7 +73,7 @@ Server
 			align:  'center',
 			colors: [ 'red', 'yellow', 'blue' ],
 		});
-		CFonts.say( `Furnace is ready to melt GOLD on port ${ Settings.get().server.port }`, {
+		CFonts.say( `Furnace is ready to melt GOLD on|https://localhost:${ Settings.get().server.port }/furnace`, {
 			font:  'console',
 			align: 'center',
 			colors: [ 'white' ],
