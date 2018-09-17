@@ -39,3 +39,23 @@ An `array` of components that relates to the currently live components in the [u
 - __`js`__: js minified
 - __`jsModules`__: js modules for each component
 - __`react`__: react modules for each component
+
+
+# Testing
+
+To test that the furnace is working run `npm run test`. This runs a unit test against the functions making sure the output is correct. It also runs an integration test making sure that a mock zip file is downloaded and has the correct output.
+
+You can also manually test the furnace by sending a POST to the local instance.
+
+- Install the dependencies `npm install`
+- Starting the furnace `npm run watch`
+- Send a POST to the furnace while it is running using `curl`:
+
+```shell
+curl -d "components=accordion&components=breadcrumbs&styleOutput=css&jsOutput=js" http://localhost:8080/furnace >> designsystem.zip
+```
+
+
+# Changelog
+
+- v1.0.0 - Initial version of the furnace
