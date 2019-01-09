@@ -44,8 +44,8 @@ export const HandlePost = ( request, response ) => {
 
 	// Format the data so that it's in an array
 	const components = typeof data.components === 'string' ? [ data.components ] : data.components;
-	const styleOutput = Settings.get().uikit.styleOutput[ data.styleOutput ].option;
-	const jsOutput = Settings.get().uikit.jsOutput[ data.jsOutput ].option;
+	const styleOutput = Settings.get().agds.styleOutput[ data.styleOutput ].option;
+	const jsOutput = Settings.get().agds.jsOutput[ data.jsOutput ].option;
 
 	Log.message( `${ components.length } components: ${ components.join(', ') }` );
 	Log.message( `Style output: ${ data.styleOutput }` );

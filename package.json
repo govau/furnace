@@ -125,7 +125,7 @@
 		"json": {
 			"enable": true,
 			"location": "./",
-			"name": "uikit"
+			"name": "design-system-components"
 		}
 	}
 }

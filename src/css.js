@@ -59,7 +59,7 @@ export const Sassify = ( scss ) => {
 
 	return new Promise( ( resolve, reject ) => {
 
-		// Run node-sass with uikit helper.js settings
+		// Run node-sass with agds helper.js settings
 		Sass.render({
 			data: scss,
 			indentType: 'tab',
@@ -90,7 +90,7 @@ export const Autoprefix = ( css ) => {
 
 	return new Promise( ( resolve, reject ) => {
 
-		// Run autoprefixer with uikit helper.js settings
+		// Run autoprefixer with agds helper.js settings
 		Postcss([ Autoprefixer({
 			browsers: ['last 2 versions', 'ie 8', 'ie 9', 'ie 10']
 		}) ])

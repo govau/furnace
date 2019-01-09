@@ -28,7 +28,7 @@ Once the server is started it can now take `POST` requests at the URL [`http://l
 The above `POST` would return a zip file containing minified `css` and `js` for all of the dependencies of `accordion` and `breadcrumbs`.
 
 ### `components` 
-An `array` of components that relates to the currently live components in the [uikit](https://github.com/govau/uikit/tree/master/packages).
+An `array` of components that relates to the currently live components in the [GOV.AU Design System Components](https://github.com/govau/design-system-components/tree/master/packages).
 
 ### `styleOutput`
 - __`css`__: css minified

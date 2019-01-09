@@ -18,11 +18,11 @@ import { Settings } from '../../src/settings';
 
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
-// uikit.json injection in Settings
+// design-system-components.json injection in Settings
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
-const uikitJson        = require( './mocks/uikit.json' );
+const agdsJson        = require( './mocks/design-system-components.json' );
 const newSettings      = Settings.get();
-newSettings.uikit.json = uikitJson;
+newSettings.design-system-components.json = agdsJson;
 Settings.set( newSettings );
 
 
