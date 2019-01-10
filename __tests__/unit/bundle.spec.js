@@ -22,7 +22,7 @@ import { Settings } from '../../src/settings';
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
 const audsJson        = require( './mocks/design-system-components.json' );
 const newSettings      = Settings.get();
-newSettings.design-system-components.json = agdsJson;
+newSettings.design-system-components.json = audsJson;
 Settings.set( newSettings );
 
 
