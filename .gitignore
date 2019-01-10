@@ -29,4 +29,5 @@ node_modules/*
 
 # Keep the mock integration test files
 !__tests__/integration/mocks/node_modules/@gov.au/
+!__tests__/unit/mocks/auds.json
 !__tests__/integration/mocks/auds.json
