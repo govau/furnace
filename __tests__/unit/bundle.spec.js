@@ -20,7 +20,7 @@ import { Settings } from '../../src/settings';
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
 // design-system-components.json injection in Settings
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
-const agdsJson        = require( './mocks/design-system-components.json' );
+const audsJson        = require( './mocks/design-system-components.json' );
 const newSettings      = Settings.get();
 newSettings.design-system-components.json = agdsJson;
 Settings.set( newSettings );
