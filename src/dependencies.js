@@ -22,7 +22,7 @@ import { Settings } from './settings';
  *
  * @param components {array}  - Components to look for dependencies on
  * @param result     {array}  - Array where we populate the dependencies, optional, default: [ 'core' ]
- * @param json       {object} - Object that contains the agds depedencies
+ * @param json       {object} - Object that contains the auds depedencies
  * @param prefix     {string} - Prefix before the component used in the dependency lookup
  *
  * @return            {array} - The components and dependencies found
@@ -30,8 +30,8 @@ import { Settings } from './settings';
 export const GetDependencies = (
 	components,
 	result = [],
-	json = Settings.get().design-system-components.json,
-	prefix = Settings.get().agds.prefix
+	json = Settings.get().auds.json,
+	prefix = Settings.get().auds.prefix
 ) => {
 	Log.verbose( `Running GetDependencies`);
 

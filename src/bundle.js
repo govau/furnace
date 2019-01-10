@@ -54,7 +54,7 @@ export const Bundle = ( data ) => {
 	const sassVersioning = `@import '${ Settings.get().npm.sassVersioning }';\n\n`;
 
 	// JS values based on the form input
-	const jsDirectory = Settings.get().agds.jsOutput[ data.jsOutput ].directory;
+	const jsDirectory = Settings.get().auds.jsOutput[ data.jsOutput ].directory;
 	const jsMin = [];
 
 	// We clone the default so we can make changes
@@ -69,9 +69,9 @@ export const Bundle = ( data ) => {
 		components.map( component => {
 
 			// The design-system-components.json object for the current component
-			const componentJson = Settings.get().design-system-components.json[`${ Settings.get().agds.prefix }${ component }`];
+			const componentJson = Settings.get().auds.json[`${ Settings.get().auds.prefix }${ component }`];
 
-			packageJson.dependencies[ `${ Settings.get().agds.prefix }${ component }` ] = componentJson.version;
+			packageJson.dependencies[ `${ Settings.get().auds.prefix }${ component }` ] = componentJson.version;
 
 			if ( component !== 'core' && component !== '_test-00' && componentJson.settings.sass.path ) {
 				_hasSass = true;
@@ -120,7 +120,7 @@ export const Bundle = ( data ) => {
 
 				// Add an @import for each dependency
 				Object.keys( dependencies ).map( dependency => {
-					let dependencyJson = Settings.get().design-system-components.json[ dependency ];
+					let dependencyJson = Settings.get().auds.json[ dependency ];
 
 					if( dependencyJson[ 'settings' ].sass.path ){
 						cssModuleImport += `@import '` +

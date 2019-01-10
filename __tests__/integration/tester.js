@@ -342,7 +342,7 @@ const ReplaceFixture = ( path, settings ) => {
 			resolve();
 		}
 		else {
-			const agdsJson = require( Path.normalize( '../../design-system-components.json' ) );
+			const audsJson = require( Path.normalize( '../../design-system-components.json' ) );
 
 			Replace({
 					files: [
@@ -352,7 +352,7 @@ const ReplaceFixture = ( path, settings ) => {
 						/\[v-core\]/g,
 					],
 					to: [
-						agdsJson[ "@gov.au/core" ].version,
+						audsJson[ "@gov.au/core" ].version,
 					],
 					allowEmptyPaths: true,
 					encoding: 'utf8',

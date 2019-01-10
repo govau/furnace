@@ -43,9 +43,9 @@ if( process.argv.includes('-j') || process.argv.includes('--json') ) {
 	}
 }
 
-const agdsJson = require( Path.normalize( jsonLocation ) );
+const audsJson = require( Path.normalize( jsonLocation ) );
 const newSettings = Settings.get();
-newSettings.design-system-components.json = agdsJson;
+newSettings.auds.json = audsJson;
 Settings.set( newSettings );
 
 
