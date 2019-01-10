@@ -46,7 +46,7 @@ export const Settings = {
 		npm: {
 			sassVersioning: Path.normalize(`node_modules/sass-versioning/dist/_index.scss`),
 		},
-		uikit: {
+		auds: {
 			dist: Path.normalize(`${ process.cwd() }/dist/`),
 			json: {},
 			prefix: '@gov.au/',

@@ -233,7 +233,7 @@ const Furnace = ( action, furnaceProcess = {} ) => {
 			// `npm run start` in base directory
 			const command = Spawn.spawn(
 				'node',
-				[ 'dist/index.js', '--verbose', '-j', '../__tests__/integration/mocks/uikit.json' ],
+				[ 'dist/index.js', '--verbose', '-j', '../__tests__/integration/mocks/auds.json' ],
 				{
 					cwd: Path.normalize( `${ __dirname }/../../` )
 				}
@@ -342,7 +342,7 @@ const ReplaceFixture = ( path, settings ) => {
 			resolve();
 		}
 		else {
-			const uikitJson = require( Path.normalize( '../../uikit.json' ) );
+			const audsJson = require( Path.normalize( '../../auds.json' ) );
 
 			Replace({
 					files: [
@@ -352,7 +352,7 @@ const ReplaceFixture = ( path, settings ) => {
 						/\[v-core\]/g,
 					],
 					to: [
-						uikitJson[ "@gov.au/core" ].version,
+						audsJson[ "@gov.au/core" ].version,
 					],
 					allowEmptyPaths: true,
 					encoding: 'utf8',

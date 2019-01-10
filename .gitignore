@@ -9,7 +9,7 @@ validation-report.json
 validation-status.json
 npm-debug.log
 lerna-debug.log
-uikit.json
+auds.json
 
 # Jest files
 dist
@@ -29,4 +29,5 @@ node_modules/*
 
 # Keep the mock integration test files
 !__tests__/integration/mocks/node_modules/@gov.au/
-!__tests__/integration/mocks/uikit.json
+!__tests__/unit/mocks/auds.json
+!__tests__/integration/mocks/auds.json

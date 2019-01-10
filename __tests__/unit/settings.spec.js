@@ -34,7 +34,7 @@ test('Settings.get() - The default settings are correct', () => {
 		npm: {
 			sassVersioning: Path.normalize(`node_modules/sass-versioning/dist/_index.scss`),
 		},
-		uikit: {
+		auds: {
 			dist: Path.normalize(`${ process.cwd() }/dist/`),
 			json: {},
 			prefix: '@gov.au/',
@@ -132,7 +132,7 @@ test('Settings.set() - Not setting anything will merge default correctly', () =>
 		npm: {
 			sassVersioning: Path.normalize(`node_modules/sass-versioning/dist/_index.scss`),
 		},
-		uikit: {
+		auds: {
 			dist: Path.normalize(`${ process.cwd() }/dist/`),
 			json: {},
 			prefix: '@gov.au/',
@@ -230,7 +230,7 @@ test('Settings.set() - Set settings correctly', () => {
 	newSettings.folder.cwd = 'test';
 	newSettings.server.root = 'test';
 	newSettings.npm.sassVersioning = 'test';
-	newSettings.uikit.abc = 'test';
+	newSettings.auds.abc = 'test';
 
 	const settings = {
 		folder: {
@@ -245,7 +245,7 @@ test('Settings.set() - Set settings correctly', () => {
 		npm: {
 			sassVersioning: 'test',
 		},
-		uikit: {
+		auds: {
 			abc: 'test',
 			dist: Path.normalize(`${ process.cwd() }/dist/`),
 			json: {},

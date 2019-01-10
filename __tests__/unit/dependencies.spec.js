@@ -18,11 +18,11 @@ import { Settings } from '../../src/settings';
 
 
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
-// uikit.json injection in Settings
+// auds.json injection in Settings
 // -------------------------------------------------------------------------------------------------------------------------------------------------------------
-const uikitJson        = require( './mocks/uikit.json' );
-const newSettings      = Settings.get();
-newSettings.uikit.json = uikitJson;
+const audsJson        = require( './mocks/auds.json' );
+const newSettings     = Settings.get();
+newSettings.auds.json = audsJson;
 Settings.set( newSettings );
 
 
@@ -77,7 +77,7 @@ test( 'GetDependencies: should fail as there is no component called `oisjdoioioj
 	GetDependencies( componentsBefore );
 
 	expect( console.error.mock.calls.length ).toBe( 1 );
-	expect( console.error.mock.calls[0][0] ).toBe(` 🔥 🔥        \u001B[31mERROR:   Component @gov.au/oisjdoioioj not found in uikit.json\u001b[39m`);
+	expect( console.error.mock.calls[0][0] ).toBe(` 🔥 🔥        \u001B[31mERROR:   Component @gov.au/oisjdoioioj not found in auds.json\u001b[39m`);
 
 });
 

@@ -33,8 +33,8 @@ if( process.argv.includes('-v') || process.argv.includes('--verbose') ) {
 }
 
 
-// Get the uikit.json and apply it to the Settings object
-let jsonLocation =  '../uikit.json';
+// Get the auds.json and apply it to the Settings object
+let jsonLocation =  '../auds.json';
 if( process.argv.includes('-j') || process.argv.includes('--json') ) {
 	let index = process.argv.indexOf( '-j' ) ||  process.argv.indexOf( '-json' );
 	const tempJsonLocation = process.argv[ index + 1 ];
@@ -43,9 +43,9 @@ if( process.argv.includes('-j') || process.argv.includes('--json') ) {
 	}
 }
 
-const uikitJson = require( Path.normalize( jsonLocation ) );
+const audsJson = require( Path.normalize( jsonLocation ) );
 const newSettings = Settings.get();
-newSettings.uikit.json = uikitJson;
+newSettings.auds.json = audsJson;
 Settings.set( newSettings );
 
 

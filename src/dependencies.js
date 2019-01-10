@@ -22,7 +22,7 @@ import { Settings } from './settings';
  *
  * @param components {array}  - Components to look for dependencies on
  * @param result     {array}  - Array where we populate the dependencies, optional, default: [ 'core' ]
- * @param json       {object} - Object that contains the uikit depedencies
+ * @param json       {object} - Object that contains the auds depedencies
  * @param prefix     {string} - Prefix before the component used in the dependency lookup
  *
  * @return            {array} - The components and dependencies found
@@ -30,8 +30,8 @@ import { Settings } from './settings';
 export const GetDependencies = (
 	components,
 	result = [],
-	json = Settings.get().uikit.json,
-	prefix = Settings.get().uikit.prefix
+	json = Settings.get().auds.json,
+	prefix = Settings.get().auds.prefix
 ) => {
 	Log.verbose( `Running GetDependencies`);
 
@@ -54,7 +54,7 @@ export const GetDependencies = (
 
 		}
 		else {
-			Log.error( `Component ${ component } not found in uikit.json`);
+			Log.error( `Component ${ component } not found in auds.json`);
 		}
 
 	});
