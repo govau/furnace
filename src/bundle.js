@@ -68,7 +68,7 @@ export const Bundle = ( data ) => {
 		// Iterate through components and dependencies
 		components.map( component => {
 
-			// The design-system-components.json object for the current component
+			// The auds.json object for the current component
 			const componentJson = Settings.get().auds.json[`${ Settings.get().auds.prefix }${ component }`];
 
 			packageJson.dependencies[ `${ Settings.get().auds.prefix }${ component }` ] = componentJson.version;

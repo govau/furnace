@@ -33,8 +33,8 @@ if( process.argv.includes('-v') || process.argv.includes('--verbose') ) {
 }
 
 
-// Get the design-system-components.json and apply it to the Settings object
-let jsonLocation =  '../design-system-components.json';
+// Get the auds.json and apply it to the Settings object
+let jsonLocation =  '../auds.json';
 if( process.argv.includes('-j') || process.argv.includes('--json') ) {
 	let index = process.argv.indexOf( '-j' ) ||  process.argv.indexOf( '-json' );
 	const tempJsonLocation = process.argv[ index + 1 ];

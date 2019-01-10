@@ -54,7 +54,7 @@ export const GetDependencies = (
 
 		}
 		else {
-			Log.error( `Component ${ component } not found in design-system-components.json`);
+			Log.error( `Component ${ component } not found in auds.json`);
 		}
 
 	});
