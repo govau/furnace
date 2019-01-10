@@ -125,7 +125,7 @@
 		"json": {
 			"enable": true,
 			"location": "./",
-			"name": "design-system-components"
+			"name": "auds"
 		}
 	}
 }
