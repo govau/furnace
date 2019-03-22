@@ -49,6 +49,5 @@ test('GetMinJs: should error when has invalid js', () => {
 	];
 
 	return GetMinJs( jsFiles )
-		.catch( error =>  expect( error.message ).toBe( `Unexpected token punc «;», expected punc «,»` ) );
-
+		.catch( error =>  expect( error.message ).toBe( `Unexpected token: punc «;», expected: punc «,»` ) );
 });
