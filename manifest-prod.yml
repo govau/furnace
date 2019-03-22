@@ -1,7 +1,7 @@
 ---
 buildpack: nodejs_buildpack
-memory: 512M
-instances: 1
+memory: 128M
+instances: 2
 env:
   NODE_MODULES_CACHE: false
 path: ./
