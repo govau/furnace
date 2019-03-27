@@ -95,7 +95,7 @@ test('Settings.get() - The default settings are correct', () => {
 						'ie 10'
 					],
 					location: 'css/',
-					name: 'furnace.min.css'
+					name: 'designsystem.min.css'
 				},
 				sass: {
 					location: './',
@@ -104,7 +104,7 @@ test('Settings.get() - The default settings are correct', () => {
 				js: {
 					minified: false,
 					location: 'js/',
-					name: 'furnace.min.js'
+					name: 'designsystem.min.js'
 				},
 				react: {
 					location: 'react/'
@@ -193,7 +193,7 @@ test('Settings.set() - Not setting anything will merge default correctly', () =>
 						'ie 10'
 					],
 					location: 'css/',
-					name: 'furnace.min.css'
+					name: 'designsystem.min.css'
 				},
 				sass: {
 					location: './',
@@ -202,7 +202,7 @@ test('Settings.set() - Not setting anything will merge default correctly', () =>
 				js: {
 					minified: false,
 					location: 'js/',
-					name: 'furnace.min.js'
+					name: 'designsystem.min.js'
 				},
 				react: {
 					location: 'react/'
@@ -307,7 +307,7 @@ test('Settings.set() - Set settings correctly', () => {
 						'ie 10'
 					],
 					location: 'css/',
-					name: 'furnace.min.css'
+					name: 'designsystem.min.css'
 				},
 				sass: {
 					location: './',
@@ -316,7 +316,7 @@ test('Settings.set() - Set settings correctly', () => {
 				js: {
 					minified: false,
 					location: 'js/',
-					name: 'furnace.min.js'
+					name: 'designsystem.min.js'
 				},
 				react: {
 					location: 'react/'
