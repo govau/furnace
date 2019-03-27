@@ -23,7 +23,7 @@
 				"ie 10"
 			],
 			"location": "css/",
-			"name": "furnace.min.css",
+			"name": "designsystem.min.css",
 			"modules": true
 		},
 		"sass": {
@@ -33,7 +33,7 @@
 		"js": {
 			"minified": false,
 			"location": "js/",
-			"name": "furnace.min.js",
+			"name": "designsystem.min.js",
 			"modules": true
 		},
 		"react": {

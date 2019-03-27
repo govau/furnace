@@ -107,7 +107,7 @@ export const Settings = {
 						'ie 10'
 					],
 					location: 'css/',
-					name: 'furnace.min.css'
+					name: 'designsystem.min.css'
 				},
 				sass: {
 					location: './',
@@ -116,7 +116,7 @@ export const Settings = {
 				js: {
 					minified: false,
 					location: 'js/',
-					name: 'furnace.min.js'
+					name: 'designsystem.min.js'
 				},
 				react: {
 					location: 'react/'
