@@ -4,7 +4,7 @@
 	"description": "Melts down the GOLD components into a zip file.",
 	"author": {
 		"name": "Commonwealth of Australia, DTA",
-		"email": "guides@digital.gov.au",
+		"email": "designsystem@dta.gov.au",
 		"url": "https://www.dta.gov.au/"
 	},
 	"contributors": [
@@ -70,18 +70,18 @@
 		"@gov.au/skip-link": "latest",
 		"@gov.au/tags": "latest",
 		"@gov.au/text-inputs": "latest",
-		"@slack/client": "^5.0.0",
+		"@slack/client": "^5.0.1",
 		"archiver": "^3.0.0",
 		"autoprefixer": "^9.5.1",
-		"body-parser": "^1.18.3",
-		"cfonts": "^2.4.2",
+		"body-parser": "^1.19.0",
+		"cfonts": "^2.4.3",
 		"express": "^4.16.4",
-		"node-sass": "^4.11.0",
+		"node-sass": "^4.12.0",
 		"postcss": "^7.0.14",
-		"replace-in-file": "^3.4.4",
+		"replace-in-file": "^4.0.0",
 		"request": "^2.88.0",
 		"sass-versioning": "^0.4.0",
-		"uglify-js": "^3.5.3"
+		"uglify-js": "^3.5.10"
 	},
 	"devDependencies": {
 		"@babel/cli": "^7.4.3",
@@ -89,13 +89,14 @@
 		"@babel/preset-env": "^7.4.3",
 		"adm-zip": "^0.4.13",
 		"copy-dir": "^0.4.0",
-		"del": "^4.1.0",
+		"del": "^4.1.1",
 		"dirsum": "^0.1.1",
 		"jest-cli": "^24.7.1",
-		"nodemon": "^1.18.10"
+		"nodemon": "^1.19.0"
 	},
 	"engines": {
-		"node": "~10"
+		"node": "~10",
+		"npm": "~6"
 	},
 	"jest": {
 		"testEnvironment": "node",
