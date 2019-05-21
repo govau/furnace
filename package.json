@@ -68,6 +68,7 @@
 		"@gov.au/select": "latest",
 		"@gov.au/side-nav": "latest",
 		"@gov.au/skip-link": "latest",
+		"@gov.au/table": "latest",
 		"@gov.au/tags": "latest",
 		"@gov.au/text-inputs": "latest",
 		"@slack/client": "^5.0.1",
