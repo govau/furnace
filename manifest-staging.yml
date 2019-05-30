@@ -1,11 +1,11 @@
 ---
 buildpack: nodejs_buildpack
-memory: 512M
+
+memory: 64M
+
 instances: 1
-env:
-  NODE_MODULES_CACHE: false
-path: ./
-command: node ./node_modules/.bin/pancake && node dist/index.js
+
+command: node dist/index.js
 
 applications:
 - name: furnace
