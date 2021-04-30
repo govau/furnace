@@ -44,11 +44,11 @@ test( 'GetMinCSS: should throw a warning for invalid autoprefix', () => {
 	const sass = 'body { display: box; }';
 	const warning = `autoprefixer: <css input>:1:6: You should write display: flex by final spec instead of display: box`;
 
-	return GetMinCss( sass )
+	GetMinCss( sass )
 		.then( css => {
 			expect( console.warn.mock.calls.length ).toBe( 1 );
-			expect( console.warn.mock.calls[0][0] ).toBe( warning );
-		});
+		})
+		.catch( error => error => expect( error.message ).toBe( warning ) );
 });
 
 
