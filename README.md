@@ -55,6 +55,21 @@ You can also manually test the furnace by sending a POST to the local instance.
 curl -d "components=accordion&components=breadcrumbs&styleOutput=css&jsOutput=js" http://localhost:8080/furnace >> designsystem.zip
 ```
 
+# Slack webhook
+
+To update the slack channels receiving notifications, run the following:
+
+
+```
+$ cf uups ups-furnace -p '{SLACK_WEBHOOKS: ... }'
+
+```
+
+with the appropriate slack webhook URL
+
+Read the [cf-docs](http://cli.cloudfoundry.org/en-US/cf/update-user-provided-service.html) for more.
+
+
 
 # Changelog
 
