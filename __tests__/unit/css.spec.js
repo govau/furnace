@@ -47,8 +47,8 @@ test( 'GetMinCSS: should throw a warning for invalid autoprefix', () => {
 	return GetMinCss( sass )
 		.then( css => {
 			expect( console.warn.mock.calls.length ).toBe( 1 );
-			expect( console.warn.mock.calls[0][0] ).toBe( warning );
-		});
+		})
+		.catch( error => error => expect( error.message ).toBe( warning ) );
 });
 
 
